@@ -1,0 +1,40 @@
+::ng-deep body {
+  background: #9c27b0;
+}
+
+.auth-card {
+  position: absolute;
+  max-width: 300px;
+  height: 420px;
+
+  margin: auto;
+  top: 25px;
+  right: 25px;
+  bottom: 25px;
+  left: 25px;
+}
+
+.auth-field {
+  width: 100%;
+}
+
+.mat-card {
+  background: #303030;
+}
+
+.login-action {
+  display: flex;
+
+  div {
+    width: 100%;
+    text-align: end;
+
+    button {
+      width: 100%;
+    }
+
+    a {
+      color: #c8c8c8;
+    }
+  }
+}

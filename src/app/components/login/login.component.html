@@ -40,7 +40,11 @@
         </mat-form-field>
       </p>
       <div class="login-action">
-        <div><button mat-flat-button [disabled]="email.invalid || passwd.invalid">Войти</button></div>
+        <div>
+          <button mat-flat-button [disabled]="email.invalid || passwd.invalid">
+            Войти
+          </button>
+        </div>
         <div>
           <a routerLink="/auth/registration">Регистрация</a><br />
           <a routerLink="/auth/reduction">Забыли пароль?</a>
