@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { ReductionComponent } from './components/reduction/reduction.component';
+import { RecoverComponentBack } from './components/recover/recover-back.component';
+import { RecoverComponentFront } from './components/recover/recover-front.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 
 const routes: Routes = [
@@ -11,7 +12,8 @@ const routes: Routes = [
   { path: 'auth', children: [
     { path: "login", component: LoginComponent },
     { path: "registration", component: RegistrationComponent },
-    { path: "reduction", component: ReductionComponent },
+    { path: "recover", component: RecoverComponentFront },
+    { path: "recover/:code", component: RecoverComponentBack },
     { path: '**', redirectTo: 'login' }
   ]},
 

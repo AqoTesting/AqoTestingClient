@@ -11,7 +11,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { RecoverComponentFront } from './components/recover/recover-front.component';
-import { RecoverComponentBack } from './components/recover/recover-back.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -23,7 +22,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     RegistrationComponent,
     RecoverComponentFront,
-    RecoverComponentBack
   ],
   imports: [
     BrowserModule,

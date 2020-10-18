@@ -5,24 +5,18 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import RepeatValidator from '../../validators/repeat.validator';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+  selector: 'app-recover-back',
+  templateUrl: './recover-back.component.html',
+  styleUrls: ['./recover.component.scss'],
 })
-export class RegistrationComponent implements OnInit {
-  constructor() {}
+export class RecoverComponentBack implements OnInit {
+  code: string;
 
-  ngOnInit(): void {}
-
-  name = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(30),
-  ]);
-  email = new FormControl('', [Validators.required, Validators.email]);
   passwd = new FormControl('', [
     Validators.required,
     Validators.minLength(5),
@@ -38,21 +32,11 @@ export class RegistrationComponent implements OnInit {
 
   hide = true;
 
-  getErrorMessageName() {
-    if (this.name.hasError('required')) return 'Введите имя';
-
-    if (this.name.hasError('minlength')) return 'Имя слишком короткое';
-
-    if (this.name.hasError('maxlength')) return 'Имя слишком длинное';
-
-    return this.email.hasError('email') ? 'Неверный e-mail' : '';
+  constructor(private route: ActivatedRoute, private snackBar: MatSnackBar) {
+    this.route.params.subscribe(({ code }) => (this.code = code));
   }
 
-  getErrorMessageEmail() {
-    if (this.email.hasError('required')) return 'Введите email';
-
-    return this.email.hasError('email') ? 'Неверный e-mail' : '';
-  }
+  ngOnInit(): void {}
 
   getErrorMessagePasswd() {
     if (this.passwd.hasError('required')) return 'Введите пароль';
@@ -78,5 +62,11 @@ export class RegistrationComponent implements OnInit {
     }
 
     return '';
+  }
+
+  sendRecoveryRequest() {
+    this.snackBar.open('Ваш пароль обновлен', 'OK', {
+      duration: 5000,
+    });
   }
 }
