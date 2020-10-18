@@ -1,1 +1,49 @@
-<mat-card>Simple card</mat-card>
+<header focusOnNavigation class="header-background" aria-label="Начать">
+  <div class="header-section">
+    <div class="header-headline">
+      <h1 class="mat-h1">AqoTesting</h1>
+      <h2>Ультразвуковые тесты</h2>
+    </div>
+    <div class="header-start">
+      <a mat-raised-button class="button" routerLink="/auth/login">Начать</a>
+    </div>
+  </div>
+</header>
+
+<main class="homepage-promo">
+  <div class="homepage-row introduction">
+    <div class="homepage-row-column">
+      <h2>Бесплатно</h2>
+      <p>
+        Использовать наш проект можно полностью бесплатно, без рекламы и СМС.
+      </p>
+    </div>
+    <div class="homepage-row-column">
+      <h2>Удобно</h2>
+      <p>
+        Создавай комнаты, создавай тесты, приглашай студентов и тестируй их
+        знания.
+      </p>
+    </div>
+    <div class="homepage-row-column">
+      <h2>Open source</h2>
+      <p>
+        Наш проект предоставляет доступ к исходным кодам программного продукта.
+      </p>
+    </div>
+  </div>
+
+  <div class="homepage-row introduction">
+    <div class="homepage-row-column">
+      <a
+        mat-button
+        matTooltip="Перейти к исходникам"
+        href="https://github.com/AqoTesting"
+        target="_blank"
+        style="margin: auto"
+      >
+        <img src="../../../assets/img/home/github.svg" alt="GitHub" /> GitHab
+      </a>
+    </div>
+  </div>
+</main>
