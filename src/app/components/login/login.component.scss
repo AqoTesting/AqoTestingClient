@@ -1,0 +1,43 @@
+:host {
+  background: #9c27b0;
+  display: block;
+  height: 100%;
+  position: relative;
+}
+
+.auth-card {
+  position: absolute;
+  max-width: 300px;
+  height: 250px;
+
+  margin: auto;
+  top: 25px;
+  right: 25px;
+  bottom: 25px;
+  left: 25px;
+}
+
+.auth-field {
+  width: 100%;
+}
+
+.mat-card {
+  background: #303030;
+}
+
+.login-action {
+  display: flex;
+
+  div {
+    width: 100%;
+    text-align: end;
+
+    button {
+      width: 100%;
+    }
+
+    a {
+      color: #c8c8c8;
+    }
+  }
+}
