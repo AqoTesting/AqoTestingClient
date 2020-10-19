@@ -14,6 +14,10 @@ import { RecoverComponentFront } from './components/recover/recover-front.compon
 import { RecoverComponentBack } from './components/recover/recover-back.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RoomsComponent } from './components/rooms/rooms.component';
+import { RoomComponent } from './components/room/room.component';
+import { RoomCreateComponent } from './components/rooms/room-create.component';
+import { RoomEditComponent } from './components/rooms/room-edit.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     RegistrationComponent,
     RecoverComponentFront,
-    RecoverComponentBack
+    RecoverComponentBack,
+    RoomsComponent,
+    RoomComponent,
+    RoomCreateComponent,
+    RoomEditComponent
   ],
   imports: [
     BrowserModule,
