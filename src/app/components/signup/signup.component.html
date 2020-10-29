@@ -1,7 +1,21 @@
 <mat-card class="auth-card">
-  <mat-card-title>Вход</mat-card-title>
+  <mat-card-title>Регистрация</mat-card-title>
   <mat-card-content>
     <div class="auth-container">
+      <p>
+        <mat-form-field class="auth-field" appearance="fill" color="accent">
+          <mat-label>Введите имя</mat-label>
+          <input
+            matInput
+            placeholder="Иванов Иван Иванович"
+            [formControl]="name"
+            required
+          />
+          <mat-error *ngIf="name.invalid">{{
+            getErrorMessageName()
+          }}</mat-error>
+        </mat-form-field>
+      </p>
       <p>
         <mat-form-field class="auth-field" appearance="fill" color="accent">
           <mat-label>Введите e-mail</mat-label>
@@ -39,14 +53,35 @@
           </button>
         </mat-form-field>
       </p>
+      <p>
+        <mat-form-field class="auth-field" appearance="fill" color="accent">
+          <mat-label>Повторите пароль</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            [formControl]="repeatPasswd"
+            required
+          />
+          <mat-error *ngIf="repeatPasswd.invalid">{{
+            getErrorMessageRepeatPasswd()
+          }}</mat-error>
+        </mat-form-field>
+      </p>
       <div class="login-action">
         <div>
-          <button mat-flat-button [disabled]="email.invalid || passwd.invalid">
-            Войти
+          <button
+            mat-flat-button
+            [disabled]="
+              email.invalid ||
+              passwd.invalid ||
+              repeatPasswd.invalid
+            "
+          >
+            Создать
           </button>
         </div>
         <div>
-          <a routerLink="/auth/registration">Регистрация</a><br />
+          <a routerLink="/auth/signin">Войти</a><br />
           <a routerLink="/auth/recover">Забыли пароль?</a>
         </div>
       </div>

@@ -8,8 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material.module';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegistrationComponent } from './components/registration/registration.component';
+import { SignInComponent } from './components/signin/signin.component';
+import { SignUpComponent } from './components/signup/signup.component';
 import { RecoverComponentFront } from './components/recover/recover-front.component';
 import { RecoverComponentBack } from './components/recover/recover-back.component';
 
@@ -19,19 +19,32 @@ import { RoomComponent } from './components/room/room.component';
 import { RoomCreateComponent } from './components/rooms/room-create.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 
+import { AuthService } from './services/auth.service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { AuthorizedGuard } from './guards/authorized.guard';
+import { NotAuthorizedGuard } from './guards/not-authorized.guard';
+import { SnackService } from './services/snack.service';
+import { SnackComponent } from './components/snack/snack.component';
+import {
+  ErrorMessagesCode,
+  ErrorMessagesText,
+} from './enums/error-messages.enum';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavbarComponent,
-    LoginComponent,
-    RegistrationComponent,
+    SignInComponent,
+    SignUpComponent,
     RecoverComponentFront,
     RecoverComponentBack,
     RoomsComponent,
     RoomComponent,
     RoomCreateComponent,
-    RoomEditComponent
+    RoomEditComponent,
+    SnackComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,8 +54,20 @@ import { RoomEditComponent } from './components/rooms/room-edit.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    SnackService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+
+    AuthorizedGuard,
+    NotAuthorizedGuard,
+  ],
   bootstrap: [AppComponent],
 
   entryComponents: [],

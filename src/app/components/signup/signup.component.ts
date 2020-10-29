@@ -9,10 +9,10 @@ import RepeatValidator from '../../validators/repeat.validator';
 
 @Component({
   selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss'],
 })
-export class RegistrationComponent implements OnInit {
+export class SignUpComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}

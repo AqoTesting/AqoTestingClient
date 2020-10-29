@@ -1,0 +1,24 @@
+::ng-deep .mat-snack-bar-container {
+    padding: 0;
+    max-width: unset;
+    min-width: unset;
+}
+
+.mat-snack-bar-container-local-error {
+    background: #f44336;
+    color: #ffffff;
+}
+
+.mat-snack-bar-container-local-success {
+    background: #69f0ae;
+    color: #424242;
+}
+
+.mat-snack-bar-container-local {
+    padding: 14px 16px;
+    margin: 0;
+}
+
+mat-icon {
+    vertical-align: bottom;
+ }

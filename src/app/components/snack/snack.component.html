@@ -1,0 +1,16 @@
+<div
+  class="mat-snack-bar-container mat-snack-bar-container-local"
+  [class.mat-snack-bar-container-local-error]="data.type == 'error'"
+  [class.mat-snack-bar-container-local-success]="data.type == 'success'"
+>
+  <table style="border: unset;border-spacing: 0px;">
+    <tr>
+      <td>
+        <mat-icon aria-hidden="false" aria-label="Ошибка" class="inline-icon">error</mat-icon>
+      </td>
+      <td style="padding-left: 14px;">
+        <span>{{ data.message }}</span>
+      </td>
+    </tr>
+  </table>
+</div>

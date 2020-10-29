@@ -1,0 +1,57 @@
+<mat-card class="auth-card">
+  <mat-card-title>Вход</mat-card-title>
+  <mat-card-content>
+    <div class="auth-container">
+      <form [formGroup]="signInForm">
+        <p>
+          <mat-form-field class="auth-field" appearance="fill" color="accent">
+            <mat-label>Логин или e-mail</mat-label>
+            <input
+              matInput
+              placeholder="aqo@example.ru"
+              formControlName="login"
+              required
+            />
+            <mat-error *ngIf="signInForm.controls['login'].invalid">{{
+              getErrorMessageLogin()
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="auth-field" appearance="fill" color="accent">
+            <mat-label>Пароль</mat-label>
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              formControlName="password"
+              required
+            />
+            <mat-error *ngIf="signInForm.controls['password'].invalid">{{
+              getErrorMessagePassword()
+            }}</mat-error>
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Скрыть пароль'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </p>
+        <div class="login-action">
+          <div>
+            <button (click)="onSubmit()" mat-flat-button [disabled]="signInForm.disabled || signInForm.invalid">
+              Войти
+            </button>
+          </div>
+          <div>
+            <a routerLink="/auth/signup">Регистрация</a><br />
+            <a routerLink="/auth/recover">Забыли пароль?</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
