@@ -30,6 +30,7 @@ import {
   ErrorMessagesCode,
   ErrorMessagesText,
 } from './enums/error-messages.enum';
+import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,11 @@ import {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CatchErrorInterceptor,
       multi: true,
     },
 

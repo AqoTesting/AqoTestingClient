@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserToken } from 'src/app/entities/user.entities';
 import { Response } from 'src/app/entities/response.entities';
 import { AuthService } from 'src/app/services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SnackService } from 'src/app/services/snack.service';
 
 @Component({
   selector: 'app-signin',
@@ -28,7 +28,7 @@ export class SignInComponent implements OnInit {
   hide = true;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private _snackService: SnackService,
     private router: Router,
     private _authService: AuthService
   ) {}
@@ -65,14 +65,11 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     this.signInForm.disable();
     this._authService.getUserTokenSignIn(this.signInForm.value).subscribe(
-      (response: Response<UserToken>) => {
-        if (response.succeeded) {
-          //this.router.navigate(["rooms"]);
-        } else {
-          this.signInForm.enable();
-        }
+      (data: UserToken) => {
+        this.router.navigate(["rooms"]);
       },
       (error) => {
+        if(error instanceof Response) this._snackService.error(error.errorMessageCode);
         this.signInForm.enable();
       }
     );

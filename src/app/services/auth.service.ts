@@ -30,8 +30,8 @@ export class AuthService {
         this.getUser()
           .pipe(take(1))
           .subscribe(
-            (value: Response<User>) => {
-              this._currentUser$.next(value.data);
+            (data: User) => {
+              this._currentUser$.next(data);
             },
             (error) => {
               this._currentUser$.error(error);
@@ -84,36 +84,36 @@ export class AuthService {
 
   /* Methods */
 
-  private getUser(): Observable<Response<User>> {
-    return this.http.get<Response<User>>(environment.apiUrl + '/user');
+  private getUser(): Observable<User> {
+    return this.http.get<User>(environment.apiUrl + '/user');
   }
 
   public getUserTokenSignIn(
     signInUser: SignInUser
-  ): Observable<Response<UserToken>> {
+  ): Observable<UserToken> {
     return this.http
-      .post<Response<UserToken>>(
+      .post<UserToken>(
         environment.apiUrl + '/auth/signin',
         signInUser
       )
       .pipe(
-        tap((response: Response<UserToken>) => {
-          this.authorizeByToken(response.data.token);
+        tap((data: UserToken) => {
+          this.authorizeByToken(data.token);
         })
       );
   }
 
   public getUserTokenSignUp(
     signUpUser: SignUpUser
-  ): Observable<Response<UserToken>> {
+  ): Observable<UserToken> {
     return this.http
-      .post<Response<UserToken>>(
+      .post<UserToken>(
         environment.apiUrl + '/auth/signup',
         signUpUser
       )
       .pipe(
-        tap((response: Response<UserToken>) => {
-          this.authorizeByToken(response.data.token);
+        tap((data: UserToken) => {
+          this.authorizeByToken(data.token);
         })
       );
   }
