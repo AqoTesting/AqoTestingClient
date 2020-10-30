@@ -1,4 +1,4 @@
-export class GetRoomsItemDTO {
+export class GetRoomsItem {
   id: string;
   name: string;
   domain: string;
@@ -7,7 +7,7 @@ export class GetRoomsItemDTO {
   isActive: boolean;
 }
 
-export class GetRoomDTO {
+export class GetRoom {
   id: string;
   name: string;
   domain: string;

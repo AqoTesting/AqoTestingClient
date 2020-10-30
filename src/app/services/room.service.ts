@@ -3,20 +3,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { GetRoomsItemDTO } from '../entities/room.entities';
+import { GetRoomsItem } from '../entities/room.entities';
 
 @Injectable()
 export class RoomService {
   constructor(private _http: HttpClient) {}
 
-  getUserRooms(): Observable<GetRoomsItemDTO[]> {
-    return this._http.get<GetRoomsItemDTO[]>(
+  getUserRooms(): Observable<GetRoomsItem[]> {
+    return this._http.get<GetRoomsItem[]>(
       environment.apiUrl + '/user/rooms'
     );
   }
 
-  getUserRoomById(roomId: string): Observable<GetRoomsItemDTO[]> {
-    return this._http.get<GetRoomsItemDTO[]>(
+  getUserRoomById(roomId: string): Observable<GetRoomsItem[]> {
+    return this._http.get<GetRoomsItem[]>(
       environment.apiUrl + '/user/rooms'
     );
   }

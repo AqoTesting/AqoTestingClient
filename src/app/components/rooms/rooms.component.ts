@@ -1,6 +1,7 @@
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GetRoomsItem } from 'src/app/entities/room.entities';
 import { User } from 'src/app/entities/user.entities';
 import { AuthService } from 'src/app/services/auth.service';
 import { RoomService } from '../../services/room.service';
@@ -12,11 +13,13 @@ import { RoomService } from '../../services/room.service';
 })
 export class RoomsComponent implements OnInit {
 
+  public rooms: GetRoomsItem[];
+
   constructor(private _roomService: RoomService) {}
 
   ngOnInit(): void {
     this._roomService.getUserRooms().subscribe(data => {
-      console.log(data)
+      this.rooms = data;
     });
   }
 }
