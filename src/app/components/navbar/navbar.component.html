@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
-  <button mat-button>AqoTesting</button>
+  <button mat-button routerLink="/">AqoTesting</button>
   <span class="example-spacer"></span>
-  <button mat-icon-button>
+  <div *ngIf="user" class="navbar-name">
+    {{ user.name || user.login }}
+  </div>
+  <button mat-icon-button (click)="signOut()" matTooltip="Выйти">
     <mat-icon>login</mat-icon>
   </button>
 </mat-toolbar>

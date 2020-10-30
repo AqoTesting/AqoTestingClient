@@ -37,7 +37,6 @@ export class CatchErrorInterceptor implements HttpInterceptor {
             const response: Response<any> = new Response(httpResponse.body);
 
             if (response.succeeded) {
-              console.log(40, response.data);
               return of(httpResponse.clone({ body: response.data }));
             } else {
               return throwError(response);
@@ -51,7 +50,7 @@ export class CatchErrorInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
             this.injector.get(AuthService).unAuthorize();
-            this.router.navigate(['/auth/login']);
+            this.router.navigate(['/auth/signin']);
           } else {
             this._snack.fatal(error.message.replace(environment.apiUrl, ''));
           }

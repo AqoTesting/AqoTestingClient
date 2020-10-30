@@ -9,11 +9,10 @@ import { SnackService } from './services/snack.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private _authService: AuthService, private _snack: SnackService) {}
+  constructor(
+    private _authService: AuthService,
+    private _snack: SnackService
+  ) {}
 
-  ngOnInit() {
-    this._authService.currentUser$.subscribe((data: any) => {
-      console.log(data);
-    });
-  }
+  ngOnInit() {}
 }

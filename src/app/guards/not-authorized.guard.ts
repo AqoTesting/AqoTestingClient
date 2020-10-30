@@ -18,7 +18,7 @@ export class NotAuthorizedGuard implements CanActivate {
   ): Observable<boolean> | boolean {
     const authorized = this.authService.isAuthorized;
     if (authorized) {
-      this.authService.redirectTo('/rooms');
+      this.router.navigate(['/rooms']);
       return false;
     } else {
       return true;

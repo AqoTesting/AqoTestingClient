@@ -15,11 +15,16 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService {
-  private _currentUser$: ReplaySubject<User> = null;
+  private _currentUser: User;
+  private _currentUser$: ReplaySubject<User>;
   private _isAuthorized: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {
     this.checkAuthorization();
+  }
+
+  public get currentUser(): User {
+    return this._currentUser;
   }
 
   public get currentUser$(): Observable<User> {
@@ -31,14 +36,17 @@ export class AuthService {
           .pipe(take(1))
           .subscribe(
             (data: User) => {
-              this._currentUser$.next(data);
+              this._currentUser = data;
+              this._currentUser$.next(this._currentUser);
             },
             (error) => {
+              this._currentUser = null;
               this._currentUser$.error(error);
             }
           );
       } else {
-        this._currentUser$.next(null);
+        this._currentUser = null;
+        this._currentUser$.next(this._currentUser);
       }
     }
 
@@ -76,10 +84,6 @@ export class AuthService {
   public get isAuthorized() {
     this.checkAuthorization();
     return this._isAuthorized;
-  }
-
-  public redirectTo(path: string) {
-    this.router.navigate([path]);
   }
 
   /* Methods */

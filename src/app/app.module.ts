@@ -31,6 +31,7 @@ import {
   ErrorMessagesText,
 } from './enums/error-messages.enum';
 import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
+import { RoomService } from './services/room.service';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
   ],
   providers: [
     AuthService,
+    RoomService,
     SnackService,
     {
       provide: HTTP_INTERCEPTORS,

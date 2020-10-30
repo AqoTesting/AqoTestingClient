@@ -12,7 +12,7 @@ export class AuthorizedGuard implements CanActivate {
     if (authorized) {
       return true;
     } else {
-      this.authService.redirectTo("/auth/signin");
+      this.router.navigate(["/auth/signin"]);
       return false;
     }
   }

@@ -65,11 +65,13 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     this.signInForm.disable();
     this._authService.getUserTokenSignIn(this.signInForm.value).subscribe(
-      (data: UserToken) => {
-        this.router.navigate(["rooms"]);
+      () => {
+        this._snackService.success('Вы успешно авторизовались');
+        this.router.navigate(['rooms']);
       },
       (error) => {
-        if(error instanceof Response) this._snackService.error(error.errorMessageCode);
+        if (error instanceof Response)
+          this._snackService.error(error.errorMessageCode);
         this.signInForm.enable();
       }
     );
