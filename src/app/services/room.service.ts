@@ -10,14 +10,14 @@ export class RoomService {
   constructor(private _http: HttpClient) {}
 
   getUserRooms(): Observable<GetRoomsItem[]> {
-    return this._http.get<GetRoomsItem[]>(
-      environment.apiUrl + '/user/rooms'
-    );
+    return this._http.get<GetRoomsItem[]>(environment.apiUrl + '/user/rooms');
   }
 
   getUserRoomById(roomId: string): Observable<GetRoomsItem[]> {
-    return this._http.get<GetRoomsItem[]>(
-      environment.apiUrl + '/user/rooms'
-    );
+    return this._http.get<GetRoomsItem[]>(environment.apiUrl + '/user/rooms');
+  }
+
+  deleteRoomById(roomId: string): Observable<any> {
+    return this._http.delete<any>(environment.apiUrl + '/user/room/' + roomId);
   }
 }
