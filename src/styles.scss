@@ -11,6 +11,14 @@ body {
   background: $background-color;
 }
 
+::-webkit-scrollbar {
+  background: #555555;
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+}
+
 a {
   color: #ce93d8;
 }
@@ -39,5 +47,78 @@ a {
 }
 
 .text-center {
-  text-align: center;
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: #9c27b0;
+}
+
+.rooms-conteiner {
+  margin: 25px;
+
+  .rooms-header {
+    display: flex;
+    color: white;
+    margin: auto;
+    max-width: 600px;
+
+    table {
+      width: 100%;
+
+      tr {
+        td {
+          h1 {
+            margin: 0;
+          }
+        }
+        td.rooms-header-action {
+          width: 40px;
+        }
+      }
+    }
+  }
+
+  .room-info {
+    width: 50%;
+    display: inline-block;
+
+    &-name {
+    }
+    &-domain {
+      font-size: 11px;
+    }
+  }
+
+  .room-action {
+    width: 50%;
+    display: inline-block;
+    text-align: right;
+
+    &-icon {
+      margin-left: 14px;
+    }
+  }
+}
+
+.room-content {
+  max-width: 600px;
+  margin: 25px auto;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px 0;
 }

@@ -7,6 +7,31 @@ export class GetRoomsItem {
   isActive: boolean;
 }
 
+export class CreateRoom {
+  name: string;
+  domain: string;
+
+  isActive: boolean = false;
+  isRegistrationAllowed: boolean = true;
+  isCheckManually: boolean = false;
+
+  description: string;
+  fields: UserRoomField[];
+}
+
+class UserRoomField {
+  name: string;
+  type: FieldType;
+  isRequired: boolean;
+
+  options?: string[];
+}
+
+enum FieldType {
+  Input = 1,
+  Select = 2,
+}
+
 export class GetRoom {
   id: string;
   name: string;

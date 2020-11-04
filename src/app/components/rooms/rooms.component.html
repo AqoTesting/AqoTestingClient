@@ -1,17 +1,22 @@
 <app-navbar></app-navbar>
 <div class="rooms-conteiner">
   <div class="rooms-header">
-    <h1>Комнаты</h1>
-    <span class="spacer"></span>
-    <button
-      routerLink="/room/create"
-      mat-mini-fab
-      color="primary"
-      aria-label="Создать новую комнату"
-      matTooltip="Создать новую комнату"
-    >
-      <mat-icon>add</mat-icon>
-    </button>
+    <table>
+      <tr>
+        <td><h1>Комнаты</h1></td>
+        <td class="rooms-header-action">
+          <button
+            routerLink="/room/create"
+            mat-mini-fab
+            color="primary"
+            aria-label="Создать новую комнату"
+            matTooltip="Создать новую комнату"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
   <ng-container *ngIf="rooms; else loading" class="rooms-conteiner">
     <div *ngFor="let room of rooms" class="room-content">
@@ -58,6 +63,6 @@
     </div>
   </ng-container>
   <ng-template #loading>
-    <mat-spinner style="margin: 50px auto;"></mat-spinner>
+    <mat-spinner style="margin: 50px auto"></mat-spinner>
   </ng-template>
 </div>

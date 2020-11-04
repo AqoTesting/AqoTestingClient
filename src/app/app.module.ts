@@ -32,6 +32,7 @@ import {
 } from './enums/error-messages.enum';
 import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
 import { RoomService } from './services/room.service';
+import { ExitAboutGuard } from './guards/exit-about.guard';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { RoomService } from './services/room.service';
 
     AuthorizedGuard,
     NotAuthorizedGuard,
+    ExitAboutGuard,
   ],
   bootstrap: [AppComponent],
 

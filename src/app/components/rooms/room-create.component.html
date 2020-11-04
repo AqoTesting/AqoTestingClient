@@ -1,2 +1,207 @@
 <app-navbar></app-navbar>
-<p>room-create works!</p>
+
+<div class="rooms-conteiner">
+  <div class="rooms-header">
+    <table>
+      <tr>
+        <td><h1>Создание комнаты</h1></td>
+        <td class="rooms-header-action">
+          <button
+            routerLink="/rooms"
+            mat-icon-button
+            aria-label="Назад"
+            matTooltip="Назад"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="room-content">
+    <form [formGroup]="roomCreate">
+      <mat-card>
+        <mat-card-content>
+          <p>
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Название</mat-label>
+              <input
+                matInput
+                placeholder="Операционные системы"
+                required
+                formControlName="name"
+                minlength="1"
+                maxlength="64"
+              />
+              <mat-hint>Придумайте название комнате</mat-hint>
+              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                getErrorMessageLogin()
+              }}</mat-error>-->
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Домен</mat-label>
+              <input
+                class="text-right"
+                matInput
+                placeholder="subdomain"
+                required
+                formControlName="domain"
+                minlength="1"
+                maxlength="63"
+              />
+              <span matSuffix>.aqotesting.tk</span>
+              <mat-hint>По домену участники будут вступать в комнату</mat-hint>
+              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                getErrorMessageLogin()
+              }}</mat-error>-->
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-slide-toggle formControlName="isActive"
+              >Комната активна</mat-slide-toggle
+            >
+          </p>
+          <p>
+            <mat-slide-toggle formControlName="isRegistrationAllowed"
+              >Разрешить регистрацию</mat-slide-toggle
+            ><br />
+            <mat-hint style="font-size: 75%"
+              >Если не разрешать регистрацию, Вам потребуется вручную вносить
+              данные участников, чтобы они могли в последующем по ним войти
+            </mat-hint>
+          </p>
+          <p>
+            <mat-slide-toggle formControlName="isCheckManually"
+              >Проверять участников вручную</mat-slide-toggle
+            ><br />
+            <mat-hint style="font-size: 75%">
+              Если включить данную опцию, то всех участников, что регистрируются
+              в комнате Вам прийдется проверять вручную. До момента проверки у
+              них не будет полного доступа к материалам комнаты
+            </mat-hint>
+          </p>
+          <p>
+            <mat-form-field class="field" appearance="fill" color="accent">
+              <mat-label>Описание</mat-label>
+              <textarea
+                matInput
+                #description
+                formControlName="description"
+                maxlength="4096"
+              ></textarea>
+              <mat-hint align="end"
+                >{{ description.value?.length || 0 }}/4096</mat-hint
+              >
+              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                getErrorMessageLogin()
+              }}</mat-error>-->
+            </mat-form-field>
+          </p>
+        </mat-card-content>
+        <mat-card-title>Идентификация</mat-card-title>
+        <mat-card-content>
+          <mat-hint>
+            Всех участников комнаты нужно как-то отличать друг от друга. Для
+            этого, Вы можете создать ниже поля, которые система будет требовать
+            заполнить участников при регистрации в комнате.
+          </mat-hint>
+
+          <div formArrayName="fields">
+            <div
+              class="field-wrapper"
+              *ngFor="let field of fields.controls; index as i"
+            >
+              <div [formGroupName]="i">
+                <div class="field-wrapper-title">
+                  <div class="spacer">Поле {{ field.value.name || i + 1 }}</div>
+                  <mat-icon
+                    matTooltip="Удалить поле"
+                    (click)="deleteField(i)"
+                    class="pointer"
+                    >delete</mat-icon
+                  >
+                </div>
+                <div class="field-wrapper-body">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Название поля</mat-label>
+                    <input
+                      matInput
+                      formControlName="name"
+                      placeholder="Имя"
+                      required
+                    />
+                    <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                      getErrorMessageLogin()
+                    }}</mat-error>-->
+                  </mat-form-field>
+
+                  <mat-slide-toggle formControlName="isRequired"
+                    >Обязательно к заполнению</mat-slide-toggle
+                  >
+
+                  <mat-radio-group
+                    aria-label="Select an option"
+                    class="radio-group"
+                    formControlName="type"
+                  >
+                    <label>Тип поля</label>
+                    <mat-radio-button [value]="0" class="radio-button"
+                      >Своё значение</mat-radio-button
+                    >
+                    <mat-radio-button [value]="1" class="radio-button"
+                      >Выбор варианта</mat-radio-button
+                    >
+                  </mat-radio-group>
+
+                  <div *ngIf="field.value.type == 1">
+                    Варианты значений поля:
+                    <button
+                      (click)="addFieldOption(field)"
+                      mat-icon-button
+                      aria-label="Добавить значение поля"
+                      matTooltip="Добавить значение поля"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <div formArrayName="options">
+                      <div
+                        *ngFor="
+                          let option of getFieldOptions(field).controls;
+                          index as i
+                        "
+                      >
+                        <mat-form-field appearance="outline" color="accent">
+                          <mat-label>Вариант {{ i + 1 }}</mat-label>
+                          <input
+                            [formControlName]="i"
+                            matInput
+                            placeholder="Введите текст варианта"
+                          />
+                          <button
+                            mat-icon-button
+                            aria-label="Удалить текст варианта"
+                            matTooltip="Удалить текст варианта"
+                            matSuffix
+                            (click)="deleteFieldOption(field, i)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <button mat-button (click)="addField()">Добавить поле</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </div>
+</div>

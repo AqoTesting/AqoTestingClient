@@ -11,6 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatRadioModule } from '@angular/material/radio';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -24,6 +28,10 @@ const MaterialComponents = [
   MatInputModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatChipsModule,
+  MatRadioModule,
 ];
 
 @NgModule({
