@@ -3,7 +3,9 @@
   <div class="rooms-header">
     <table>
       <tr>
-        <td><h1>{{ room ? room.name : ""}}</h1></td>
+        <td>
+          <h1>{{ room ? room.name : "" }}</h1>
+        </td>
         <td class="rooms-header-action">
           <button
             routerLink="/rooms"
@@ -18,7 +20,24 @@
     </table>
   </div>
   <ng-container *ngIf="room; else loading" class="rooms-conteiner">
-    <div class="room-content"></div>
+    <div class="room-content">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">check_box</mat-icon>
+            Тесты
+          </ng-template>
+          Тесты
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">group</mat-icon>
+            Участники
+          </ng-template>
+          Участники
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </ng-container>
   <ng-template #loading>
     <mat-spinner class="loading"></mat-spinner>

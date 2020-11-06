@@ -69,6 +69,15 @@ snack-bar-container {
   background-color: #9c27b0;
 }
 
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #9c27b0;
+}
+
+.mat-tab-labels {
+  justify-content: space-around !important;
+}
+
 .rooms-conteiner {
   margin: 25px;
 
