@@ -27,14 +27,14 @@
             <mat-icon class="tab-icon">check_box</mat-icon>
             Тесты
           </ng-template>
-          Тесты
+          <app-tests [roomId]="roomId"></app-tests>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">group</mat-icon>
             Участники
           </ng-template>
-          Участники
+          <app-members></app-members>
         </mat-tab>
       </mat-tab-group>
     </div>

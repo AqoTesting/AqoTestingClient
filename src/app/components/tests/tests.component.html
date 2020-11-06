@@ -1,0 +1,7 @@
+<div class="text-center">
+
+  <ng-container *ngIf="tests; else loading"></ng-container>
+  <ng-template #loading>
+    <mat-spinner class="loading text-center"></mat-spinner>
+  </ng-template>
+</div>

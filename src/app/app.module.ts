@@ -33,6 +33,9 @@ import {
 import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
 import { RoomService } from './services/room.service';
 import { ExitAboutGuard } from './guards/exit-about.guard';
+import { TestsComponent } from './components/tests/tests.component';
+import { MembersComponent } from './components/members/members.component';
+import { TestService } from './services/test.service';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,8 @@ import { ExitAboutGuard } from './guards/exit-about.guard';
     RoomCreateComponent,
     RoomEditComponent,
     SnackComponent,
+    TestsComponent,
+    MembersComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +68,7 @@ import { ExitAboutGuard } from './guards/exit-about.guard';
     AuthService,
     RoomService,
     SnackService,
+    TestService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
