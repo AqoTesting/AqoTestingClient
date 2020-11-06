@@ -1,1 +1,26 @@
-<p>room works!</p>
+<app-navbar></app-navbar>
+<div class="rooms-conteiner">
+  <div class="rooms-header">
+    <table>
+      <tr>
+        <td><h1>{{ room ? room.name : ""}}</h1></td>
+        <td class="rooms-header-action">
+          <button
+            routerLink="/rooms"
+            mat-icon-button
+            aria-label="Назад"
+            matTooltip="Назад"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <ng-container *ngIf="room; else loading" class="rooms-conteiner">
+    <div class="room-content"></div>
+  </ng-container>
+  <ng-template #loading>
+    <mat-spinner class="loading"></mat-spinner>
+  </ng-template>
+</div>

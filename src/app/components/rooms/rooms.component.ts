@@ -1,13 +1,10 @@
-import { Route } from '@angular/compiler/src/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GetRoomsItem } from 'src/app/entities/room.entities';
-import { User } from 'src/app/entities/user.entities';
 import { Response } from 'src/app/entities/response.entities';
-import { AuthService } from 'src/app/services/auth.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { RoomService } from '../../services/room.service';
+import { Background } from 'src/app/utils/background.utility';
 
 @Component({
   selector: 'app-rooms',
@@ -21,16 +18,20 @@ export class RoomsComponent implements OnInit, OnDestroy {
   constructor(
     private _roomService: RoomService,
     private _snackService: SnackService
-  ) {}
+  ) {
+    Background.setColor("#303030");
+  }
 
   ngOnInit(): void {
     this.updateRoomsItem();
   }
 
   private updateRoomsItem(): void {
-    this.roomsSub = this._roomService.getUserRooms().subscribe((data) => {
-      this.rooms = data;
-    });
+    this.roomsSub = this._roomService.getUserRooms().subscribe(
+      (data) => {
+        this.rooms = data;
+      }
+    );
   }
 
   deleteRoom(room: GetRoomsItem): void {
@@ -38,7 +39,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       this._roomService.deleteRoomById(room.id).subscribe(
         () => {
           this._snackService.success(
-            `Комната ${room.name} была успешно удалена`
+            `Комната <b>${room.name}</b> была успешно удалена`
           );
           this.rooms = this.rooms.filter((_room) => _room.id != room.id);
           this.updateRoomsItem();

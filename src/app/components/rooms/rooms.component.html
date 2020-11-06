@@ -46,12 +46,14 @@
           <mat-icon
             matTooltip="Изменить комнату"
             class="pointer room-action-icon"
+            [routerLink]="['/room/edit/', room.id]"
             >settings</mat-icon
           >
           <div class="divider"></div>
           <mat-icon
             matTooltip="Перейти в комнату"
             class="pointer room-action-icon"
+            [routerLink]="['/room/', room.id]"
             >keyboard_tab</mat-icon
           >
         </div>
@@ -63,6 +65,6 @@
     </div>
   </ng-container>
   <ng-template #loading>
-    <mat-spinner style="margin: 50px auto"></mat-spinner>
+    <mat-spinner class="loading"></mat-spinner>
   </ng-template>
 </div>

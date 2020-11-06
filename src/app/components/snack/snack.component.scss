@@ -1,24 +1,52 @@
 ::ng-deep .mat-snack-bar-container {
-    padding: 0;
-    max-width: unset;
-    min-width: unset;
-}
-
-.mat-snack-bar-container-local-error {
-    background: #f44336;
-    color: #ffffff;
-}
-
-.mat-snack-bar-container-local-success {
-    background: #69f0ae;
-    color: #424242;
-}
-
-.mat-snack-bar-container-local {
-    padding: 14px 16px;
-    margin: 0;
+  padding: 0;
+  max-width: unset;
+  min-width: unset;
 }
 
 mat-icon {
-    vertical-align: bottom;
- }
+  margin-right: 8px;
+}
+
+.mat-snack-bar-container-local {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 20px;
+  opacity: 1;
+  padding: 14px 16px;
+  border-radius: 4px;
+
+  &-action {
+    flex-shrink: 0;
+    margin: -8px -8px -8px 8px;
+
+    button {
+      max-height: 36px;
+      min-width: 0;
+    }
+  }
+}
+
+.mat-snack-bar-container-local-error {
+  background: #f44336;
+  color: #ffffff;
+}
+
+.mat-snack-bar-container-local-success {
+  background: #69f0ae;
+  color: #424242;
+}
+
+
+.mat-snack-bar-close {
+  min-width: 0;
+  line-height: 24px;
+  padding: 0 8px;
+  font-size: 11px;
+  margin-left: 14px;
+}
+
+mat-icon {
+  vertical-align: bottom;
+}

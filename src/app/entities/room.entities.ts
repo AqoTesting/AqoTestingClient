@@ -3,45 +3,34 @@ export class GetRoomsItem {
   name: string;
   domain: string;
   ownerId: string;
-  isDataRequired: boolean;
   isActive: boolean;
+  isApproveManually: boolean;
+  isRegistrationEnabled: boolean;
 }
 
-export class CreateRoom {
+export class Room {
   name: string;
   domain: string;
-
-  isActive: boolean = false;
-  isRegistrationAllowed: boolean = true;
-  isCheckManually: boolean = false;
-
-  description: string;
-  fields: UserRoomField[];
+  ownerId: string;
+  fields: RoomField[];
+  isActive: boolean;
+  isApproveManually: boolean;
+  isRegistrationEnabled: boolean;
 }
 
-class UserRoomField {
+export class RoomField {
   name: string;
   type: FieldType;
   isRequired: boolean;
+  placeholder: string = null;
+  mask: string = null;
 
   options?: string[];
 }
 
-enum FieldType {
+export enum FieldType {
   Input = 1,
   Select = 2,
-}
-
-export class GetRoom {
-  id: string;
-  name: string;
-  domain: string;
-  members: Member[];
-  testIds: string[];
-  ownerId: string;
-  isDataRequired: boolean;
-  requestedFields: RequestedField[];
-  isActive: boolean;
 }
 
 class Member {
@@ -56,12 +45,4 @@ class Attempt {
   sectionId: number;
   questionId: number;
   answer: any;
-}
-
-class RequestedField {
-  key: string;
-  name: string;
-  placeholder?: string;
-  isRequired: boolean;
-  isShowTable: boolean;
 }

@@ -5,7 +5,7 @@ import {
 } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-snack-error',
+  selector: 'app-snack',
   templateUrl: './snack.component.html',
   styleUrls: ['./snack.component.scss'],
 })
@@ -16,4 +16,8 @@ export class SnackComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  close() {
+    this.snackBarRef.dismiss();
+  }
 }

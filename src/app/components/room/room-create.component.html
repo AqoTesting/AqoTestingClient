@@ -65,7 +65,7 @@
             >
           </p>
           <p>
-            <mat-slide-toggle formControlName="isRegistrationAllowed"
+            <mat-slide-toggle formControlName="isRegistrationEnabled"
               >Разрешить регистрацию</mat-slide-toggle
             ><br />
             <mat-hint style="font-size: 75%"
@@ -74,7 +74,7 @@
             </mat-hint>
           </p>
           <p>
-            <mat-slide-toggle formControlName="isCheckManually"
+            <mat-slide-toggle formControlName="isApproveManually"
               >Проверять участников вручную</mat-slide-toggle
             ><br />
             <mat-hint style="font-size: 75%">
@@ -115,15 +115,6 @@
               *ngFor="let field of fields.controls; index as i"
             >
               <div [formGroupName]="i">
-                <div class="field-wrapper-title">
-                  <div class="spacer">Поле {{ field.value.name || i + 1 }}</div>
-                  <mat-icon
-                    matTooltip="Удалить поле"
-                    (click)="deleteField(i)"
-                    class="pointer"
-                    >delete</mat-icon
-                  >
-                </div>
                 <div class="field-wrapper-body">
                   <mat-form-field appearance="fill" color="accent">
                     <mat-label>Название поля</mat-label>
@@ -133,6 +124,13 @@
                       placeholder="Имя"
                       required
                     />
+                    <mat-icon
+                      matSuffix
+                      matTooltip="Удалить поле"
+                      (click)="deleteField(i)"
+                      class="pointer"
+                      >delete</mat-icon
+                    >
                     <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
                       getErrorMessageLogin()
                     }}</mat-error>-->
@@ -148,15 +146,15 @@
                     formControlName="type"
                   >
                     <label>Тип поля</label>
-                    <mat-radio-button [value]="0" class="radio-button"
+                    <mat-radio-button [value]="1" class="radio-button"
                       >Своё значение</mat-radio-button
                     >
-                    <mat-radio-button [value]="1" class="radio-button"
+                    <mat-radio-button [value]="2" class="radio-button"
                       >Выбор варианта</mat-radio-button
                     >
                   </mat-radio-group>
 
-                  <div *ngIf="field.value.type == 1">
+                  <div *ngIf="field.value.type == 2">
                     Варианты значений поля:
                     <button
                       (click)="addFieldOption(field)"
@@ -197,11 +195,14 @@
               </div>
             </div>
           </div>
-          <div class="text-center">
+          <p class="text-center">
             <button mat-button (click)="addField()">Добавить поле</button>
-          </div>
+          </p>
         </mat-card-content>
       </mat-card>
+      <p class="text-center">
+        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="roomCreate.invalid || roomCreate.disabled">Создать комнату</button>
+      </p>
     </form>
   </div>
 </div>

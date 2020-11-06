@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Background } from 'src/app/utils/background.utility';
 import RepeatValidator from '../../validators/repeat.validator';
 
 @Component({
@@ -33,6 +34,7 @@ export class RecoverComponentBack implements OnInit {
   hide = true;
 
   constructor(private route: ActivatedRoute, private snackBar: MatSnackBar) {
+    Background.setColor("#9c27b0");
     this.route.params.subscribe(({ code }) => (this.code = code));
   }
 

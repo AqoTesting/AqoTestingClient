@@ -5,6 +5,7 @@ import { Response } from 'src/app/entities/response.entities';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { SnackService } from 'src/app/services/snack.service';
+import { Background } from 'src/app/utils/background.utility';
 
 @Component({
   selector: 'app-signin',
@@ -28,10 +29,12 @@ export class SignInComponent implements OnInit {
   hide = true;
 
   constructor(
-    private _snackService: SnackService,
+    private snackService: SnackService,
     private router: Router,
-    private _authService: AuthService
-  ) {}
+    private authService: AuthService
+  ) {
+    Background.setColor("#9c27b0");
+  }
 
   ngOnInit(): void {}
 
@@ -64,14 +67,14 @@ export class SignInComponent implements OnInit {
 
   onSubmit() {
     this.signInForm.disable();
-    this._authService.getUserTokenSignIn(this.signInForm.value).subscribe(
+    this.authService.getUserTokenSignIn(this.signInForm.value).subscribe(
       () => {
-        this._snackService.success('Вы успешно авторизовались');
+        this.snackService.success('Вы успешно авторизовались');
         this.router.navigate(['rooms']);
       },
       (error) => {
         if (error instanceof Response)
-          this._snackService.error(error.errorMessageCode);
+          this.snackService.error(error.errorMessageCode);
         this.signInForm.enable();
       }
     );

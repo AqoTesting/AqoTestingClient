@@ -6,8 +6,8 @@ import { RecoverComponentBack } from './components/recover/recover-back.componen
 import { RecoverComponentFront } from './components/recover/recover-front.component';
 import { SignUpComponent } from './components/signup/signup.component';
 import { RoomComponent } from './components/room/room.component';
-import { RoomCreateComponent } from './components/rooms/room-create.component';
-import { RoomEditComponent } from './components/rooms/room-edit.component';
+import { RoomCreateComponent } from './components/room/room-create.component';
+import { RoomEditComponent } from './components/room/room-edit.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { AuthorizedGuard } from './guards/authorized.guard';
 import { NotAuthorizedGuard } from './guards/not-authorized.guard';
@@ -45,7 +45,11 @@ const routes: Routes = [
         component: RoomCreateComponent,
         canDeactivate: [ExitAboutGuard],
       },
-      { path: 'edit/:roomId', component: RoomEditComponent },
+      {
+        path: 'edit/:roomId',
+        component: RoomEditComponent,
+        canDeactivate: [ExitAboutGuard],
+       },
       { path: ':roomId', component: RoomComponent },
     ],
   },

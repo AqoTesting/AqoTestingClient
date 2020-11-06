@@ -16,8 +16,8 @@ import { RecoverComponentBack } from './components/recover/recover-back.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomComponent } from './components/room/room.component';
-import { RoomCreateComponent } from './components/rooms/room-create.component';
-import { RoomEditComponent } from './components/rooms/room-edit.component';
+import { RoomCreateComponent } from './components/room/room-create.component';
+import { RoomEditComponent } from './components/room/room-edit.component';
 
 import { AuthService } from './services/auth.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';

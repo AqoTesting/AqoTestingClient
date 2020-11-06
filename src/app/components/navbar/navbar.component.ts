@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { User } from 'src/app/entities/user.entities';
 import { AuthService } from 'src/app/services/auth.service';
+import { Background } from 'src/app/utils/background.utility';
 
 @Component({
   selector: 'app-navbar',

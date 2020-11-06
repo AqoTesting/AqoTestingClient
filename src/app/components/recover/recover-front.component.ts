@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Background } from 'src/app/utils/background.utility';
 
 @Component({
   selector: 'app-recover-front',
@@ -10,7 +11,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RecoverComponentFront implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar) {
+    Background.setColor("#9c27b0");
+  }
 
   ngOnInit(): void {}
 

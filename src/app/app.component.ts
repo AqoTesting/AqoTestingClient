@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorMessagesCode } from './enums/error-messages.enum';
 import { AuthService } from './services/auth.service';
 import { SnackService } from './services/snack.service';
@@ -11,8 +12,12 @@ import { SnackService } from './services/snack.service';
 export class AppComponent implements OnInit {
   constructor(
     private _authService: AuthService,
-    private _snack: SnackService
+    private _snack: SnackService,
+    private _bar: MatSnackBar
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    //this._bar.open("f", "OK");
+    //this._snack.success("Комната <b>Хрен</b> успешно создана!", 5000000);
+  }
 }

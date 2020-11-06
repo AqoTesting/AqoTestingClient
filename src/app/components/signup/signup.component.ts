@@ -5,6 +5,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Background } from 'src/app/utils/background.utility';
 import RepeatValidator from '../../validators/repeat.validator';
 
 @Component({
@@ -13,7 +14,9 @@ import RepeatValidator from '../../validators/repeat.validator';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  constructor() {}
+  constructor() {
+    Background.setColor("#9c27b0");
+  }
 
   ngOnInit(): void {}
 
