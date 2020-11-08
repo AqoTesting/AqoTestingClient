@@ -21,9 +21,10 @@ export class RoomService {
     return this.http.post<any>(environment.apiUrl + '/user/room', room);
   }
 
-  getUserRoomByIdForEdit(roomId: string): Observable<Room> {
-    return this.http.get<Room>(
-      environment.apiUrl + '/user/room/' + roomId + '/edit'
+  editRoom(roomId: string, room: Room): Observable<any> {
+    return this.http.put<any>(
+      environment.apiUrl + '/user/room/' + roomId,
+      room
     );
   }
 

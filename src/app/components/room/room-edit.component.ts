@@ -7,10 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { error } from 'protractor';
 import { Observable, Subscription } from 'rxjs';
-import { Room, FieldType } from 'src/app/entities/room.entities';
+import { Room, FieldType, RoomField } from 'src/app/entities/room.entities';
 import { RoomService } from 'src/app/services/room.service';
+import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
+import { Response } from 'src/app/entities/response.entities';
 
 @Component({
   selector: 'app-room-edit',
@@ -42,7 +45,9 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private router: Router,
+    private snackService: SnackService
   ) {
     Background.setColor('#303030');
     this.route.params.subscribe((params) => {
@@ -56,19 +61,19 @@ export class RoomEditComponent implements OnInit, OnDestroy {
 
   getRoom() {
     this.roomEdit.disable();
-    this.roomEditSub = this.roomService
-      .getUserRoomByIdForEdit(this.roomId)
-      .subscribe(
-        (data: Room) => {
-          this.room = data;
-          console.log(this.room);
-          this.initForm();
-          this.roomEdit.enable();
-        },
-        () => {
-          this.roomEdit.enable();
-        }
-      );
+    this.roomEditSub = this.roomService.getUserRoomById(this.roomId).subscribe(
+      (data: Room) => {
+        delete data.id;
+        delete data.ownerId;
+
+        this.room = data;
+        this.initForm();
+        this.roomEdit.enable();
+      },
+      () => {
+        this.roomEdit.enable();
+      }
+    );
   }
 
   get fields(): FormArray {
@@ -83,7 +88,9 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     return this.fb.group({
       name: ['', Validators.required],
       type: [0],
-      isRequired: [true],
+      isRequired: [true, Validators.required],
+      placeholder: [null],
+      mask: [null],
       options: this.fb.array([]),
     });
   }
@@ -116,18 +123,51 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   initForm() {
     this.room.fields.forEach((field) => {
       const _field = this.addField();
-      if (field.type == FieldType.Select)
+      if (field.type == FieldType.Select) {
         field.options.forEach(() => this.addFieldOption(_field));
+      } else {
+        field.options = [];
+      }
     });
     this.roomEdit.setValue(this.room);
     this.roomEdit.markAsPending();
   }
 
   onSubmit() {
-    console.log(this.roomEdit.value);
-  }
+    this.roomEdit.disable();
 
-  checkChanges() {}
+    this.roomEdit.value.fields = this.roomEdit.value.fields.map(
+      (filed: RoomField) => {
+        switch (filed.type) {
+          case FieldType.Input:
+            delete filed.options;
+            break;
+
+          case FieldType.Select:
+            delete filed.placeholder;
+            delete filed.mask;
+            break;
+        }
+
+        return filed;
+      }
+    );
+
+    this.roomService.editRoom(this.roomId, this.roomEdit.value).subscribe(
+      () => {
+        this.snackService.success(
+          `Комната <b>${this.roomEdit.value.name}</b> была успешно изменена`
+        );
+        this.roomEdit.reset();
+        this.router.navigate(['/rooms']);
+      },
+      (error) => {
+        if (error instanceof Response)
+          this.snackService.error(error.errorMessageCode);
+        this.roomEdit.enable();
+      }
+    );
+  }
 
   canDeactivate(): boolean | Observable<boolean> {
     if (this.roomEdit.dirty) {

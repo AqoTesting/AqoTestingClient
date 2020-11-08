@@ -150,15 +150,15 @@
                       formControlName="type"
                     >
                       <label>Тип поля</label>
-                      <mat-radio-button [value]="0" class="radio-button"
+                      <mat-radio-button [value]="1" class="radio-button"
                         >Своё значение</mat-radio-button
                       >
-                      <mat-radio-button [value]="1" class="radio-button"
+                      <mat-radio-button [value]="2" class="radio-button"
                         >Выбор варианта</mat-radio-button
                       >
                     </mat-radio-group>
 
-                    <div *ngIf="field.value.type == 1">
+                    <div *ngIf="field.value.type == 2">
                       Варианты значений поля:
                       <button
                         (click)="addFieldOption(field)"
@@ -205,7 +205,16 @@
           </mat-card-content>
         </mat-card>
         <p class="text-center">
-          <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="roomEdit.invalid || roomEdit.disabled || !roomEdit.dirty">Изменить комнату</button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onSubmit()"
+            [disabled]="
+              roomEdit.invalid || roomEdit.disabled || !roomEdit.dirty
+            "
+          >
+            Изменить комнату
+          </button>
         </p>
       </form>
     </div>
