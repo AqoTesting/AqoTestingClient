@@ -1,3 +1,4 @@
+
 export class GetRoomsItem {
   id: string;
   name: string;
@@ -9,6 +10,11 @@ export class GetRoomsItem {
 }
 
 export class Room {
+  constructor(room: Room) {
+    Object.assign(this, room);
+  }
+
+  id: string;
   name: string;
   domain: string;
   ownerId: string;
@@ -22,8 +28,8 @@ export class RoomField {
   name: string;
   type: FieldType;
   isRequired: boolean;
-  placeholder: string = null;
-  mask: string = null;
+  placeholder!: string;
+  mask!: string;
 
   options?: string[];
 }

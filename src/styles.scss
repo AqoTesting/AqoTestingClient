@@ -1,4 +1,9 @@
-$background-color: #303030;
+$gray-night-color: #303030;
+$gray-color: #555555;
+$gray-soft-color: #aaa;
+$transparent-gray-color: #ffffff1f;
+$purple-color: #9c27b0;
+$purple-soft-color: #ce93d8;
 
 html,
 body {
@@ -8,19 +13,19 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: $background-color;
+  background: $gray-night-color;
 }
 
 ::-webkit-scrollbar {
-  background: #555555;
+  background: $gray-color;
   width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #aaa;
+  background-color: $gray-soft-color;
 }
 
 a {
-  color: #ce93d8;
+  color: $purple-soft-color;
 }
 
 .pointer {
@@ -29,7 +34,7 @@ a {
 
 .divider {
   margin-left: 14px;
-  border-left: 1px solid #303030;
+  border-left: 1px solid $gray-night-color;
   display: inline-block;
   height: 24px;
 }
@@ -66,12 +71,12 @@ snack-bar-container {
 .mat-raised-button.mat-primary,
 .mat-fab.mat-primary,
 .mat-mini-fab.mat-primary {
-  background-color: #9c27b0;
+  background-color: $purple-color;
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar,
 .mat-tab-nav-bar.mat-primary .mat-ink-bar {
-  background-color: #9c27b0;
+  background-color: $purple-color;
 }
 
 .mat-tab-labels {
@@ -132,7 +137,7 @@ mat-form-field {
 .field-wrapper {
   border-radius: 4px;
   margin: 24px 0;
-  border: 1px solid hsla(0, 0%, 100%, 0.2);
+  border: 1px solid $transparent-gray-color;
 
   &-title {
     align-content: center;
@@ -160,4 +165,8 @@ mat-form-field {
 
 .radio-button {
   margin: 5px 0;
+}
+
+.mat-tab-body-content {
+  overflow: hidden !important;
 }

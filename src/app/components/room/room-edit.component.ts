@@ -44,7 +44,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private roomService: RoomService
   ) {
-    Background.setColor("#303030");
+    Background.setColor('#303030');
     this.route.params.subscribe((params) => {
       this.roomId = params['roomId'];
     });
@@ -95,7 +95,12 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   }
 
   deleteField(i: number) {
-    this.fields.removeAt(i);
+    if (
+      confirm(
+        `Вы уверены, что хотите удалить данное поле?\nВ таком случае, все данные, что ввели участники в данное поле будут утеряны`
+      )
+    )
+      this.fields.removeAt(i);
   }
 
   addFieldOption(field: FormGroup) {

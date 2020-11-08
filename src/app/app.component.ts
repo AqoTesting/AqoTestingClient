@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorMessagesCode } from './enums/error-messages.enum';
 import { AuthService } from './services/auth.service';
 import { SnackService } from './services/snack.service';
 

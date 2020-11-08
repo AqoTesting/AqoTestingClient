@@ -7,27 +7,27 @@ import { Room, GetRoomsItem } from '../entities/room.entities';
 
 @Injectable()
 export class RoomService {
-  constructor(private _http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getUserRooms(): Observable<GetRoomsItem[]> {
-    return this._http.get<GetRoomsItem[]>(environment.apiUrl + '/user/rooms');
+    return this.http.get<GetRoomsItem[]>(environment.apiUrl + '/user/rooms');
   }
 
   getUserRoomById(roomId: string): Observable<Room> {
-    return this._http.get<Room>(environment.apiUrl + '/user/room/' + roomId);
+    return this.http.get<Room>(environment.apiUrl + '/user/room/' + roomId);
   }
 
   createRoom(room: Room): Observable<any> {
-    return this._http.post<any>(environment.apiUrl + '/user/room', room);
+    return this.http.post<any>(environment.apiUrl + '/user/room', room);
   }
 
   getUserRoomByIdForEdit(roomId: string): Observable<Room> {
-    return this._http.get<Room>(
+    return this.http.get<Room>(
       environment.apiUrl + '/user/room/' + roomId + '/edit'
     );
   }
 
   deleteRoomById(roomId: string): Observable<any> {
-    return this._http.delete<any>(environment.apiUrl + '/user/room/' + roomId);
+    return this.http.delete<any>(environment.apiUrl + '/user/room/' + roomId);
   }
 }
