@@ -17,6 +17,7 @@ export class Room {
   id: string;
   name: string;
   domain: string;
+  description: string;
   ownerId: string;
   fields: RoomField[];
   isActive: boolean;

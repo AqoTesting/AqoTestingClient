@@ -117,6 +117,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   }
 
   deleteFieldOption(field: FormGroup, i: number) {
+    this.roomEdit.markAsDirty();
     return this.getFieldOptions(field).removeAt(i);
   }
 

@@ -12,6 +12,8 @@ import { RoomsComponent } from './components/rooms/rooms.component';
 import { AuthorizedGuard } from './guards/authorized.guard';
 import { NotAuthorizedGuard } from './guards/not-authorized.guard';
 import { ExitAboutGuard } from './guards/exit-about.guard';
+import { TestsComponent } from './components/tests/tests.component';
+import { MembersComponent } from './components/members/members.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -49,8 +51,22 @@ const routes: Routes = [
         path: 'edit/:roomId',
         component: RoomEditComponent,
         canDeactivate: [ExitAboutGuard],
-       },
-      { path: ':roomId', component: RoomComponent },
+      },
+      {
+        path: ':roomId',
+        component: RoomComponent,
+        children: [
+          { path: '', redirectTo: 'tests', pathMatch: 'prefix' },
+          {
+            path: 'tests',
+            component: TestsComponent,
+          },
+          {
+            path: 'members',
+            component: MembersComponent,
+          },
+        ],
+      },
     ],
   },
 

@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -32,6 +33,7 @@ const MaterialComponents = [
   MatSlideToggleModule,
   MatChipsModule,
   MatRadioModule,
+  MatMenuModule,
 ];
 
 @NgModule({

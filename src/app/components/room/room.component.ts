@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Room } from 'src/app/entities/room.entities';
 import { RoomService } from 'src/app/services/room.service';
 import { Background } from 'src/app/utils/background.utility';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-room',
@@ -15,7 +16,11 @@ export class RoomComponent implements OnInit, OnDestroy {
   room: Room;
   roomSub: Subscription;
 
-  constructor(private route: ActivatedRoute, private roomService: RoomService) {
+  constructor(
+    private route: ActivatedRoute,
+    private roomService: RoomService,
+    public location: Location
+  ) {
     Background.setColor('#303030');
     this.route.params.subscribe((params) => {
       this.roomId = params['roomId'];

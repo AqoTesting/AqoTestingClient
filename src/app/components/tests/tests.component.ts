@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Room } from 'src/app/entities/room.entities';
 import { TestService } from 'src/app/services/test.service';
@@ -10,11 +11,15 @@ import { TestService } from 'src/app/services/test.service';
 })
 export class TestsComponent implements OnInit, OnDestroy {
   testsSub: Subscription;
-  @Input() roomId: string;
+  roomId: string;
 
   tests: any[];
 
-  constructor(private testService: TestService) {}
+  constructor(private route: ActivatedRoute, private testService: TestService) {
+    this.route.params.subscribe((params) => {
+      this.roomId = params['roomId'];
+    });
+  }
 
   ngOnInit(): void {
     this.getRoomTests();

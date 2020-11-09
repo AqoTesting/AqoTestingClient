@@ -5,6 +5,7 @@ import { Response } from 'src/app/entities/response.entities';
 import { SnackService } from 'src/app/services/snack.service';
 import { RoomService } from '../../services/room.service';
 import { Background } from 'src/app/utils/background.utility';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rooms',
@@ -14,12 +15,13 @@ import { Background } from 'src/app/utils/background.utility';
 export class RoomsComponent implements OnInit, OnDestroy {
   roomsSub: Subscription;
   rooms: GetRoomsItem[];
+  env: any = environment;
 
   constructor(
     private _roomService: RoomService,
     private _snackService: SnackService
   ) {
-    Background.setColor("#303030");
+    Background.setColor('#303030');
   }
 
   ngOnInit(): void {
@@ -27,11 +29,9 @@ export class RoomsComponent implements OnInit, OnDestroy {
   }
 
   private updateRoomsItem(): void {
-    this.roomsSub = this._roomService.getUserRooms().subscribe(
-      (data) => {
-        this.rooms = data;
-      }
-    );
+    this.roomsSub = this._roomService.getUserRooms().subscribe((data) => {
+      this.rooms = data;
+    });
   }
 
   deleteRoom(room: GetRoomsItem): void {
