@@ -1,17 +1,32 @@
 <div class="text-center">
   <div class="text-right" style="margin: 0 4px; color: white">
-    <span>Создать новый тест</span>&nbsp;
     <button
       routerLink="/room/create"
       mat-mini-fab
       color="primary"
       aria-label="Создать новый тест"
+      matTooltip="Создать новый тест"
+      matTooltipPosition="left"
+      #tooltip="matTooltip"
     >
       <mat-icon>add</mat-icon>
     </button>
   </div>
 
-  <ng-container *ngIf="tests; else loading"></ng-container>
+  <ng-container *ngIf="tests; else loading">
+    <mat-card class="tests-line">
+      <div class="tests-line-left">Тестовое название теста</div>
+
+      <div class="tests-line-right">
+        <mat-icon matTooltip="Удалить тест" class="pointer room-action-icon"
+          >delete</mat-icon
+        >
+        <mat-icon matTooltip="Изменить тест" class="pointer room-action-icon"
+          >settings</mat-icon
+        >
+      </div>
+    </mat-card>
+  </ng-container>
   <ng-template #loading>
     <mat-spinner class="loading text-center"></mat-spinner>
   </ng-template>

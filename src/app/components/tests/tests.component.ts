@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Room } from 'src/app/entities/room.entities';
@@ -16,7 +16,7 @@ export class TestsComponent implements OnInit, OnDestroy {
   tests: any[];
 
   constructor(private route: ActivatedRoute, private testService: TestService) {
-    this.route.params.subscribe((params) => {
+    this.route.parent.params.subscribe((params) => {
       this.roomId = params['roomId'];
     });
   }
@@ -29,7 +29,7 @@ export class TestsComponent implements OnInit, OnDestroy {
     this.testsSub = this.testService
       .getRoomTests(this.roomId)
       .subscribe((data) => {
-        //this.tests = data;
+        this.tests = data;
       });
   }
 
