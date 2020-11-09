@@ -14,6 +14,7 @@ import { RoomService } from 'src/app/services/room.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
 import { Response } from 'src/app/entities/response.entities';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-room-edit',
@@ -47,7 +48,8 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private roomService: RoomService,
     private router: Router,
-    private snackService: SnackService
+    private snackService: SnackService,
+    public location: Location
   ) {
     Background.setColor('#303030');
     this.route.params.subscribe((params) => {

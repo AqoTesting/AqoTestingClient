@@ -7,7 +7,7 @@
         <td><h1>Создание комнаты</h1></td>
         <td class="rooms-header-action">
           <button
-            routerLink="/rooms"
+            (click)="location.back()"
             mat-icon-button
             aria-label="Назад"
             matTooltip="Назад"
@@ -201,7 +201,14 @@
         </mat-card-content>
       </mat-card>
       <p class="text-center">
-        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="roomCreate.invalid || roomCreate.disabled">Создать комнату</button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="roomCreate.invalid || roomCreate.disabled"
+        >
+          Создать комнату
+        </button>
       </p>
     </form>
   </div>

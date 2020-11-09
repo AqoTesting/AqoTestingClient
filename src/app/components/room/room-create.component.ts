@@ -9,14 +9,11 @@ import {
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Response } from 'src/app/entities/response.entities';
-import {
-  Room,
-  FieldType,
-  RoomField,
-} from 'src/app/entities/room.entities';
+import { Room, FieldType, RoomField } from 'src/app/entities/room.entities';
 import { RoomService } from 'src/app/services/room.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-room-create',
@@ -47,9 +44,10 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private roomService: RoomService,
     private router: Router,
-    private snackService: SnackService
+    private snackService: SnackService,
+    public location: Location
   ) {
-    Background.setColor("#303030");
+    Background.setColor('#303030');
   }
 
   ngOnInit(): void {}
