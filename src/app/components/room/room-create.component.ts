@@ -38,7 +38,7 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
     fields: this.fb.array([]),
   });
 
-  roomCreateSub: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -109,9 +109,8 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.roomCreateSub = this.roomService
-      .createRoom(this.roomCreate.value)
-      .subscribe(
+    this.subscription.add(
+      this.roomService.createRoom(this.roomCreate.value).subscribe(
         () => {
           this.snackService.success(
             `Комната <b>${this.roomCreate.value.name}</b> была успешно создана`
@@ -124,7 +123,8 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
             this.snackService.error(error.errorMessageCode);
           this.roomCreate.enable();
         }
-      );
+      )
+    );
   }
 
   canDeactivate(): boolean | Observable<boolean> {
@@ -138,6 +138,6 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.roomCreateSub) this.roomCreateSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

@@ -1,1 +1,15 @@
-<div class="text-center"><p>members works!</p></div>
+<div class="text-center">
+  <div class="text-right" style="margin: 0 4px; color: white">
+    <button
+      routerLink="/room/create"
+      mat-mini-fab
+      color="primary"
+      aria-label="Добавить участника"
+      matTooltip="Добавить участника"
+      matTooltipPosition="left"
+      #tooltip="matTooltip"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

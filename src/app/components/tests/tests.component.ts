@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Room } from 'src/app/entities/room.entities';
 import { TestService } from 'src/app/services/test.service';
 
@@ -10,15 +11,17 @@ import { TestService } from 'src/app/services/test.service';
   styleUrls: ['./tests.component.scss'],
 })
 export class TestsComponent implements OnInit, OnDestroy {
-  testsSub: Subscription;
+  subscription: Subscription = new Subscription();
   roomId: string;
 
   tests: any[];
 
   constructor(private route: ActivatedRoute, private testService: TestService) {
-    this.route.parent.params.subscribe((params) => {
-      this.roomId = params['roomId'];
-    });
+    this.subscription.add(
+      this.route.parent.params.pipe(take(1)).subscribe((params) => {
+        this.roomId = params['roomId'];
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -26,14 +29,14 @@ export class TestsComponent implements OnInit, OnDestroy {
   }
 
   getRoomTests(): void {
-    this.testsSub = this.testService
-      .getRoomTests(this.roomId)
-      .subscribe((data) => {
+    this.subscription.add(
+      this.testService.getRoomTests(this.roomId).subscribe((data) => {
         this.tests = data;
-      });
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    if (this.testsSub) this.testsSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

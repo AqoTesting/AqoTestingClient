@@ -39,7 +39,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     fields: this.fb.array([]),
   });
 
-  roomEditSub: Subscription;
+  subscription: Subscription = new Subscription();
   roomId: string;
   room: Room;
 
@@ -52,9 +52,11 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     public location: Location
   ) {
     Background.setColor('#303030');
-    this.route.params.subscribe((params) => {
-      this.roomId = params['roomId'];
-    });
+    this.subscription.add(
+      this.route.params.subscribe((params) => {
+        this.roomId = params['roomId'];
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -63,18 +65,20 @@ export class RoomEditComponent implements OnInit, OnDestroy {
 
   getRoom() {
     this.roomEdit.disable();
-    this.roomEditSub = this.roomService.getUserRoomById(this.roomId).subscribe(
-      (data: Room) => {
-        delete data.id;
-        delete data.ownerId;
+    this.subscription.add(
+      this.roomService.getUserRoomById(this.roomId).subscribe(
+        (data: Room) => {
+          delete data.id;
+          delete data.ownerId;
 
-        this.room = data;
-        this.initForm();
-        this.roomEdit.enable();
-      },
-      () => {
-        this.roomEdit.enable();
-      }
+          this.room = data;
+          this.initForm();
+          this.roomEdit.enable();
+        },
+        () => {
+          this.roomEdit.enable();
+        }
+      )
     );
   }
 
@@ -156,19 +160,21 @@ export class RoomEditComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.roomService.editRoom(this.roomId, this.roomEdit.value).subscribe(
-      () => {
-        this.snackService.success(
-          `Комната <b>${this.roomEdit.value.name}</b> была успешно изменена`
-        );
-        this.roomEdit.reset();
-        this.router.navigate(['/rooms']);
-      },
-      (error) => {
-        if (error instanceof Response)
-          this.snackService.error(error.errorMessageCode);
-        this.roomEdit.enable();
-      }
+    this.subscription.add(
+      this.roomService.editRoom(this.roomId, this.roomEdit.value).subscribe(
+        () => {
+          this.snackService.success(
+            `Комната <b>${this.roomEdit.value.name}</b> была успешно изменена`
+          );
+          this.roomEdit.reset();
+          this.router.navigate(['/rooms']);
+        },
+        (error) => {
+          if (error instanceof Response)
+            this.snackService.error(error.errorMessageCode);
+          this.roomEdit.enable();
+        }
+      )
     );
   }
 
@@ -183,6 +189,6 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.roomEditSub) this.roomEditSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserToken } from 'src/app/entities/user.entities';
 import { Response } from 'src/app/entities/response.entities';
@@ -6,13 +6,15 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss'],
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent implements OnInit, OnDestroy {
+  subscription: Subscription = new Subscription();
   signInForm: FormGroup = new FormGroup({
     login: new FormControl('', [
       Validators.required,
@@ -33,7 +35,7 @@ export class SignInComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {
-    Background.setColor("#9c27b0");
+    Background.setColor('#9c27b0');
   }
 
   ngOnInit(): void {}
@@ -67,16 +69,22 @@ export class SignInComponent implements OnInit {
 
   onSubmit() {
     this.signInForm.disable();
-    this.authService.getUserTokenSignIn(this.signInForm.value).subscribe(
-      () => {
-        this.snackService.success('Вы успешно авторизовались');
-        this.router.navigate(['rooms']);
-      },
-      (error) => {
-        if (error instanceof Response)
-          this.snackService.error(error.errorMessageCode);
-        this.signInForm.enable();
-      }
+    this.subscription.add(
+      this.authService.getUserTokenSignIn(this.signInForm.value).subscribe(
+        () => {
+          this.snackService.success('Вы успешно авторизовались');
+          this.router.navigate(['rooms']);
+        },
+        (error) => {
+          if (error instanceof Response)
+            this.snackService.error(error.errorMessageCode);
+          this.signInForm.enable();
+        }
+      )
     );
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

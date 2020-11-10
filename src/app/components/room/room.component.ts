@@ -12,9 +12,9 @@ import { Location } from '@angular/common';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit, OnDestroy {
+  subscription: Subscription = new Subscription();
   roomId: string;
   room: Room;
-  roomSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,9 +22,12 @@ export class RoomComponent implements OnInit, OnDestroy {
     public location: Location
   ) {
     Background.setColor('#303030');
-    this.route.params.subscribe((params) => {
-      this.roomId = params['roomId'];
-    });
+
+    this.subscription.add(
+      this.route.params.subscribe((params) => {
+        this.roomId = params['roomId'];
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -32,14 +35,14 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   getRoom(): void {
-    this.roomSub = this.roomService
-      .getUserRoomById(this.roomId)
-      .subscribe((data: Room) => {
+    this.subscription.add(
+      this.roomService.getUserRoomById(this.roomId).subscribe((data: Room) => {
         this.room = data;
-      });
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    if (this.roomSub) this.roomSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

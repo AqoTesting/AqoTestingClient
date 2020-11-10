@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Room } from 'src/app/entities/room.entities';
+import { RoomService } from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-members',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MembersComponent implements OnInit {
 
-  constructor() { }
+  room: Room;
+
+  constructor(private route: ActivatedRoute, private roomService: RoomService) { 
+    
+  }
 
   ngOnInit(): void {
   }

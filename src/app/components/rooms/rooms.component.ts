@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./rooms.component.scss'],
 })
 export class RoomsComponent implements OnInit, OnDestroy {
-  roomsSub: Subscription;
+  subscription: Subscription = new Subscription();
   rooms: GetRoomsItem[];
   env: any = environment;
 
@@ -29,30 +29,34 @@ export class RoomsComponent implements OnInit, OnDestroy {
   }
 
   private updateRoomsItem(): void {
-    this.roomsSub = this._roomService.getUserRooms().subscribe((data) => {
-      this.rooms = data;
-    });
+    this.subscription.add(
+      this._roomService.getUserRooms().subscribe((data) => {
+        this.rooms = data;
+      })
+    );
   }
 
   deleteRoom(room: GetRoomsItem): void {
     if (confirm(`Вы уверены, что хотите удалить комнату ${room.name}?`)) {
-      this._roomService.deleteRoomById(room.id).subscribe(
-        () => {
-          this._snackService.success(
-            `Комната <b>${room.name}</b> была успешно удалена`
-          );
-          this.rooms = this.rooms.filter((_room) => _room.id != room.id);
-          this.updateRoomsItem();
-        },
-        (error) => {
-          if (error instanceof Response)
-            this._snackService.error(error.errorMessageCode);
-        }
+      this.subscription.add(
+        this._roomService.deleteRoomById(room.id).subscribe(
+          () => {
+            this._snackService.success(
+              `Комната <b>${room.name}</b> была успешно удалена`
+            );
+            this.rooms = this.rooms.filter((_room) => _room.id != room.id);
+            this.updateRoomsItem();
+          },
+          (error) => {
+            if (error instanceof Response)
+              this._snackService.error(error.errorMessageCode);
+          }
+        )
       );
     }
   }
 
   ngOnDestroy() {
-    if (this.roomsSub) this.roomsSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }
