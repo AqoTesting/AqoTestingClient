@@ -36,6 +36,7 @@ import { ExitAboutGuard } from './guards/exit-about.guard';
 import { TestsComponent } from './components/tests/tests.component';
 import { MembersComponent } from './components/members/members.component';
 import { TestService } from './services/test.service';
+import { AddMemberComponent } from './components/members/add-member.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { TestService } from './services/test.service';
     SnackComponent,
     TestsComponent,
     MembersComponent,
+    AddMemberComponent,
   ],
   imports: [
     BrowserModule,
