@@ -3,6 +3,7 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
+  FormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -20,7 +21,7 @@ import { MembersComponent } from './members.component';
   styleUrls: ['./add-member.component.scss'],
 })
 export class AddMemberComponent implements OnInit, OnDestroy {
-  memberAdd: FormArray = this.fb.array([]);
+  memberAdd: FormGroup = this.fb.group({});
 
   constructor(
     public dialogRef: MatDialogRef<MembersComponent>,
@@ -39,14 +40,12 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       if (field.isRequired) validators.push(Validators.required);
       if (field.mask) validators.push(Validators.pattern(field.mask));
 
-      this.addField([field.name], ['', validators]);
+      this.addField(field.name, '', validators);
     });
   }
 
-  addField(name: any, value: any) {
-    const field = this.fb.group({ name, value });
-    this.memberAdd.push(field);
-    return field;
+  addField(name: string, value: string = '', validators: Validators[]): void {
+    this.memberAdd.addControl(name, this.fb.control(value, ...validators));
   }
 
   getErrorMessage(control: FormControl) {
@@ -65,10 +64,11 @@ export class AddMemberComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     this.memberAdd.disable();
     setTimeout(() => {
-      if (true) {
+      if (false) {
         this.memberAdd.enable();
         this.snack.fatal('Что-то пошло не так...');
       } else {
+        console.log(this.memberAdd.value);
         this.snack.success('Участник успешно добавлен');
         this.onNoClick(true);
       }
