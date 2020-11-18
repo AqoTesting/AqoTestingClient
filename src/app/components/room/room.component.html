@@ -6,39 +6,34 @@
     </div>
     <div class="under-header-right">
       <button
+        routerLink="/rooms"
         mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Example icon-button with a menu"
+        aria-label="Назад"
+        matTooltip="Назад"
       >
-        <mat-icon>more_vert</mat-icon>
+        <mat-icon>arrow_back</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
-        <button
-          routerLink="tests"
-          routerLinkActive
-          #testsRouterLinkActive="routerLinkActive"
-          mat-menu-item
-          [disabled]="testsRouterLinkActive.isActive"
-        >
-          <mat-icon>check_box</mat-icon>
-          <span>Тесты</span>
-        </button>
-        <button
-          routerLink="members"
-          routerLinkActive
-          #membersRouterLinkActive="routerLinkActive"
-          mat-menu-item
-          [disabled]="membersRouterLinkActive.isActive"
-        >
-          <mat-icon>group</mat-icon>
-          <span>Участники</span>
-        </button>
-        <button mat-menu-item routerLink="/rooms">
-          <mat-icon>meeting_room</mat-icon>
-          <span>Комнаты</span>
-        </button>
-      </mat-menu>
     </div>
+  </div>
+  <div style="max-width: 600px; margin: auto">
+    <nav mat-tab-nav-bar>
+      <a
+        mat-tab-link
+        routerLink="tests"
+        routerLinkActive
+        #testsRouterLinkActive="routerLinkActive"
+        [active]="testsRouterLinkActive.isActive"
+        ><mat-icon>list</mat-icon>&nbsp;Тесты</a
+      >
+      <a
+        mat-tab-link
+        routerLink="members"
+        routerLinkActive
+        #membersRouterLinkActive="routerLinkActive"
+        [active]="membersRouterLinkActive.isActive"
+        ><mat-icon>group</mat-icon>&nbsp;Участники</a
+      >
+    </nav>
   </div>
   <ng-container *ngIf="room; else loading" class="rooms-conteiner">
     <div class="room-content">

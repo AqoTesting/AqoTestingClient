@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -13,7 +13,6 @@ import { TestService } from 'src/app/services/test.service';
 export class TestsComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   roomId: string;
-
   tests: any[];
 
   constructor(private route: ActivatedRoute, private testService: TestService) {

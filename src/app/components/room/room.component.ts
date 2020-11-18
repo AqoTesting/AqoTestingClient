@@ -15,6 +15,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   roomId: string;
   room: Room;
+  tabSelectedIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +23,6 @@ export class RoomComponent implements OnInit, OnDestroy {
     public location: Location
   ) {
     Background.setColor('#303030');
-
     this.subscription.add(
       this.route.params.subscribe((params) => {
         this.roomId = params['roomId'];

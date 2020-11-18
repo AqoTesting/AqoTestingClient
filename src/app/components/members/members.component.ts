@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Room } from 'src/app/entities/room.entities';
@@ -19,7 +19,8 @@ export class MembersComponent implements OnInit {
     private route: ActivatedRoute,
     private roomService: RoomService,
     public dialog: MatDialog
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {}
 
