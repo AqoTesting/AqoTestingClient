@@ -37,6 +37,7 @@ import { TestsComponent } from './components/tests/tests.component';
 import { MembersComponent } from './components/members/members.component';
 import { TestService } from './services/test.service';
 import { AddMemberComponent } from './components/members/add-member.component';
+import { MemberService } from './services/member.service';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { AddMemberComponent } from './components/members/add-member.component';
     RoomService,
     SnackService,
     TestService,
+    MemberService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

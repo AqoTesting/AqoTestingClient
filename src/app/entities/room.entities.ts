@@ -39,17 +39,3 @@ export enum FieldType {
   Input = 1,
   Select = 2,
 }
-
-class Member {
-  token: string;
-  login: string;
-  attempts: Attempt[];
-  UserData: any;
-}
-
-class Attempt {
-  testId: string;
-  sectionId: number;
-  questionId: number;
-  answer: any;
-}

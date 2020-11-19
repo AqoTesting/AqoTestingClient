@@ -4,6 +4,17 @@
     <div class="under-header-right" *ngIf="!room.isRegistrationEnabled">
       <button
         (click)="openAddMemberDialog()"
+        mat-icon-button
+        aria-label="Изменить отображение"
+        matTooltip="Изменить отображение"
+        matTooltipPosition="left"
+        #tooltip="matTooltip"
+        class="mr"
+      >
+        <mat-icon>filter_alt</mat-icon>
+      </button>
+      <button
+        (click)="openAddMemberDialog()"
         mat-mini-fab
         color="primary"
         aria-label="Добавить участника"
@@ -15,5 +26,59 @@
       </button>
     </div>
   </div>
-  <div class="text-center white">В комнате ещё нет участников</div>
+  <div *ngIf="members; else loading">
+    <div *ngIf="members.length; else noMembers">
+      <mat-card class="member" *ngFor="let member of members">
+        <div class="member-fields">
+          <div class="member-field" *ngFor="let colum of displayColumns">
+            <div class="member-field-name">{{ colum }}</div>
+            <div class="member-field-value">{{ member.fields[colum] }}</div>
+          </div>
+        </div>
+        <span class="spacer"></span>
+        <div>
+          <button
+            [matMenuTriggerFor]="menu"
+            mat-icon-button
+            aria-label="Действия"
+            matTooltip="Действия"
+            *ngIf="member.isRegistered"
+            matBadge="?"
+            [matBadgeHidden]="member.isApproved"
+            matBadgeColor="accent"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            aria-label="Удалить"
+            matTooltip="Удалить"
+            *ngIf="!member.isRegistered"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item *ngIf="!member.isApproved" (click)="memberApprove(member)">
+              <mat-icon matBadge="?" matBadgeColor="accent">how_to_reg</mat-icon>
+              <span>Подтвердить</span>
+            </button>
+            <button mat-menu-item *ngIf="member.isRegistered" (click)="memberUnregister(member)">
+              <mat-icon>backspace</mat-icon>
+              <span>Сбросить регистрацию</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Удалить</span>
+            </button>
+          </mat-menu>
+        </div>
+      </mat-card>
+    </div>
+    <ng-template #noMembers>
+      <div class="text-center white">В комнате ещё нет участников</div>
+    </ng-template>
+  </div>
+  <ng-template #loading>
+    <mat-spinner class="loading text-center"></mat-spinner>
+  </ng-template>
 </div>

@@ -11,7 +11,11 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { RoomField } from 'src/app/entities/room.entities';
+import { Subscription } from 'rxjs';
+import { Response } from 'src/app/entities/response.entities';
+import { Room, RoomField } from 'src/app/entities/room.entities';
+import { MemberService } from 'src/app/services/member.service';
+import { RoomService } from 'src/app/services/room.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { MembersComponent } from './members.component';
 
@@ -21,13 +25,20 @@ import { MembersComponent } from './members.component';
   styleUrls: ['./add-member.component.scss'],
 })
 export class AddMemberComponent implements OnInit, OnDestroy {
+  subscription: Subscription = new Subscription();
+  get room(): Room {
+    return this.roomService.room;
+  }
+
   memberAdd: FormGroup = this.fb.group({});
 
   constructor(
     public dialogRef: MatDialogRef<MembersComponent>,
     @Inject(MAT_DIALOG_DATA) public fields: RoomField[],
     private fb: FormBuilder,
-    private snack: SnackService
+    private snack: SnackService,
+    private roomService: RoomService,
+    private memberService: MemberService,
   ) {}
 
   ngOnInit(): void {
@@ -63,16 +74,15 @@ export class AddMemberComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.memberAdd.disable();
-    setTimeout(() => {
-      if (false) {
-        this.memberAdd.enable();
-        this.snack.fatal('Что-то пошло не так...');
-      } else {
-        console.log(this.memberAdd.value);
-        this.snack.success('Участник успешно добавлен');
-        this.onNoClick(true);
-      }
-    }, 1500);
+    this.subscription.add(this.memberService.postRoomMember(this.room.id, { fields: this.memberAdd.value }).subscribe(() => {
+      this.snack.success('Участник успешно добавлен');
+      this.onNoClick(true);
+    }, (error) => {
+      this.memberAdd.enable();
+        if (error instanceof Response)
+          this.snack.error(error.errorMessageCode);
+        
+    }));
   }
 
   ngOnDestroy() {

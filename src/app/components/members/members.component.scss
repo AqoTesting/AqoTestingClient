@@ -1,0 +1,21 @@
+.member {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 15px;
+
+  &-fields {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &-field {
+    margin-right: 15px;
+    &-name {
+      color: #989898;
+      font-size: 10px;
+    }
+    &-value {
+    }
+  }
+}
