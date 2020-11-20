@@ -3,10 +3,10 @@
     <div class="under-header-left"><h3>Участники</h3></div>
     <div class="under-header-right" *ngIf="!room.isRegistrationEnabled">
       <button
-        (click)="openAddMemberDialog()"
+        (click)="openFilterDialog()"
         mat-icon-button
-        aria-label="Изменить отображение"
-        matTooltip="Изменить отображение"
+        aria-label="Фильтровать/Сортировать"
+        matTooltip="Фильтровать/Сортировать"
         matTooltipPosition="left"
         #tooltip="matTooltip"
         class="mr"
