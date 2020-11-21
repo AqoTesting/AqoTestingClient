@@ -20,6 +20,7 @@ import { MemberService } from 'src/app/services/member.service';
 import { RoomService } from 'src/app/services/room.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { AddMemberComponent } from './add-member.component';
+import { FilterMemberComponent } from './filter-member.component';
 
 @Component({
   selector: 'app-members',
@@ -29,6 +30,7 @@ import { AddMemberComponent } from './add-member.component';
 export class MembersComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   members: Member[];
+  allColumns: string[];
   displayColumns: string[];
 
   get room(): Room {
@@ -45,6 +47,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getMembers();
+    this.allColumns = this.room.fields.map((field) => field.name);
     this.displayColumns = this.room.fields.map((field) => field.name);
   }
 
@@ -83,6 +86,21 @@ export class MembersComponent implements OnInit, OnDestroy {
             this.snack.error(error.errorMessageCode);
         }
       )
+    );
+  }
+
+  openFilterDialog() {
+    const dialogRef = this.dialog.open(FilterMemberComponent, {
+      data: this.room.fields,
+    });
+
+    this.subscription.add(
+      dialogRef.afterClosed().subscribe((reslt) => {
+        if (reslt) {
+          this.members = null;
+          this.getMembers();
+        }
+      })
     );
   }
 
