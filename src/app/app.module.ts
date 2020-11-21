@@ -38,12 +38,9 @@ import { MembersComponent } from './components/members/members.component';
 import { TestService } from './services/test.service';
 import { AddMemberComponent } from './components/members/add-member.component';
 import { MemberService } from './services/member.service';
-<<<<<<< Updated upstream
-=======
-import { FilterMemberComponent } from './components/members/filter-member.component';
+//import { FilterMemberComponent } from './components/members/filter-member.component';
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
