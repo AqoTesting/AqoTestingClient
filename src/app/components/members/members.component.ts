@@ -59,12 +59,12 @@ export class MembersComponent implements OnInit, OnDestroy {
   }
 
   memberApprove(member: Member) {
-    member.isApproved = false;
+    member.isApproved = true;
     this.subscription.add(
       this.memberService.memberApprove(member.id).subscribe(
         () => {},
         (error) => {
-          member.isApproved = true;
+          member.isApproved = false;
           if (error instanceof Response)
             this.snack.error(error.errorMessageCode);
         }
