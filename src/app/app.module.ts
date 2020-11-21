@@ -56,12 +56,6 @@ import { MemberService } from './services/member.service';
     TestsComponent,
     MembersComponent,
     AddMemberComponent,
-<<<<<<< Updated upstream
-=======
-    FilterMemberComponent,
-    TestCreateComponent,
-    TestEditComponent,
->>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,
