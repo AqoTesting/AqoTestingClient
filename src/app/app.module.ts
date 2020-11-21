@@ -39,6 +39,8 @@ import { TestService } from './services/test.service';
 import { AddMemberComponent } from './components/members/add-member.component';
 import { MemberService } from './services/member.service';
 import { FilterMemberComponent } from './components/members/filter-member.component';
+import { TestCreateComponent } from './components/test/test-create.component';
+import { TestEditComponent } from './components/test/test-edit.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { FilterMemberComponent } from './components/members/filter-member.compon
     MembersComponent,
     AddMemberComponent,
     FilterMemberComponent,
+    TestCreateComponent,
+    TestEditComponent
   ],
   imports: [
     BrowserModule,
