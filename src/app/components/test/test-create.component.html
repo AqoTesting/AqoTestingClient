@@ -1,18 +1,266 @@
 <app-navbar></app-navbar>
-<div class="rooms-conteiner">
-  <div class="under-header">
-    <div class="under-header-left">
-      <h1>Создание теста</h1>
+<div class="container">
+  <div class="content">
+    <div class="header">
+      <div class="header-left">
+        <h1>Создание теста</h1>
+      </div>
+      <div class="header-right">
+        <button
+          (click)="location.back()"
+          mat-icon-button
+          aria-label="Назад"
+          matTooltip="Назад"
+        >
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
     </div>
-    <div class="under-header-right">
-      <button
-        (click)="location.back()"
-        mat-icon-button
-        aria-label="Назад"
-        matTooltip="Назад"
-      >
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    </div>
+    <form [formGroup]="testCreate">
+      <mat-card>
+        <mat-card-content>
+          <p>
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Название</mat-label>
+              <input
+                matInput
+                placeholder="Физические тела и вещества"
+                required
+                formControlName="title"
+                minlength="1"
+                maxlength="64"
+              />
+              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+              getErrorMessageLogin()
+            }}</mat-error>-->
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="field" appearance="fill" color="accent">
+              <mat-label>Описание</mat-label>
+              <textarea
+                matInput
+                #description
+                formControlName="description"
+                maxlength="4096"
+              ></textarea>
+              <mat-hint align="end"
+                >{{ description.value?.length || 0 }}/4096</mat-hint
+              >
+              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                getErrorMessageLogin()
+              }}</mat-error>-->
+            </mat-form-field>
+          </p>
+          <div>
+            <div>
+              <p>
+                <mat-form-field appearance="fill" color="accent">
+                  <mat-label>Количество попыток</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="2"
+                    formControlName="numberOfAttempts"
+                    min="1"
+                  />
+                </mat-form-field>
+              </p>
+            </div>
+            <div>
+              <p>
+                <mat-form-field appearance="fill" color="accent">
+                  <mat-label>Итогивый балл</mat-label>
+                  <mat-select formControlName="finalScore">
+                    <mat-option [value]="0">Средний от всех попыток</mat-option>
+                    <mat-option [value]="1"
+                      >Максимальный от всех попыток</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </p>
+            </div>
+          </div>
+          <p>
+            <mat-slide-toggle formControlName="isActive"
+              >Активирован</mat-slide-toggle
+            >
+          </p>
+          <p>
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Дата и время начала тестирования</mat-label>
+              <input
+                matInput
+                [ngxMatDatetimePicker]="pickerActivation"
+                [min]="now"
+                placeholder=""
+                formControlName="activationDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerActivation"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #pickerActivation
+              ></ngx-mat-datetime-picker>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Дата и время окончания тестирования</mat-label>
+              <input
+                matInput
+                [ngxMatDatetimePicker]="pickerDeactivation"
+                [min]="now"
+                placeholder=""
+                formControlName="deactivationDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerDeactivation"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #pickerDeactivation
+              ></ngx-mat-datetime-picker>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-slide-toggle formControlName="shuffle"
+              >Перемешивать секции</mat-slide-toggle
+            >
+          </p>
+          <p>
+            <mat-slide-toggle formControlName="showAllSections"
+              >Выводить все секции</mat-slide-toggle
+            >
+          </p>
+          <p *ngIf="!testCreate.value.showAllSections">
+            <mat-form-field appearance="fill" color="accent">
+              <mat-label>Количество выводимых секций</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="2"
+                formControlName="amount"
+                min="1"
+                (input)="
+                  setShowAllSections(
+                    testCreate.controls.amount,
+                    testCreate.controls.showAllSections
+                  )
+                "
+              />
+            </mat-form-field>
+          </p>
+        </mat-card-content>
+        <mat-card-title>Документы</mat-card-title>
+        <mat-card-content>
+          <mat-hint>
+            Добавляйте ссылки на учебники, методички и прочие документы,
+            используемые при создании или нужные для прохождения данного теста
+          </mat-hint>
+          <div
+            formArrayName="documents"
+            *ngFor="let document of documents.controls; index as i"
+          >
+            <div class="field-wrapper">
+              <div [formGroupName]="i">
+                <div class="field-wrapper-body">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Заголовок</mat-label>
+                    <input
+                      matInput
+                      formControlName="name"
+                      placeholder="лялялляляял"
+                      required
+                    />
+                    <mat-icon
+                      matSuffix
+                      matTooltip="Удалить документ"
+                      (click)="deleteDucument(i)"
+                      class="pointer"
+                      >delete</mat-icon
+                    >
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Ссылка</mat-label>
+                    <input
+                      matInput
+                      formControlName="value"
+                      placeholder="Ссылка"
+                      required
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="text-center">
+            <button mat-button (click)="addDocument()">
+              Добавить документ
+            </button>
+          </p>
+        </mat-card-content>
+
+        <mat-card-title>Шкала оценки</mat-card-title>
+        <mat-card-content>
+          <mat-hint>
+            Добавляйте свою шкалу оценок. Например оценка "Хорошо" будет от 50
+            баллов, а "Отлично" от 75.
+          </mat-hint>
+          <div
+            formArrayName="ratingScale"
+            *ngFor="let scale of ratingScale.controls; index as i"
+          >
+            <div class="field-wrapper">
+              <div [formGroupName]="i">
+                <div class="field-wrapper-body">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Название оценки</mat-label>
+                    <input
+                      matInput
+                      formControlName="name"
+                      placeholder="Да ты красава"
+                      required
+                    />
+                    <mat-icon
+                      matSuffix
+                      matTooltip="Удалить шкалу"
+                      (click)="deleteRatingScale(i)"
+                      class="pointer"
+                      >delete</mat-icon
+                    >
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Баллы</mat-label>
+                    <input
+                      matInput
+                      formControlName="value"
+                      placeholder="10"
+                      required
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="text-center">
+            <button mat-button (click)="addRatingScale()">
+              Добавить шкалу
+            </button>
+          </p>
+        </mat-card-content>
+      </mat-card>
+      <p class="text-center">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="testCreate.invalid || testCreate.disabled"
+        >
+          Создать тест
+        </button>
+      </p>
+    </form>
   </div>
 </div>

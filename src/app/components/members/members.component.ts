@@ -1,7 +1,9 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -43,7 +45,8 @@ export class MembersComponent implements OnInit, OnDestroy {
     private memberService: MemberService,
     private snack: SnackService,
     public dialog: MatDialog
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getMembers();

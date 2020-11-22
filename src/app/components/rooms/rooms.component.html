@@ -20,17 +20,19 @@
   </div>
   <ng-container *ngIf="rooms; else loading" class="rooms-conteiner">
     <div *ngFor="let room of rooms" class="room-content">
-      <mat-card>
+      <mat-card [routerLink]="['/room/', room.id]" class="pointer">
         <div class="room-info">
           <div class="room-info-name pointer">
-            <span matTooltip="Перейти в комнату">{{ room.name }}</span>
+            <span>{{ room.name }}</span>
           </div>
           <div class="room-info-domain">
-            <span matTooltip="Открыть в новой владке">
+            <span>
               <a
                 class="clip"
                 target="_blank"
                 [href]="'https://' + room.domain + '.' + env.domain"
+                matTooltip="Открыть в новой владке"
+                style="width: fit-content;"
                 >{{ room.domain }}.aqotesting.tk</a
               >
             </span>

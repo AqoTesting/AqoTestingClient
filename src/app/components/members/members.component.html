@@ -1,7 +1,7 @@
 <div class="text-center">
   <div class="under-header">
     <div class="under-header-left"><h3>Участники</h3></div>
-    <div class="under-header-right" *ngIf="!room.isRegistrationEnabled">
+    <div class="under-header-right">
       <button
         (click)="openFilterDialog()"
         mat-icon-button
@@ -14,6 +14,7 @@
         <mat-icon>filter_alt</mat-icon>
       </button>
       <button
+        *ngIf="!room.isRegistrationEnabled"
         (click)="openAddMemberDialog()"
         mat-mini-fab
         color="primary"
@@ -58,11 +59,21 @@
             <mat-icon>delete</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item *ngIf="!member.isApproved" (click)="memberApprove(member)">
-              <mat-icon matBadge="?" matBadgeColor="accent">how_to_reg</mat-icon>
+            <button
+              mat-menu-item
+              *ngIf="!member.isApproved"
+              (click)="memberApprove(member)"
+            >
+              <mat-icon matBadge="?" matBadgeColor="accent"
+                >how_to_reg</mat-icon
+              >
               <span>Подтвердить</span>
             </button>
-            <button mat-menu-item *ngIf="member.isRegistered" (click)="memberUnregister(member)">
+            <button
+              mat-menu-item
+              *ngIf="member.isRegistered"
+              (click)="memberUnregister(member)"
+            >
               <mat-icon>backspace</mat-icon>
               <span>Сбросить регистрацию</span>
             </button>

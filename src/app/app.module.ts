@@ -41,6 +41,11 @@ import { MemberService } from './services/member.service';
 import { FilterMemberComponent } from './components/members/filter-member.component';
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [
@@ -61,7 +66,7 @@ import { TestEditComponent } from './components/test/test-edit.component';
     AddMemberComponent,
     FilterMemberComponent,
     TestCreateComponent,
-    TestEditComponent
+    TestEditComponent,
   ],
   imports: [
     BrowserModule,
