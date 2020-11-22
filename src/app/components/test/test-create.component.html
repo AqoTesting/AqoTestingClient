@@ -52,8 +52,8 @@
               }}</mat-error>-->
             </mat-form-field>
           </p>
-          <div>
-            <div>
+          <div class="flex-row">
+            <div class="flex-row-item">
               <p>
                 <mat-form-field appearance="fill" color="accent">
                   <mat-label>Количество попыток</mat-label>
@@ -67,7 +67,7 @@
                 </mat-form-field>
               </p>
             </div>
-            <div>
+            <div class="flex-row-item">
               <p>
                 <mat-form-field appearance="fill" color="accent">
                   <mat-label>Итогивый балл</mat-label>
@@ -81,77 +81,100 @@
               </p>
             </div>
           </div>
-          <p>
-            <mat-slide-toggle formControlName="isActive"
-              >Активирован</mat-slide-toggle
+
+          <div class="flex-row">
+            <div class="flex-row-item">
+              <p>
+                <mat-form-field appearance="fill" color="accent">
+                  <mat-label>Дата начала тестирования</mat-label>
+                  <input
+                    matInput
+                    [ngxMatDatetimePicker]="pickerActivation"
+                    [min]="now"
+                    placeholder=""
+                    formControlName="activationDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerActivation"
+                  ></mat-datepicker-toggle>
+                  <ngx-mat-datetime-picker
+                    #pickerActivation
+                  ></ngx-mat-datetime-picker>
+                </mat-form-field>
+              </p>
+            </div>
+            <div class="flex-row-item">
+              <p>
+                <mat-form-field appearance="fill" color="accent">
+                  <mat-label>Дата окончания тестирования</mat-label>
+                  <input
+                    matInput
+                    [ngxMatDatetimePicker]="pickerDeactivation"
+                    [min]="now"
+                    placeholder=""
+                    formControlName="deactivationDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerDeactivation"
+                  ></mat-datepicker-toggle>
+                  <ngx-mat-datetime-picker
+                    #pickerDeactivation
+                  ></ngx-mat-datetime-picker>
+                </mat-form-field>
+              </p>
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-row-item">
+              <p>
+                <mat-slide-toggle formControlName="isActive"
+                  >Тест активирован</mat-slide-toggle
+                >
+              </p>
+            </div>
+            <div class="flex-row-item">
+              <p>
+                <mat-slide-toggle formControlName="shuffle"
+                  >Перемешивать секции</mat-slide-toggle
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="flex-row">
+            <div class="flex-row-item">
+              <p>
+                <mat-slide-toggle formControlName="showAllSections"
+                  >Выводить все секции</mat-slide-toggle
+                >
+              </p>
+            </div>
+            <div
+              class="flex-row-item"
+              *ngIf="!testCreate.value.showAllSections"
             >
-          </p>
-          <p>
-            <mat-form-field appearance="fill" color="accent">
-              <mat-label>Дата и время начала тестирования</mat-label>
-              <input
-                matInput
-                [ngxMatDatetimePicker]="pickerActivation"
-                [min]="now"
-                placeholder=""
-                formControlName="activationDate"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerActivation"
-              ></mat-datepicker-toggle>
-              <ngx-mat-datetime-picker
-                #pickerActivation
-              ></ngx-mat-datetime-picker>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill" color="accent">
-              <mat-label>Дата и время окончания тестирования</mat-label>
-              <input
-                matInput
-                [ngxMatDatetimePicker]="pickerDeactivation"
-                [min]="now"
-                placeholder=""
-                formControlName="deactivationDate"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerDeactivation"
-              ></mat-datepicker-toggle>
-              <ngx-mat-datetime-picker
-                #pickerDeactivation
-              ></ngx-mat-datetime-picker>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-slide-toggle formControlName="shuffle"
-              >Перемешивать секции</mat-slide-toggle
-            >
-          </p>
-          <p>
-            <mat-slide-toggle formControlName="showAllSections"
-              >Выводить все секции</mat-slide-toggle
-            >
-          </p>
-          <p *ngIf="!testCreate.value.showAllSections">
-            <mat-form-field appearance="fill" color="accent">
-              <mat-label>Количество выводимых секций</mat-label>
-              <input
-                matInput
-                type="number"
-                placeholder="2"
-                formControlName="amount"
-                min="1"
-                (input)="
-                  setShowAllSections(
-                    testCreate.controls.amount,
-                    testCreate.controls.showAllSections
-                  )
-                "
-              />
-            </mat-form-field>
-          </p>
+              <p>
+                <mat-form-field appearance="fill" color="accent">
+                  <mat-label>Количество выводимых секций</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="2"
+                    formControlName="amount"
+                    min="1"
+                    (input)="
+                      setShowAllSections(
+                        testCreate.controls.amount,
+                        testCreate.controls.showAllSections
+                      )
+                    "
+                  />
+                </mat-form-field>
+              </p>
+            </div>
+          </div>
         </mat-card-content>
         <mat-card-title>Документы</mat-card-title>
         <mat-card-content>
@@ -166,31 +189,37 @@
             <div class="field-wrapper">
               <div [formGroupName]="i">
                 <div class="field-wrapper-body">
-                  <mat-form-field appearance="fill" color="accent">
-                    <mat-label>Заголовок</mat-label>
-                    <input
-                      matInput
-                      formControlName="name"
-                      placeholder="лялялляляял"
-                      required
-                    />
-                    <mat-icon
-                      matSuffix
-                      matTooltip="Удалить документ"
-                      (click)="deleteDucument(i)"
-                      class="pointer"
-                      >delete</mat-icon
-                    >
-                  </mat-form-field>
-                  <mat-form-field appearance="fill" color="accent">
-                    <mat-label>Ссылка</mat-label>
-                    <input
-                      matInput
-                      formControlName="value"
-                      placeholder="Ссылка"
-                      required
-                    />
-                  </mat-form-field>
+                  <div class="flex-row">
+                    <div class="flex-row-item">
+                      <mat-form-field appearance="fill" color="accent">
+                        <mat-label>Заголовок</mat-label>
+                        <input
+                          matInput
+                          formControlName="name"
+                          placeholder="лялялляляял"
+                          required
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-row-item">
+                      <mat-form-field appearance="fill" color="accent">
+                        <mat-label>Ссылка</mat-label>
+                        <input
+                          matInput
+                          formControlName="value"
+                          placeholder="Ссылка"
+                          required
+                        />
+                        <mat-icon
+                          matSuffix
+                          matTooltip="Удалить документ"
+                          (click)="deleteDucument(i)"
+                          class="pointer"
+                          >delete</mat-icon
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -215,31 +244,37 @@
             <div class="field-wrapper">
               <div [formGroupName]="i">
                 <div class="field-wrapper-body">
-                  <mat-form-field appearance="fill" color="accent">
-                    <mat-label>Название оценки</mat-label>
-                    <input
-                      matInput
-                      formControlName="name"
-                      placeholder="Да ты красава"
-                      required
-                    />
-                    <mat-icon
-                      matSuffix
-                      matTooltip="Удалить шкалу"
-                      (click)="deleteRatingScale(i)"
-                      class="pointer"
-                      >delete</mat-icon
-                    >
-                  </mat-form-field>
-                  <mat-form-field appearance="fill" color="accent">
-                    <mat-label>Баллы</mat-label>
-                    <input
-                      matInput
-                      formControlName="value"
-                      placeholder="10"
-                      required
-                    />
-                  </mat-form-field>
+                  <div class="flex-row">
+                    <div class="flex-row-item">
+                      <mat-form-field appearance="fill" color="accent">
+                        <mat-label>Название оценки</mat-label>
+                        <input
+                          matInput
+                          formControlName="name"
+                          placeholder="Да ты красава"
+                          required
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-row-item">
+                      <mat-form-field appearance="fill" color="accent">
+                        <mat-label>Баллы</mat-label>
+                        <input
+                          matInput
+                          formControlName="value"
+                          placeholder="10"
+                          required
+                        />
+                        <mat-icon
+                          matSuffix
+                          matTooltip="Удалить шкалу"
+                          (click)="deleteRatingScale(i)"
+                          class="pointer"
+                          >delete</mat-icon
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

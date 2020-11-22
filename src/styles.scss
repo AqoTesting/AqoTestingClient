@@ -324,7 +324,7 @@ mat-form-field {
     .room-description {
       position: relative;
       margin-top: 15px;
-      padding: 13px 13px 2px 13px;;
+      padding: 13px 13px 2px 13px;
       color: white;
       border-left: 1px solid #ffffff1f;
 
@@ -335,6 +335,17 @@ mat-form-field {
         position: absolute;
         content: "Описание комнаты";
       }
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .flex-row {
+    display: flex;
+    gap: 16px;
+
+    &-item {
+      flex: 1 1 calc((100% / 2) - 16px);
     }
   }
 }

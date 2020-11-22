@@ -24,44 +24,50 @@
       <form [formGroup]="roomEdit">
         <mat-card>
           <mat-card-content>
-            <p>
-              <mat-form-field appearance="fill" color="accent">
-                <mat-label>Название</mat-label>
-                <input
-                  matInput
-                  placeholder="Операционные системы"
-                  required
-                  formControlName="name"
-                  minlength="1"
-                  maxlength="64"
-                />
-                <mat-hint>Придумайте название комнате</mat-hint>
-                <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Название</mat-label>
+                    <input
+                      matInput
+                      placeholder="Операционные системы"
+                      required
+                      formControlName="name"
+                      minlength="1"
+                      maxlength="64"
+                    />
+                    <mat-hint>Придумайте название комнате</mat-hint>
+                    <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
                 getErrorMessageLogin()
               }}</mat-error>-->
-              </mat-form-field>
-            </p>
-            <p>
-              <mat-form-field appearance="fill" color="accent">
-                <mat-label>Домен</mat-label>
-                <input
-                  class="text-right"
-                  matInput
-                  placeholder="subdomain"
-                  required
-                  formControlName="domain"
-                  minlength="1"
-                  maxlength="63"
-                />
-                <span matSuffix>.aqotesting.tk</span>
-                <mat-hint
-                  >По домену участники будут вступать в комнату</mat-hint
-                >
-                <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
+                  </mat-form-field>
+                </p>
+              </div>
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Домен</mat-label>
+                    <input
+                      class="text-right"
+                      matInput
+                      placeholder="subdomain"
+                      required
+                      formControlName="domain"
+                      minlength="1"
+                      maxlength="63"
+                    />
+                    <span matSuffix>.aqotesting.tk</span>
+                    <mat-hint
+                      >По домену участники будут вступать в комнату</mat-hint
+                    >
+                    <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
                 getErrorMessageLogin()
               }}</mat-error>-->
-              </mat-form-field>
-            </p>
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
             <p>
               <mat-slide-toggle formControlName="isActive"
                 >Комната активна</mat-slide-toggle
