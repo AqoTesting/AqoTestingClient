@@ -5,15 +5,28 @@
       <div class="header-left">
         <h1>Создание теста</h1>
       </div>
-      <div class="header-right">
-        <button
-          (click)="location.back()"
-          mat-icon-button
-          aria-label="Назад"
-          matTooltip="Назад"
-        >
-          <mat-icon>arrow_back</mat-icon>
-        </button>
+      <div class="flex-row" style="display: flex; gap: 0px">
+        <div class="flex-row-item">
+          <button
+            mat-icon-button
+            aria-label="Создать тест"
+            matTooltip="Создать тест"
+            (click)="onSubmit()"
+            [disabled]="testCreate.invalid || testCreate.disabled"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+        <div class="flex-row-item">
+          <button
+            (click)="location.back()"
+            mat-icon-button
+            aria-label="Назад"
+            matTooltip="Назад"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
     <form [formGroup]="testCreate">
@@ -30,9 +43,9 @@
                 minlength="1"
                 maxlength="64"
               />
-              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
-              getErrorMessageLogin()
-            }}</mat-error>-->
+              <mat-error *ngIf="testCreate.controls['title'].invalid">{{
+                getErrorMessage(testCreate.controls["title"])
+              }}</mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -47,9 +60,9 @@
               <mat-hint align="end"
                 >{{ description.value?.length || 0 }}/4096</mat-hint
               >
-              <!--<mat-error *ngIf="signInForm.controls['login'].invalid">{{
-                getErrorMessageLogin()
-              }}</mat-error>-->
+              <mat-error *ngIf="testCreate.controls['description'].invalid">{{
+                getErrorMessage(testCreate.controls["description"])
+              }}</mat-error>
             </mat-form-field>
           </p>
           <div class="flex-row">
@@ -61,9 +74,15 @@
                     matInput
                     type="number"
                     placeholder="2"
-                    formControlName="numberOfAttempts"
+                    formControlName="attemptsNumber"
                     min="1"
                   />
+                  <mat-error
+                    *ngIf="testCreate.controls['attemptsNumber'].invalid"
+                    >{{
+                      getErrorMessage(testCreate.controls["attemptsNumber"])
+                    }}</mat-error
+                  >
                 </mat-form-field>
               </p>
             </div>
@@ -71,7 +90,7 @@
               <p>
                 <mat-form-field appearance="fill" color="accent">
                   <mat-label>Итогивый балл</mat-label>
-                  <mat-select formControlName="finalScore">
+                  <mat-select formControlName="finalResultCalculationMethod">
                     <mat-option [value]="0">Средний от всех попыток</mat-option>
                     <mat-option [value]="1"
                       >Максимальный от всех попыток</mat-option
@@ -137,7 +156,7 @@
             <div class="flex-row-item">
               <p>
                 <mat-slide-toggle formControlName="shuffle"
-                  >Перемешивать секции</mat-slide-toggle
+                  >Перемешивать разделы</mat-slide-toggle
                 >
               </p>
             </div>
@@ -147,7 +166,7 @@
             <div class="flex-row-item">
               <p>
                 <mat-slide-toggle formControlName="showAllSections"
-                  >Выводить все секции</mat-slide-toggle
+                  >Выводить все разделы</mat-slide-toggle
                 >
               </p>
             </div>
@@ -157,20 +176,28 @@
             >
               <p>
                 <mat-form-field appearance="fill" color="accent">
-                  <mat-label>Количество выводимых секций</mat-label>
+                  <mat-label>Количество выводимых разделов</mat-label>
                   <input
                     matInput
                     type="number"
                     placeholder="2"
-                    formControlName="amount"
+                    formControlName="attemptSectionsNumber"
                     min="1"
                     (input)="
                       setShowAllSections(
-                        testCreate.controls.amount,
+                        testCreate.controls.attemptSectionsNumber,
                         testCreate.controls.showAllSections
                       )
                     "
                   />
+                  <mat-error
+                    *ngIf="testCreate.controls['attemptSectionsNumber'].invalid"
+                    >{{
+                      getErrorMessage(
+                        testCreate.controls["attemptSectionsNumber"]
+                      )
+                    }}</mat-error
+                  >
                 </mat-form-field>
               </p>
             </div>
@@ -195,10 +222,13 @@
                         <mat-label>Заголовок</mat-label>
                         <input
                           matInput
-                          formControlName="name"
+                          formControlName="title"
                           placeholder="лялялляляял"
                           required
                         />
+                        <mat-error *ngIf="document.controls['title'].invalid">{{
+                          getErrorMessage(document.controls["title"])
+                        }}</mat-error>
                       </mat-form-field>
                     </div>
                     <div class="flex-row-item">
@@ -206,7 +236,7 @@
                         <mat-label>Ссылка</mat-label>
                         <input
                           matInput
-                          formControlName="value"
+                          formControlName="link"
                           placeholder="Ссылка"
                           required
                         />
@@ -217,6 +247,9 @@
                           class="pointer"
                           >delete</mat-icon
                         >
+                        <mat-error *ngIf="document.controls['link'].invalid">{{
+                          getErrorMessage(document.controls["link"])
+                        }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -254,6 +287,9 @@
                           placeholder="Да ты красава"
                           required
                         />
+                        <mat-error *ngIf="scale.controls['name'].invalid">{{
+                          getErrorMessage(scale.controls["name"])
+                        }}</mat-error>
                       </mat-form-field>
                     </div>
                     <div class="flex-row-item">
@@ -272,6 +308,9 @@
                           class="pointer"
                           >delete</mat-icon
                         >
+                        <mat-error *ngIf="scale.controls['value'].invalid">{{
+                          getErrorMessage(scale.controls["value"])
+                        }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>

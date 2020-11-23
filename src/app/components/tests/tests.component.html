@@ -17,18 +17,29 @@
   </div>
 
   <ng-container *ngIf="tests; else loading">
-    <mat-card class="tests-line">
-      <div class="tests-line-left">Тестовое название теста</div>
+    <div *ngIf="tests.length; else noTests">
+      <mat-card class="tests-line" *ngFor="let test of tests">
+        <div class="tests-line-left">{{ test.title }}</div>
 
-      <div class="tests-line-right">
-        <mat-icon matTooltip="Удалить тест" class="pointer room-action-icon"
-          >delete</mat-icon
-        >
-        <mat-icon matTooltip="Изменить тест" class="pointer room-action-icon"
-          >settings</mat-icon
-        >
-      </div>
-    </mat-card>
+        <div class="tests-line-right">
+          <mat-icon
+            matTooltip="Удалить тест"
+            class="pointer room-action-icon"
+            (click)="deleteTest(test)"
+            >delete</mat-icon
+          >
+          <mat-icon
+            matTooltip="Изменить тест"
+            class="pointer room-action-icon"
+            [routerLink]="['../test', 'edit', test.id]"
+            >settings</mat-icon
+          >
+        </div>
+      </mat-card>
+    </div>
+    <ng-template #noTests>
+      <div class="text-center white">В комнате ещё нет тестов</div>
+    </ng-template>
   </ng-container>
   <ng-template #loading>
     <mat-spinner class="loading text-center"></mat-spinner>

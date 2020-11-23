@@ -53,6 +53,14 @@ a {
   cursor: pointer;
 }
 
+.mat-divider {
+  display: block;
+  border-top-width: 1px;
+  border-top-style: solid;
+  margin: 25px 0;
+  border-top-color: hsla(0, 0%, 100%, 0.12);
+}
+
 .divider {
   margin-left: 14px;
   border-left: 1px solid $gray-night-color;
@@ -339,6 +347,10 @@ mat-form-field {
   }
 }
 
+.mat-stroked-button {
+  color: white;
+}
+
 @media (min-width: 600px) {
   .flex-row {
     display: flex;
@@ -348,4 +360,39 @@ mat-form-field {
       flex: 1 1 calc((100% / 2) - 16px);
     }
   }
+}
+
+.flex-row-static {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+
+  &-item {
+    width: 100%;
+  }
+
+  &-icon {
+    width: 24px;
+  }
+}
+
+.section {
+  position: relative;
+  border-radius: 0 4px 4px 4px !important;
+  &::before {
+    left: 0;
+    top: -24px;
+    position: absolute;
+    content: attr(title);
+    color: #fff;
+    border-radius: 4px 4px 0 0;
+    width: fit-content;
+    background: #9c27b0;
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
+.question {
+  margin: 24px 0;
 }

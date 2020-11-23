@@ -1,18 +1,549 @@
 <app-navbar></app-navbar>
-<div class="rooms-conteiner">
-  <div class="under-header">
-    <div class="under-header-left">
-      <h1>Изменение теста</h1>
+<div class="container">
+  <div class="content">
+    <div class="header">
+      <div class="header-left">
+        <h1>Изменение теста</h1>
+      </div>
+      <div class="header-right" style="width: 80px">
+        <div class="flex-row" style="display: flex; gap: 0px">
+          <div class="flex-row-item">
+            <button
+              mat-icon-button
+              aria-label="Сохранить тест"
+              matTooltip="Сохранить тест"
+              (click)="onTestSubmit()"
+              [disabled]="
+                testEdit.invalid || testEdit.disabled || !testEdit.dirty
+              "
+            >
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+          <div class="flex-row-item">
+            <button
+              routerLink="../../../tests"
+              mat-icon-button
+              aria-label="Назад"
+              matTooltip="Назад"
+            >
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="under-header-right">
-      <button
-        (click)="location.back()"
-        mat-icon-button
-        aria-label="Назад"
-        matTooltip="Назад"
-      >
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    </div>
+    <ng-container *ngIf="test; else loading">
+      <form [formGroup]="testEdit">
+        <mat-card>
+          <mat-card-content>
+            <p>
+              <mat-form-field appearance="fill" color="accent">
+                <mat-label>Название</mat-label>
+                <input
+                  matInput
+                  placeholder="Физические тела и вещества"
+                  required
+                  formControlName="title"
+                  minlength="1"
+                  maxlength="64"
+                />
+                <mat-error *ngIf="testEdit.controls['title'].invalid">{{
+                  getErrorMessage(testEdit.controls["title"])
+                }}</mat-error>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field class="field" appearance="fill" color="accent">
+                <mat-label>Описание</mat-label>
+                <textarea
+                  matInput
+                  #description
+                  formControlName="description"
+                  maxlength="4096"
+                ></textarea>
+                <mat-hint align="end"
+                  >{{ description.value?.length || 0 }}/4096</mat-hint
+                >
+                <mat-error *ngIf="testEdit.controls['description'].invalid">{{
+                  getErrorMessage(testEdit.controls["description"])
+                }}</mat-error>
+              </mat-form-field>
+            </p>
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Количество попыток</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="2"
+                      formControlName="attemptsNumber"
+                      min="1"
+                    />
+                    <mat-error
+                      *ngIf="testEdit.controls['attemptsNumber'].invalid"
+                      >{{
+                        getErrorMessage(testEdit.controls["attemptsNumber"])
+                      }}</mat-error
+                    >
+                  </mat-form-field>
+                </p>
+              </div>
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Итогивый балл</mat-label>
+                    <mat-select formControlName="finalResultCalculationMethod">
+                      <mat-option [value]="0"
+                        >Средний от всех попыток</mat-option
+                      >
+                      <mat-option [value]="1"
+                        >Максимальный от всех попыток</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Дата начала тестирования</mat-label>
+                    <input
+                      matInput
+                      [ngxMatDatetimePicker]="pickerActivation"
+                      [min]="now"
+                      placeholder=""
+                      formControlName="activationDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="pickerActivation"
+                    ></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker
+                      #pickerActivation
+                    ></ngx-mat-datetime-picker>
+                  </mat-form-field>
+                </p>
+              </div>
+              <div class="flex-row-item">
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Дата окончания тестирования</mat-label>
+                    <input
+                      matInput
+                      [ngxMatDatetimePicker]="pickerDeactivation"
+                      [min]="now"
+                      placeholder=""
+                      formControlName="deactivationDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="pickerDeactivation"
+                    ></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker
+                      #pickerDeactivation
+                    ></ngx-mat-datetime-picker>
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
+                  <mat-slide-toggle formControlName="isActive"
+                    >Тест активирован</mat-slide-toggle
+                  >
+                </p>
+              </div>
+              <div class="flex-row-item">
+                <p>
+                  <mat-slide-toggle formControlName="shuffle"
+                    >Перемешивать разделы</mat-slide-toggle
+                  >
+                </p>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
+                  <mat-slide-toggle formControlName="showAllSections"
+                    >Выводить все вопросы</mat-slide-toggle
+                  >
+                </p>
+              </div>
+              <div
+                class="flex-row-item"
+                *ngIf="!sections.value.showAllSections"
+              >
+                <p>
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Количество выводимых вопросов</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="2"
+                      formControlName="attemptSectionsNumber"
+                      min="1"
+                      (input)="
+                        setShowAll(
+                          testEdit.controls.attemptSectionsNumber,
+                          testEdit.controls.showAllSections
+                        )
+                      "
+                    />
+                    <mat-error
+                      *ngIf="testEdit.controls['attemptSectionsNumber'].invalid"
+                      >{{
+                        getErrorMessage(
+                          testEdit.controls["attemptSectionsNumber"]
+                        )
+                      }}</mat-error
+                    >
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-title>Документы</mat-card-title>
+          <mat-card-content>
+            <mat-hint>
+              Добавляйте ссылки на учебники, методички и прочие документы,
+              используемые при создании или нужные для прохождения данного теста
+            </mat-hint>
+            <div
+              formArrayName="documents"
+              *ngFor="let document of documents.controls; index as i"
+            >
+              <div class="field-wrapper">
+                <div [formGroupName]="i">
+                  <div class="field-wrapper-body">
+                    <div class="flex-row">
+                      <div class="flex-row-item">
+                        <mat-form-field appearance="fill" color="accent">
+                          <mat-label>Заголовок</mat-label>
+                          <input
+                            matInput
+                            formControlName="title"
+                            placeholder="лялялляляял"
+                            required
+                          />
+                          <mat-error
+                            *ngIf="document.controls['title'].invalid"
+                            >{{
+                              getErrorMessage(document.controls["title"])
+                            }}</mat-error
+                          >
+                        </mat-form-field>
+                      </div>
+                      <div class="flex-row-item">
+                        <mat-form-field appearance="fill" color="accent">
+                          <mat-label>Ссылка</mat-label>
+                          <input
+                            matInput
+                            formControlName="link"
+                            placeholder="Ссылка"
+                            required
+                          />
+                          <mat-icon
+                            matSuffix
+                            matTooltip="Удалить документ"
+                            (click)="deleteDucument(i)"
+                            class="pointer"
+                            >delete</mat-icon
+                          >
+                          <mat-error
+                            *ngIf="document.controls['link'].invalid"
+                            >{{
+                              getErrorMessage(document.controls["link"])
+                            }}</mat-error
+                          >
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="text-center">
+              <button mat-button (click)="addDocument()">
+                Добавить документ
+              </button>
+            </p>
+          </mat-card-content>
+
+          <mat-card-title>Шкала оценки</mat-card-title>
+          <mat-card-content>
+            <mat-hint>
+              Добавляйте свою шкалу оценок. Например оценка "Хорошо" будет от 50
+              баллов, а "Отлично" от 75.
+            </mat-hint>
+            <div
+              formArrayName="ratingScale"
+              *ngFor="let scale of ratingScale.controls; index as i"
+            >
+              <div class="field-wrapper">
+                <div [formGroupName]="i">
+                  <div class="field-wrapper-body">
+                    <div class="flex-row">
+                      <div class="flex-row-item">
+                        <mat-form-field appearance="fill" color="accent">
+                          <mat-label>Название оценки</mat-label>
+                          <input
+                            matInput
+                            formControlName="name"
+                            placeholder="Да ты красава"
+                            required
+                          />
+                          <mat-error *ngIf="scale.controls['name'].invalid">{{
+                            getErrorMessage(scale.controls["name"])
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="flex-row-item">
+                        <mat-form-field appearance="fill" color="accent">
+                          <mat-label>Баллы</mat-label>
+                          <input
+                            matInput
+                            formControlName="value"
+                            placeholder="10"
+                            required
+                          />
+                          <mat-icon
+                            matSuffix
+                            matTooltip="Удалить шкалу"
+                            (click)="deleteRatingScale(i)"
+                            class="pointer"
+                            >delete</mat-icon
+                          >
+                          <mat-error *ngIf="scale.controls['value'].invalid">{{
+                            getErrorMessage(scale.controls["value"])
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="text-center">
+              <button mat-button (click)="addRatingScale()">
+                Добавить шкалу
+              </button>
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <p class="text-center">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onTestSubmit()"
+            [disabled]="
+              testEdit.invalid || testEdit.disabled || !testEdit.dirty
+            "
+          >
+            Сохранить тест
+          </button>
+        </p>
+      </form>
+      <div class="mat-divider"></div>
+      <div class="header">
+        <div class="header-left">
+          <h1>Разделы</h1>
+        </div>
+        <div class="header-right" style="width: 80px">
+          <div class="flex-row" style="display: flex; gap: 0px">
+            <div class="flex-row-item">
+              <button
+                mat-icon-button
+                aria-label="Сохранить разделы"
+                matTooltip="Сохранить разделы"
+                disabled
+              >
+                <mat-icon>save</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form [formGroup]="sections">
+        <div
+          *ngFor="let section of sections.controls | keyvalue; let i = index"
+          style="margin: 50px 0 100px 0"
+        >
+          <mat-card
+            title="Раздел {{ i + 1 }} из {{ getSectionsKeys().length }}"
+            class="section"
+          >
+            <div [formGroupName]="section.key">
+              <mat-card-content>
+                <p style="margin: 0">
+                  <mat-form-field appearance="outline" color="accent">
+                    <mat-label>Заголовок</mat-label>
+                    <input formControlName="title" matInput />
+                    <button
+                      mat-icon-button
+                      aria-label="Удалить раздел"
+                      matTooltip="Удалить раздел"
+                      matSuffix
+                      (click)="deleteSection(section.key)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </p>
+                <div class="flex-row">
+                  <div class="flex-row-item">
+                    <p style="margin: 0">
+                      <mat-slide-toggle formControlName="showAllQuestions"
+                        >Выводить все вопросы</mat-slide-toggle
+                      >
+                    </p>
+                  </div>
+                  <div class="flex-row-item">
+                    <p style="margin: 0">
+                      <mat-slide-toggle formControlName="shuffle"
+                        >Перемешивать вопросы</mat-slide-toggle
+                      >
+                    </p>
+                  </div>
+                </div>
+                <p *ngIf="!section.value.value.showAllQuestions">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Количество выводимых вопросов</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="2"
+                      formControlName="attemptQuestionsNumber"
+                      min="1"
+                      (input)="
+                        setShowAll(
+                          section.value.controls.attemptQuestionsNumber,
+                          section.value.controls.showAllQuestions
+                        )
+                      "
+                    />
+                    <mat-error
+                      *ngIf="
+                        section.value.controls['attemptQuestionsNumber'].invalid
+                      "
+                      >{{
+                        getErrorMessage(
+                          section.value.controls["attemptQuestionsNumber"]
+                        )
+                      }}</mat-error
+                    >
+                  </mat-form-field>
+                </p>
+              </mat-card-content>
+            </div>
+          </mat-card>
+          <p class="text-center">
+            <button
+              mat-stroked-button
+              (click)="addQuestion(section.value.controls.questions)"
+            >
+              Добавить вопрос
+            </button>
+          </p>
+
+          <mat-card
+            class="question"
+            *ngFor="
+              let question of section.value.controls.questions.controls
+                | keyvalue;
+              let i = index
+            "
+          >
+            <div [formGroup]="question.value">
+              <div class="flex-row-static">
+                <div class="flex-row-static-item">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Вид вопроса</mat-label>
+                    <mat-select formControlName="type">
+                      <mat-option [value]="0">Один из</mat-option>
+                      <mat-option [value]="1">Множество из</mat-option>
+                      <mat-option [value]="2">Сопоставление</mat-option>
+                      <mat-option [value]="3">Порядок</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div
+                  class="flex-row-static-icon"
+                  style="flex: unset; width: 24px"
+                >
+                  <mat-icon
+                    matSuffix
+                    matTooltip="Удалить вопрос"
+                    (click)="
+                      deleteQuestion(
+                        section.value.controls.questions,
+                        question.key
+                      )
+                    "
+                    class="pointer"
+                    >delete</mat-icon
+                  >
+                </div>
+              </div>
+              <div class="flex-row-static">
+                <div class="flex-row-static-item">
+                  <mat-form-field appearance="fill" color="accent">
+                    <mat-label>Текст</mat-label>
+                    <textarea
+                      matInput
+                      formControlName="text"
+                      placeholder="Текст вопроса"
+                    ></textarea>
+
+                    <mat-error
+                      *ngIf="question.value.controls['text'].invalid"
+                      >{{
+                        getErrorMessage(question.value.controls["text"])
+                      }}</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="flex-row-static-icon">
+                  <mat-icon
+                    matSuffix
+                    matTooltip="Прикрепить изображение"
+                    class="pointer"
+                    >attach_file</mat-icon
+                  >
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <p class="text-center" style="margin-top: 50px">
+          <button mat-stroked-button (click)="addSection()">
+            Добавить раздел
+          </button>
+        </p>
+        <p class="text-center">
+          <button
+            mat-raised-button
+            color="primary"
+            disabled
+            (click)="onSectionsSubmit()"
+            [disabled]="
+              sections.invalid || sections.disabled || !sections.dirty
+            "
+          >
+            Сохранить разделы
+          </button>
+        </p>
+      </form>
+    </ng-container>
+    <ng-template #loading>
+      <mat-spinner class="loading"></mat-spinner>
+    </ng-template>
   </div>
 </div>
