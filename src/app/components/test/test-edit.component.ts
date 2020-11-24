@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -8,13 +9,20 @@ import {
   Validators,
 } from '@angular/forms';
 import { Response } from 'src/app/entities/response.entities';
-import { QuestionTypes, Test } from 'src/app/entities/test.entities';
+import {
+  CommonOption,
+  PostSections,
+  QuestionTypes,
+  Section,
+  Test,
+} from 'src/app/entities/test.entities';
 import { Observable, Subscription } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-test-edit',
@@ -138,6 +146,7 @@ export class TestEditComponent implements OnInit {
       this.getSectionKey().toString(),
       this.fb.group({
         deleted: [false],
+        local: [true],
         title: [''],
         questions: this.fb.group({}),
         showAllQuestions: [{ value: true, disabled: false }],
@@ -172,6 +181,7 @@ export class TestEditComponent implements OnInit {
         imageUrl: [''],
         cost: [1],
         weight: [0],
+        options: this.fb.array([]),
       })
     );
   }
@@ -187,6 +197,53 @@ export class TestEditComponent implements OnInit {
 
   getQuestionsKeys(questions: FormGroup): any {
     return Object.keys(questions.value);
+  }
+
+  getOptions(question: FormControl): FormArray {
+    return question.get('options') as FormArray;
+  }
+
+  addOption(question: FormControl) {
+    this.getOptions(question).push(
+      this.fb.group({
+        isCorrect: [false],
+        text: [''],
+        imageUrl: [''],
+        rightText: [''],
+        rightImageUrl: [''],
+        leftText: [''],
+        leftImageUrl: [''],
+      })
+    );
+    console.log(question.value);
+  }
+
+  deleteOption(question: FormControl, options: FormArray, i: number) {
+    switch (question.value.type) {
+      case QuestionTypes.SingleChoice:
+        break;
+      case QuestionTypes.MultipleChoice:
+        break;
+      case QuestionTypes.Matching:
+        break;
+      case QuestionTypes.Sequence:
+        break;
+    }
+
+    options.removeAt(i);
+  }
+
+  radioChange(question: FormControl, i: number) {
+    this.getOptions(question).controls.forEach(
+      (option: AbstractControl, index) => {
+        if (index == i) option.patchValue({ isCorrect: true });
+        else option.patchValue({ isCorrect: false });
+      }
+    );
+  }
+
+  checkboxChange(option: FormControl) {
+    option.patchValue({ isCorrect: !option.value.isCorrect });
   }
 
   setShowAll(amount: FormControl, showAllSections: FormControl) {
@@ -276,7 +333,65 @@ export class TestEditComponent implements OnInit {
     );
   }
 
-  onSectionsSubmit() {}
+  onSectionsSubmit() {
+    this.sections.disable();
+    const postSections = new PostSections(this.sections.value);
+
+    for (let [sectionId, section] of Object.entries(postSections.sections)) {
+      if (!section.deleted) delete section.deleted;
+      delete section.local;
+
+      for (let [questionId, question] of Object.entries(section.questions)) {
+        if (!question.deleted) delete question.deleted;
+        delete question.local;
+
+        if (!question.imageUrl) delete question.imageUrl;
+
+        question.options.forEach((option) => {
+          switch (question.type) {
+            case QuestionTypes.SingleChoice:
+              if (!option.imageUrl) delete option.imageUrl;
+              delete option.rightText;
+              delete option.rightImageUrl;
+              delete option.leftText;
+              delete option.leftImageUrl;
+              break;
+            case QuestionTypes.MultipleChoice:
+              if (!option.imageUrl) delete option.imageUrl;
+              delete option.rightText;
+              delete option.rightImageUrl;
+              delete option.leftText;
+              delete option.leftImageUrl;
+              break;
+            case QuestionTypes.Matching:
+              if (!option.rightImageUrl) delete option.rightImageUrl;
+              if (!option.leftImageUrl) delete option.leftImageUrl;
+              delete option.text;
+              delete option.imageUrl;
+              delete option.isCorrect;
+              break;
+            case QuestionTypes.Sequence:
+              break;
+          }
+        });
+      }
+    }
+
+    console.log(postSections);
+
+    this.subscription.add(
+      this.testService.patchSections(this.testId, postSections).subscribe(
+        (result) => {
+          console.log(result);
+        },
+        (error) => {
+          this.sections.enable();
+          if (error instanceof Response)
+            this.snack.error(error.errorMessageCode);
+        }
+      )
+    );
+  }
 
   getErrorMessage(control: FormControl) {
     if (control.hasError('required')) return 'Введите значение';

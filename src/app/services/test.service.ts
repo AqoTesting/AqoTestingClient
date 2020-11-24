@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Test } from '../entities/test.entities';
+import { PostSections, Test } from '../entities/test.entities';
 
 @Injectable()
 export class TestService {
@@ -29,6 +29,13 @@ export class TestService {
     return this.http.put<any>(
       environment.apiUrl + '/user/test/' + testId,
       test
+    );
+  }
+
+  patchSections(testId: string, sections: PostSections): Observable<any> {
+    return this.http.patch<any>(
+      environment.apiUrl + '/user/test/' + testId + '/sections',
+      sections
     );
   }
 

@@ -13,7 +13,14 @@ export class Test {
   deactivationDate: string;
   shuffle: boolean = false;
   ratingScale: any = {};
-  sections: any[];
+  sections: Section[];
+}
+
+export class PostSections {
+  constructor(sections: Section[]) {
+    this.sections = sections;
+  }
+  sections: Section[];
 }
 
 export class Document {
@@ -40,6 +47,7 @@ export class Question {
   imageUrl: string;
   cost: number = 1;
   weight: number = 0;
+  options: CommonOption[];
 }
 
 export enum QuestionTypes {
