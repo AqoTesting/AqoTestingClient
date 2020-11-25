@@ -24,6 +24,9 @@ import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
 import { MatRadioChange } from '@angular/material/radio';
 import { cloneAbstractControl } from 'src/app/utils/clone-abstract-control.utility';
+import { ImageService } from 'src/app/services/image.service';
+import { ImgBBResponse } from 'src/app/services/imgbb.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-test-edit',
@@ -75,7 +78,8 @@ export class TestEditComponent implements OnInit {
     public location: Location,
     private fb: FormBuilder,
     private snack: SnackService,
-    private testService: TestService
+    private testService: TestService,
+    private image: ImageService
   ) {
     this.subscription.add(
       this.route.params.pipe(take(1)).subscribe((params) => {
@@ -189,7 +193,7 @@ export class TestEditComponent implements OnInit {
         local: [local],
         type: [QuestionTypes.SingleChoice],
         text: [''],
-        imageUrl: [''],
+        imageUrl: [null],
         cost: [1],
         weight: [0],
         options: this.fb.array([]),
@@ -227,11 +231,11 @@ export class TestEditComponent implements OnInit {
       this.fb.group({
         isCorrect: [isCorrect],
         text: [''],
-        imageUrl: [''],
+        imageUrl: [null],
         rightText: [''],
-        rightImageUrl: [''],
+        rightImageUrl: [null],
         leftText: [''],
-        leftImageUrl: [''],
+        leftImageUrl: [null],
       })
     );
   }
@@ -259,10 +263,12 @@ export class TestEditComponent implements OnInit {
         else option.patchValue({ isCorrect: false });
       }
     );
+    question.markAsDirty();
   }
 
   checkboxChange(option: FormControl) {
     option.patchValue({ isCorrect: !option.value.isCorrect });
+    option.markAsDirty();
   }
 
   setShowAll(amount: FormControl, showAllSections: FormControl) {
@@ -481,6 +487,77 @@ export class TestEditComponent implements OnInit {
         }
       }
     }
+  }
+
+  uploadImage(
+    files: any[],
+    formGroup: FormGroup,
+    type: QuestionTypes = QuestionTypes.SingleChoice,
+    right: boolean = false
+  ) {
+    this.sections.disable();
+    if (files.length) {
+      this.image.upload(files[0]).subscribe(
+        (response: ImgBBResponse) => {
+          if (
+            type == QuestionTypes.SingleChoice ||
+            type == QuestionTypes.MultipleChoice
+          ) {
+            formGroup.patchValue({ imageUrl: response.data.display_url });
+          } else if (type == QuestionTypes.Matching) {
+            if (right) {
+              formGroup.patchValue({
+                rightImageUrl: response.data.display_url,
+              });
+            } else {
+              formGroup.patchValue({ leftImageUrl: response.data.display_url });
+            }
+          }
+          formGroup.markAsDirty();
+          this.sections.enable();
+        },
+        (response) => {
+          this.sections.enable();
+          if (response instanceof HttpErrorResponse) {
+            this.snack.fatal(response.message);
+          } else {
+            const { error } = response;
+            switch (error.code) {
+              case 310:
+                this.snack.fatal('Данный файл не является изображением');
+                break;
+              default:
+                this.snack.fatal(error.code + ' - ' + error.message);
+                break;
+            }
+          }
+        }
+      );
+    } else {
+      this.snack.fatal('Вы не выбрали файл');
+    }
+  }
+
+  deleteImage(
+    formGroup: FormGroup,
+    type: QuestionTypes = QuestionTypes.SingleChoice,
+    right: boolean = false
+  ) {
+    if (
+      type == QuestionTypes.SingleChoice ||
+      type == QuestionTypes.MultipleChoice
+    ) {
+      formGroup.patchValue({ imageUrl: null });
+    } else if (type == QuestionTypes.Matching) {
+      if (right) {
+        formGroup.patchValue({
+          rightImageUrl: null,
+        });
+      } else {
+        formGroup.patchValue({ leftImageUrl: null });
+      }
+    }
+    formGroup.markAsDirty();
   }
 
   getErrorMessage(control: FormControl) {

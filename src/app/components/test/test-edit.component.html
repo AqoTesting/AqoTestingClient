@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
+fgdfg
 <div class="container">
   <div class="content">
     <div class="header">
@@ -493,9 +494,8 @@
                       class="flex-row-static-icon"
                       style="flex: unset; width: 24px"
                     >
-                      <mat-icon
-                        matSuffix
-                        matTooltip="Удалить вопрос"
+                      <button
+                        mat-icon-button
                         [disabled]="sections.disabled"
                         (click)="
                           deleteQuestion(
@@ -503,9 +503,10 @@
                             question.key
                           )
                         "
-                        class="pointer"
-                        >delete</mat-icon
+                        matTooltip="Удалить вопрос"
                       >
+                        <mat-icon>delete</mat-icon>
+                      </button>
                     </div>
                   </div>
                   <div class="flex-row-static" style="align-items: center">
@@ -524,12 +525,58 @@
                       </mat-form-field>
                     </div>
                     <div class="flex-row-static-icon">
-                      <mat-icon
-                        matSuffix
+                      <input
+                        #uploadImageInput
+                        hidden
+                        type="file"
+                        (change)="
+                          uploadImage($event.target.files, question.value)
+                        "
+                        accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                      />
+                      <button
+                        mat-icon-button
+                        [disabled]="
+                          question.value.value.imageUrl != null ||
+                          sections.disabled
+                        "
+                        (click)="uploadImageInput.click()"
                         matTooltip="Прикрепить изображение"
-                        class="pointer"
-                        >attach_file</mat-icon
+                        title="Возможно прикрепить только 1 изображение"
                       >
+                        <mat-icon>attach_file</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="question.value.value.imageUrl"
+                    class="flex-row-static"
+                    style="gap: 8px; margin-top: 8px"
+                  >
+                    <div class="flex-row-static-item test-img">
+                      <img [src]="question.value.value.imageUrl" />
+                    </div>
+                    <div class="flex-row-static-icon">
+                      <div>
+                        <a
+                          [href]="question.value.value.imageUrl"
+                          target="_blank"
+                        >
+                          <mat-icon
+                            matTooltip="Просмотреть изображение"
+                            nclass="pointer"
+                            >preview</mat-icon
+                          >
+                        </a>
+                      </div>
+                      <div>
+                        <mat-icon
+                          matTooltip="Удалить изображение"
+                          (click)="deleteImage(question.value)"
+                          class="pointer"
+                          >clear</mat-icon
+                        >
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -550,8 +597,6 @@
                     <div [ngSwitch]="question.value.value.type">
                       <div *ngSwitchCase="0">
                         <div
-                          class="flex-row-static"
-                          style="margin-top: 16px; align-items: center"
                           *ngFor="
                             let option of question.value.controls.options
                               .controls;
@@ -559,59 +604,115 @@
                           "
                         >
                           <div
-                            class="flex-row-static-item"
-                            [formGroup]="option"
+                            class="flex-row-static"
+                            style="margin-top: 16px; align-items: center"
                           >
                             <div
-                              class="flex-row-static"
-                              style="align-items: center"
+                              class="flex-row-static-item"
+                              [formGroup]="option"
                             >
-                              <div class="flex-row-static-icon">
-                                <mat-radio-button
-                                  (click)="radioChange(question.value, i)"
-                                  [checked]="option.value.isCorrect"
-                                ></mat-radio-button>
+                              <div
+                                class="flex-row-static"
+                                style="align-items: center"
+                              >
+                                <div class="flex-row-static-icon">
+                                  <mat-radio-button
+                                    (click)="radioChange(question.value, i)"
+                                    [checked]="option.value.isCorrect"
+                                  ></mat-radio-button>
+                                </div>
+                                <div class="flex-row-static-item">
+                                  <mat-form-field
+                                    appearance="outline"
+                                    class="ignore-mat-field-padding-bottom"
+                                    color="accent"
+                                  >
+                                    <mat-label>Текст</mat-label>
+                                    <textarea
+                                      matInput
+                                      formControlName="text"
+                                      placeholder="Текст варианта"
+                                    ></textarea>
+                                    <input
+                                      #uploadImageInput
+                                      hidden
+                                      type="file"
+                                      (change)="
+                                        uploadImage($event.target.files, option)
+                                      "
+                                      accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                    />
+                                    <button
+                                      matSuffix
+                                      mat-icon-button
+                                      [disabled]="
+                                        option.value.imageUrl != null ||
+                                        sections.disabled
+                                      "
+                                      matTooltip="Прикрепить изображение"
+                                      title="Возможно прикрепить только 1 изображение"
+                                      (click)="uploadImageInput.click()"
+                                    >
+                                      <mat-icon>attach_file</mat-icon>
+                                    </button>
+                                  </mat-form-field>
+                                </div>
                               </div>
-                              <div class="flex-row-static-item">
-                                <mat-form-field
-                                  appearance="outline"
-                                  class="ignore-mat-field-padding-bottom"
-                                  color="accent"
+                            </div>
+                            <div class="flex-row-static-icon">
+                              <div class="flex-row-static-icon">
+                                <button
+                                  mat-icon-button
+                                  matTooltip="Удалить вариант"
+                                  [disabled]="sections.disabled"
+                                  (click)="
+                                    deleteOption(
+                                      question.value,
+                                      question.value.controls.options,
+                                      i
+                                    )
+                                  "
                                 >
-                                  <mat-label>Текст</mat-label>
-                                  <textarea
-                                    matInput
-                                    formControlName="text"
-                                    placeholder="Текст варианта"
-                                  ></textarea>
-                                </mat-form-field>
+                                  <mat-icon>delete</mat-icon>
+                                </button>
                               </div>
                             </div>
                           </div>
-                          <div class="flex-row-static-icon">
+                          <div
+                            *ngIf="option.value.imageUrl"
+                            class="flex-row-static"
+                            style="gap: 8px; margin-top: 8px; margin-left: 40px"
+                          >
+                            <div class="flex-row-static-item test-img">
+                              <img [src]="option.value.imageUrl" />
+                            </div>
                             <div class="flex-row-static-icon">
-                              <mat-icon
-                                matSuffix
-                                matTooltip="Удалить вариант"
-                                [disabled]="sections.disabled"
-                                (click)="
-                                  deleteOption(
-                                    question.value,
-                                    question.value.controls.options,
-                                    i
-                                  )
-                                "
-                                class="pointer"
-                                >delete</mat-icon
-                              >
+                              <div>
+                                <a
+                                  [href]="option.value.imageUrl"
+                                  target="_blank"
+                                >
+                                  <mat-icon
+                                    matTooltip="Просмотреть изображение"
+                                    nclass="pointer"
+                                    >preview</mat-icon
+                                  >
+                                </a>
+                              </div>
+                              <div>
+                                <mat-icon
+                                  matTooltip="Удалить изображение"
+                                  (click)="deleteImage(option)"
+                                  class="pointer"
+                                  >clear</mat-icon
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div *ngSwitchCase="1">
                         <div
-                          class="flex-row-static"
-                          style="margin-top: 16px; align-items: center"
                           *ngFor="
                             let option of question.value.controls.options
                               .controls;
@@ -619,51 +720,109 @@
                           "
                         >
                           <div
-                            class="flex-row-static-item"
-                            [formGroup]="option"
+                            class="flex-row-static"
+                            style="margin-top: 16px; align-items: center"
                           >
                             <div
-                              class="flex-row-static"
-                              style="align-items: center"
+                              class="flex-row-static-item"
+                              [formGroup]="option"
                             >
-                              <div class="flex-row-static-icon">
-                                <mat-checkbox
-                                  (change)="checkboxChange(option)"
-                                  [checked]="option.value.isCorrect"
-                                ></mat-checkbox>
+                              <div
+                                class="flex-row-static"
+                                style="align-items: center"
+                              >
+                                <div class="flex-row-static-icon">
+                                  <mat-checkbox
+                                    (change)="checkboxChange(option)"
+                                    [checked]="option.value.isCorrect"
+                                  ></mat-checkbox>
+                                </div>
+                                <div class="flex-row-static-item">
+                                  <mat-form-field
+                                    appearance="outline"
+                                    color="accent"
+                                    class="ignore-mat-field-padding-bottom"
+                                  >
+                                    <mat-label>Текст</mat-label>
+                                    <textarea
+                                      matInput
+                                      formControlName="text"
+                                      placeholder="Текст варианта"
+                                    ></textarea>
+                                    <input
+                                      #uploadImageInput
+                                      hidden
+                                      type="file"
+                                      (change)="
+                                        uploadImage($event.target.files, option)
+                                      "
+                                      accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                    />
+                                    <button
+                                      matSuffix
+                                      mat-icon-button
+                                      [disabled]="
+                                        option.value.imageUrl != null ||
+                                        sections.disabled
+                                      "
+                                      matTooltip="Прикрепить изображение"
+                                      title="Возможно прикрепить только 1 изображение"
+                                      (click)="uploadImageInput.click()"
+                                    >
+                                      <mat-icon>attach_file</mat-icon>
+                                    </button>
+                                  </mat-form-field>
+                                </div>
                               </div>
-                              <div class="flex-row-static-item">
-                                <mat-form-field
-                                  appearance="outline"
-                                  color="accent"
-                                  class="ignore-mat-field-padding-bottom"
+                            </div>
+                            <div class="flex-row-static-icon">
+                              <div class="flex-row-static-icon">
+                                <button
+                                  mat-icon-button
+                                  matTooltip="Удалить вариант"
+                                  [disabled]="sections.disabled"
+                                  (click)="
+                                    deleteOption(
+                                      question.value,
+                                      question.value.controls.options,
+                                      i
+                                    )
+                                  "
                                 >
-                                  <mat-label>Текст</mat-label>
-                                  <textarea
-                                    matInput
-                                    formControlName="text"
-                                    placeholder="Текст варианта"
-                                  ></textarea>
-                                </mat-form-field>
+                                  <mat-icon>delete</mat-icon>
+                                </button>
                               </div>
                             </div>
                           </div>
-                          <div class="flex-row-static-icon">
+                          <div
+                            *ngIf="option.value.imageUrl"
+                            class="flex-row-static"
+                            style="gap: 8px; margin-top: 8px; margin-left: 40px"
+                          >
+                            <div class="flex-row-static-item test-img">
+                              <img [src]="option.value.imageUrl" />
+                            </div>
                             <div class="flex-row-static-icon">
-                              <mat-icon
-                                matSuffix
-                                matTooltip="Удалить вариант"
-                                [disabled]="sections.disabled"
-                                (click)="
-                                  deleteOption(
-                                    question.value,
-                                    question.value.controls.options,
-                                    i
-                                  )
-                                "
-                                class="pointer"
-                                >delete</mat-icon
-                              >
+                              <div>
+                                <a
+                                  [href]="option.value.imageUrl"
+                                  target="_blank"
+                                >
+                                  <mat-icon
+                                    matTooltip="Просмотреть изображение"
+                                    nclass="pointer"
+                                    >preview</mat-icon
+                                  >
+                                </a>
+                              </div>
+                              <div>
+                                <mat-icon
+                                  matTooltip="Удалить изображение"
+                                  (click)="deleteImage(option)"
+                                  class="pointer"
+                                  >clear</mat-icon
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -695,6 +854,28 @@
                                     formControlName="leftText"
                                     placeholder="Текст предмета сравнения"
                                   ></textarea>
+                                  <input
+                                    #uploadImageInput
+                                    hidden
+                                    type="file"
+                                    (change)="
+                                      uploadImage($event.target.files, option, 2)
+                                    "
+                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                  />
+                                  <button
+                                    matSuffix
+                                    mat-icon-button
+                                    [disabled]="
+                                      option.value.leftImageUrl != null ||
+                                      sections.disabled
+                                    "
+                                    matTooltip="Прикрепить изображение"
+                                    title="Возможно прикрепить только 1 изображение"
+                                    (click)="uploadImageInput.click()"
+                                  >
+                                    <mat-icon>attach_file</mat-icon>
+                                  </button>
                                 </mat-form-field>
                               </div>
                               <div class="flex-row-item">
@@ -709,14 +890,36 @@
                                     formControlName="rightText"
                                     placeholder="Текст образа сравнения"
                                   ></textarea>
+                                  <input
+                                    #uploadImageInput
+                                    hidden
+                                    type="file"
+                                    (change)="
+                                      uploadImage($event.target.files, option, 2, true)
+                                    "
+                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                  />
+                                  <button
+                                    matSuffix
+                                    mat-icon-button
+                                    [disabled]="
+                                      option.value.rightImageUrl != null ||
+                                      sections.disabled
+                                    "
+                                    matTooltip="Прикрепить изображение"
+                                    title="Возможно прикрепить только 1 изображение"
+                                    (click)="uploadImageInput.click()"
+                                  >
+                                    <mat-icon>attach_file</mat-icon>
+                                  </button>
                                 </mat-form-field>
                               </div>
                             </div>
                           </div>
                           <div class="flex-row-static-icon">
                             <div class="flex-row-static-icon">
-                              <mat-icon
-                                matSuffix
+                              <button
+                                mat-icon-button
                                 matTooltip="Удалить вариант"
                                 [disabled]="sections.disabled"
                                 (click)="
@@ -726,9 +929,9 @@
                                     i
                                   )
                                 "
-                                class="pointer"
-                                >delete</mat-icon
                               >
+                                <mat-icon>delete</mat-icon>
+                              </button>
                             </div>
                           </div>
                         </div>

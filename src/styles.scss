@@ -368,17 +368,25 @@ mat-form-field {
   }
 }
 
+.mat-form-field-flex {
+  align-items: center !important;
+}
+
 .flex-row-static {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
 
   &-item {
-    width: 100%;
+    width: calc(100% - 40px);
   }
 
   &-icon {
     width: 24px;
+
+    button {
+      width: 24px;
+    }
   }
 }
 
@@ -401,4 +409,16 @@ mat-form-field {
 
 .question {
   margin: 24px 0;
+}
+
+.test-img {
+  height: 100px;
+  width: fit-content;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+
+  img {
+    height: 100px;
+    border-radius: 4px;
+  }
 }

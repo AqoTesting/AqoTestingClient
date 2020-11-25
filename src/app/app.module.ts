@@ -46,6 +46,8 @@ import {
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
 } from '@angular-material-components/datetime-picker';
+import { ImageService } from './services/image.service';
+import { ImgBBService } from './services/imgbb.service';
 
 @NgModule({
   declarations: [
@@ -84,6 +86,8 @@ import {
     SnackService,
     TestService,
     MemberService,
+    ImageService,
+    ImgBBService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
