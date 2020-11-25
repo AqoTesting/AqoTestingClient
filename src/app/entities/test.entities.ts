@@ -29,25 +29,25 @@ export class Document {
 }
 
 export class Section {
-  deleted: boolean = false;
-  local: boolean = false;
-  title: string;
-  showAllQuestions: boolean = true;
-  questions: Question[];
-  attemptQuestionsNumber: number = 0;
-  shuffle: boolean = false;
-  weight: number = 0;
+  deleted?: boolean = false;
+  local?: boolean = false;
+  title?: string;
+  showAllQuestions?: boolean = true;
+  questions?: Question[];
+  attemptQuestionsNumber?: number = 0;
+  shuffle?: boolean = false;
+  weight?: number = 0;
 }
 
 export class Question {
-  deleted: boolean = false;
-  local: boolean = false;
-  type: QuestionTypes;
-  text: string;
-  imageUrl: string;
-  cost: number = 1;
-  weight: number = 0;
-  options: CommonOption[];
+  deleted?: boolean = false;
+  local?: boolean = false;
+  type?: QuestionTypes;
+  text?: string;
+  imageUrl?: string;
+  cost?: number = 1;
+  weight?: number = 0;
+  options?: CommonOption[];
 }
 
 export enum QuestionTypes {
@@ -58,11 +58,11 @@ export enum QuestionTypes {
 }
 
 export class CommonOption {
-  isCorrect: boolean = false;
-  text: string;
-  imageUrl: string;
-  rightText: string;
-  rightImageUrl: string;
-  leftText: string;
-  leftImageUrl: string;
+  isCorrect?: boolean = false;
+  text?: string;
+  imageUrl?: string;
+  rightText?: string;
+  rightImageUrl?: string;
+  leftText?: string;
+  leftImageUrl?: string;
 }

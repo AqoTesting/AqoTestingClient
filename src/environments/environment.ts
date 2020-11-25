@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000',
+  apiUrl: 'http://192.168.1.64:5000',
   domain: 'aqotesting.tk'
 };
 

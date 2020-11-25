@@ -374,365 +374,414 @@
           </div>
         </div>
       </div>
-      <form [formGroup]="sections" [disabled]="true">
+      <form [formGroup]="sections">
         <div
           *ngFor="let section of sections.controls | keyvalue; let i = index"
           style="margin: 50px 0 100px 0"
         >
-          <mat-card
-            title="Раздел {{ i + 1 }} из {{ getSectionsKeys().length }}"
-            class="section"
-          >
-            <div [formGroupName]="section.key">
-              <mat-card-content style="margin-bottom: 0px">
-                <p style="margin: 0">
-                  <mat-form-field appearance="outline" color="accent">
-                    <mat-label>Заголовок</mat-label>
-                    <input formControlName="title" matInput />
-                    <button
-                      mat-icon-button
-                      aria-label="Удалить раздел"
-                      matTooltip="Удалить раздел"
-                      [disabled]="sections.disabled"
-                      matSuffix
-                      (click)="deleteSection(section.key)"
-                    >
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </mat-form-field>
-                </p>
-                <div class="flex-row">
-                  <div class="flex-row-item">
-                    <p style="margin: 0">
-                      <mat-slide-toggle formControlName="showAllQuestions"
-                        >Выводить все вопросы</mat-slide-toggle
-                      >
-                    </p>
-                  </div>
-                  <div class="flex-row-item">
-                    <p style="margin: 0">
-                      <mat-slide-toggle formControlName="shuffle"
-                        >Перемешивать вопросы</mat-slide-toggle
-                      >
-                    </p>
-                  </div>
-                </div>
-                <p *ngIf="!section.value.value.showAllQuestions">
-                  <mat-form-field appearance="outline" color="accent">
-                    <mat-label>Количество выводимых вопросов</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      placeholder="2"
-                      formControlName="attemptQuestionsNumber"
-                      min="1"
-                      (input)="
-                        setShowAll(
-                          section.value.controls.attemptQuestionsNumber,
-                          section.value.controls.showAllQuestions
-                        )
-                      "
-                    />
-                    <mat-error
-                      *ngIf="
-                        section.value.controls['attemptQuestionsNumber'].invalid
-                      "
-                      >{{
-                        getErrorMessage(
-                          section.value.controls["attemptQuestionsNumber"]
-                        )
-                      }}</mat-error
-                    >
-                  </mat-form-field>
-                </p>
-              </mat-card-content>
-            </div>
-          </mat-card>
-          <mat-card
-            class="question"
-            *ngFor="
-              let question of section.value.controls.questions.controls
-                | keyvalue;
-              let i = index
-            "
-          >
-            <div [formGroup]="question.value">
-              <div class="flex-row-static">
-                <div class="flex-row-static-item" style="width: 50%">
-                  <mat-form-field appearance="outline" color="accent">
-                    <mat-label>Вид вопроса</mat-label>
-                    <mat-select formControlName="type">
-                      <mat-option [value]="0">Один из</mat-option>
-                      <mat-option [value]="1">Множество из</mat-option>
-                      <mat-option [value]="2">Сопоставление</mat-option>
-                      <!--<mat-option [value]="3">Порядок</mat-option>-->
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div
-                  class="flex-row-static-item"
-                  style="width: calc(50% - 56px)"
-                >
-                  <mat-form-field appearance="outline" color="accent">
-                    <mat-label>Баллы</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      placeholder="1"
-                      formControlName="cost"
-                      min="0"
-                    />
-                  </mat-form-field>
-                </div>
-                <div
-                  class="flex-row-static-icon"
-                  style="flex: unset; width: 24px"
-                >
-                  <mat-icon
-                    matSuffix
-                    matTooltip="Удалить вопрос"
-                    [disabled]="sections.disabled"
-                    (click)="
-                      deleteQuestion(
-                        section.value.controls.questions,
-                        question.key
-                      )
-                    "
-                    class="pointer"
-                    >delete</mat-icon
-                  >
-                </div>
-              </div>
-              <div class="flex-row-static" style="align-items: center">
-                <div class="flex-row-static-item">
-                  <mat-form-field
-                    appearance="outline"
-                    class="ignore-mat-field-padding-bottom"
-                    color="accent"
-                  >
-                    <mat-label>Текст</mat-label>
-                    <textarea
-                      matInput
-                      formControlName="text"
-                      placeholder="Текст вопроса"
-                    ></textarea>
-                  </mat-form-field>
-                </div>
-                <div class="flex-row-static-icon">
-                  <mat-icon
-                    matSuffix
-                    matTooltip="Прикрепить изображение"
-                    class="pointer"
-                    >attach_file</mat-icon
-                  >
-                </div>
-              </div>
-              <div>
-                <mat-card-title
-                  style="align-items: center; display: flex; margin: 16px 0"
-                  >Варианты
-                  <button
-                    (click)="addOption(question.value)"
-                    [disabled]="sections.disabled"
-                    mat-icon-button
-                    aria-label="Добавить вариант"
-                    matTooltip="Добавить вариант"
-                  >
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </mat-card-title>
-
-                <div [ngSwitch]="question.value.value.type">
-                  <div *ngSwitchCase="0">
-                    <div
-                      class="flex-row-static"
-                      style="margin-top: 16px; align-items: center"
-                      *ngFor="
-                        let option of question.value.controls.options.controls;
-                        let i = index
-                      "
-                    >
-                      <div class="flex-row-static-item" [formGroup]="option">
-                        <div
-                          class="flex-row-static"
-                          style="align-items: center"
-                        >
-                          <div class="flex-row-static-icon">
-                            <mat-radio-button
-                              (change)="radioChange(question.value, i)"
-                              [selected]="option.value.isCorrect"
-                            >{{option.value.isCorrect}}</mat-radio-button>
-                          </div>
-                          <div class="flex-row-static-item">
-                            <mat-form-field
-                              appearance="outline"
-                              class="ignore-mat-field-padding-bottom"
-                              color="accent"
-                            >
-                              <mat-label>Текст</mat-label>
-                              <textarea
-                                matInput
-                                formControlName="text"
-                                placeholder="Текст варианта"
-                              ></textarea>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex-row-static-icon">
-                        <div class="flex-row-static-icon">
-                          <mat-icon
-                            matSuffix
-                            matTooltip="Удалить вариант"
-                            [disabled]="sections.disabled"
-                            (click)="
-                              deleteOption(
-                                question.value,
-                                question.value.controls.options,
-                                i
-                              )
-                            "
-                            class="pointer"
-                            >delete</mat-icon
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngSwitchCase="1">
-                    <div
-                      class="flex-row-static"
-                      style="margin-top: 16px; align-items: center"
-                      *ngFor="
-                        let option of question.value.controls.options.controls;
-                        let i = index
-                      "
-                    >
-                      <div class="flex-row-static-item" [formGroup]="option">
-                        <div
-                          class="flex-row-static"
-                          style="align-items: center"
-                        >
-                          <div class="flex-row-static-icon">
-                            <mat-checkbox
-                              (change)="checkboxChange(option)"
-                              [selected]="option.value.isCorrect"
-                            ></mat-checkbox>
-                          </div>
-                          <div class="flex-row-static-item">
-                            <mat-form-field
-                              appearance="outline"
-                              color="accent"
-                              class="ignore-mat-field-padding-bottom"
-                            >
-                              <mat-label>Текст</mat-label>
-                              <textarea
-                                matInput
-                                formControlName="text"
-                                placeholder="Текст варианта"
-                              ></textarea>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex-row-static-icon">
-                        <div class="flex-row-static-icon">
-                          <mat-icon
-                            matSuffix
-                            matTooltip="Удалить вариант"
-                            [disabled]="sections.disabled"
-                            (click)="
-                              deleteOption(
-                                question.value,
-                                question.value.controls.options,
-                                i
-                              )
-                            "
-                            class="pointer"
-                            >delete</mat-icon
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngSwitchCase="2">
-                    <div
-                      class="flex-row-static"
-                      style="margin-top: 16px; align-items: center"
-                      *ngFor="
-                        let option of question.value.controls.options.controls;
-                        let i = index
-                      "
-                    >
-                      <div class="flex-row-static-item" [formGroup]="option">
-                        <div class="flex-row">
-                          <div class="flex-row-item">
-                            <mat-form-field
-                              appearance="outline"
-                              color="accent"
-                              class="ignore-mat-field-padding-bottom"
-                            >
-                              <mat-label>Что сравнивается</mat-label>
-                              <textarea
-                                matInput
-                                formControlName="leftText"
-                                placeholder="Текст предмета сравнения"
-                              ></textarea>
-                            </mat-form-field>
-                          </div>
-                          <div class="flex-row-item">
-                            <mat-form-field
-                              appearance="outline"
-                              color="accent"
-                              class="ignore-mat-field-padding-bottom"
-                            >
-                              <mat-label>С чем сравнивается</mat-label>
-                              <textarea
-                                matInput
-                                formControlName="rightText"
-                                placeholder="Текст образа сравнения"
-                              ></textarea>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex-row-static-icon">
-                        <div class="flex-row-static-icon">
-                          <mat-icon
-                            matSuffix
-                            matTooltip="Удалить вариант"
-                            [disabled]="sections.disabled"
-                            (click)="
-                              deleteOption(
-                                question.value,
-                                question.value.controls.options,
-                                i
-                              )
-                            "
-                            class="pointer"
-                            >delete</mat-icon
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngSwitchCase="3">3</div>
-                </div>
-              </div>
-            </div>
-          </mat-card>
-          <p class="text-center">
-            <button
-              mat-stroked-button
-              [disabled]="sections.disabled"
-              (click)="addQuestion(section.value.controls.questions)"
+          <div *ngIf="!section.value.value.deleted; else backSection">
+            <mat-card
+              title="Раздел {{ i + 1 }} из {{ getSectionsKeys().length }}"
+              class="section"
             >
-              Добавить вопрос
-            </button>
-          </p>
+              <div [formGroupName]="section.key">
+                <mat-card-content style="margin-bottom: 0px">
+                  <p style="margin: 0">
+                    <mat-form-field appearance="outline" color="accent">
+                      <mat-label>Заголовок</mat-label>
+                      <input formControlName="title" matInput />
+                      <button
+                        mat-icon-button
+                        aria-label="Удалить раздел"
+                        matTooltip="Удалить раздел"
+                        [disabled]="sections.disabled"
+                        matSuffix
+                        (click)="deleteSection(section.key)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </p>
+                  <div class="flex-row">
+                    <div class="flex-row-item">
+                      <p style="margin: 0">
+                        <mat-slide-toggle formControlName="showAllQuestions"
+                          >Выводить все вопросы</mat-slide-toggle
+                        >
+                      </p>
+                    </div>
+                    <div class="flex-row-item">
+                      <p style="margin: 0">
+                        <mat-slide-toggle formControlName="shuffle"
+                          >Перемешивать вопросы</mat-slide-toggle
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <p *ngIf="!section.value.value.showAllQuestions">
+                    <mat-form-field appearance="outline" color="accent">
+                      <mat-label>Количество выводимых вопросов</mat-label>
+                      <input
+                        matInput
+                        type="number"
+                        placeholder="2"
+                        formControlName="attemptQuestionsNumber"
+                        min="1"
+                        (input)="
+                          setShowAll(
+                            section.value.controls.attemptQuestionsNumber,
+                            section.value.controls.showAllQuestions
+                          )
+                        "
+                      />
+                      <mat-error
+                        *ngIf="
+                          section.value.controls['attemptQuestionsNumber']
+                            .invalid
+                        "
+                        >{{
+                          getErrorMessage(
+                            section.value.controls["attemptQuestionsNumber"]
+                          )
+                        }}</mat-error
+                      >
+                    </mat-form-field>
+                  </p>
+                </mat-card-content>
+              </div>
+            </mat-card>
+            <mat-card
+              class="question"
+              *ngFor="
+                let question of section.value.controls.questions.controls
+                  | keyvalue;
+                let i = index
+              "
+            >
+              <ng-container
+                *ngIf="!question.value.value.deleted; else backQuestion"
+              >
+                <div [formGroup]="question.value">
+                  <div class="flex-row-static">
+                    <div class="flex-row-static-item" style="width: 50%">
+                      <mat-form-field appearance="outline" color="accent">
+                        <mat-label>Вид вопроса</mat-label>
+                        <mat-select formControlName="type">
+                          <mat-option [value]="0">Один из</mat-option>
+                          <mat-option [value]="1">Множество из</mat-option>
+                          <mat-option [value]="2">Сопоставление</mat-option>
+                          <!--<mat-option [value]="3">Порядок</mat-option>-->
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      class="flex-row-static-item"
+                      style="width: calc(50% - 56px)"
+                    >
+                      <mat-form-field appearance="outline" color="accent">
+                        <mat-label>Баллы</mat-label>
+                        <input
+                          matInput
+                          type="number"
+                          placeholder="1"
+                          formControlName="cost"
+                          min="0"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div
+                      class="flex-row-static-icon"
+                      style="flex: unset; width: 24px"
+                    >
+                      <mat-icon
+                        matSuffix
+                        matTooltip="Удалить вопрос"
+                        [disabled]="sections.disabled"
+                        (click)="
+                          deleteQuestion(
+                            section.value.controls.questions,
+                            question.key
+                          )
+                        "
+                        class="pointer"
+                        >delete</mat-icon
+                      >
+                    </div>
+                  </div>
+                  <div class="flex-row-static" style="align-items: center">
+                    <div class="flex-row-static-item">
+                      <mat-form-field
+                        appearance="outline"
+                        class="ignore-mat-field-padding-bottom"
+                        color="accent"
+                      >
+                        <mat-label>Текст</mat-label>
+                        <textarea
+                          matInput
+                          formControlName="text"
+                          placeholder="Текст вопроса"
+                        ></textarea>
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-row-static-icon">
+                      <mat-icon
+                        matSuffix
+                        matTooltip="Прикрепить изображение"
+                        class="pointer"
+                        >attach_file</mat-icon
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <mat-card-title
+                      style="align-items: center; display: flex; margin: 16px 0"
+                      >Варианты
+                      <button
+                        (click)="addOption(question.value)"
+                        [disabled]="sections.disabled"
+                        mat-icon-button
+                        aria-label="Добавить вариант"
+                        matTooltip="Добавить вариант"
+                      >
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </mat-card-title>
+
+                    <div [ngSwitch]="question.value.value.type">
+                      <div *ngSwitchCase="0">
+                        <div
+                          class="flex-row-static"
+                          style="margin-top: 16px; align-items: center"
+                          *ngFor="
+                            let option of question.value.controls.options
+                              .controls;
+                            let i = index
+                          "
+                        >
+                          <div
+                            class="flex-row-static-item"
+                            [formGroup]="option"
+                          >
+                            <div
+                              class="flex-row-static"
+                              style="align-items: center"
+                            >
+                              <div class="flex-row-static-icon">
+                                <mat-radio-button
+                                  (click)="radioChange(question.value, i)"
+                                  [checked]="option.value.isCorrect"
+                                ></mat-radio-button>
+                              </div>
+                              <div class="flex-row-static-item">
+                                <mat-form-field
+                                  appearance="outline"
+                                  class="ignore-mat-field-padding-bottom"
+                                  color="accent"
+                                >
+                                  <mat-label>Текст</mat-label>
+                                  <textarea
+                                    matInput
+                                    formControlName="text"
+                                    placeholder="Текст варианта"
+                                  ></textarea>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-row-static-icon">
+                            <div class="flex-row-static-icon">
+                              <mat-icon
+                                matSuffix
+                                matTooltip="Удалить вариант"
+                                [disabled]="sections.disabled"
+                                (click)="
+                                  deleteOption(
+                                    question.value,
+                                    question.value.controls.options,
+                                    i
+                                  )
+                                "
+                                class="pointer"
+                                >delete</mat-icon
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="1">
+                        <div
+                          class="flex-row-static"
+                          style="margin-top: 16px; align-items: center"
+                          *ngFor="
+                            let option of question.value.controls.options
+                              .controls;
+                            let i = index
+                          "
+                        >
+                          <div
+                            class="flex-row-static-item"
+                            [formGroup]="option"
+                          >
+                            <div
+                              class="flex-row-static"
+                              style="align-items: center"
+                            >
+                              <div class="flex-row-static-icon">
+                                <mat-checkbox
+                                  (change)="checkboxChange(option)"
+                                  [checked]="option.value.isCorrect"
+                                ></mat-checkbox>
+                              </div>
+                              <div class="flex-row-static-item">
+                                <mat-form-field
+                                  appearance="outline"
+                                  color="accent"
+                                  class="ignore-mat-field-padding-bottom"
+                                >
+                                  <mat-label>Текст</mat-label>
+                                  <textarea
+                                    matInput
+                                    formControlName="text"
+                                    placeholder="Текст варианта"
+                                  ></textarea>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-row-static-icon">
+                            <div class="flex-row-static-icon">
+                              <mat-icon
+                                matSuffix
+                                matTooltip="Удалить вариант"
+                                [disabled]="sections.disabled"
+                                (click)="
+                                  deleteOption(
+                                    question.value,
+                                    question.value.controls.options,
+                                    i
+                                  )
+                                "
+                                class="pointer"
+                                >delete</mat-icon
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="2">
+                        <div
+                          class="flex-row-static"
+                          style="margin-top: 16px; align-items: center"
+                          *ngFor="
+                            let option of question.value.controls.options
+                              .controls;
+                            let i = index
+                          "
+                        >
+                          <div
+                            class="flex-row-static-item"
+                            [formGroup]="option"
+                          >
+                            <div class="flex-row">
+                              <div class="flex-row-item">
+                                <mat-form-field
+                                  appearance="outline"
+                                  color="accent"
+                                  class="ignore-mat-field-padding-bottom"
+                                >
+                                  <mat-label>Что сравнивается</mat-label>
+                                  <textarea
+                                    matInput
+                                    formControlName="leftText"
+                                    placeholder="Текст предмета сравнения"
+                                  ></textarea>
+                                </mat-form-field>
+                              </div>
+                              <div class="flex-row-item">
+                                <mat-form-field
+                                  appearance="outline"
+                                  color="accent"
+                                  class="ignore-mat-field-padding-bottom"
+                                >
+                                  <mat-label>С чем сравнивается</mat-label>
+                                  <textarea
+                                    matInput
+                                    formControlName="rightText"
+                                    placeholder="Текст образа сравнения"
+                                  ></textarea>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-row-static-icon">
+                            <div class="flex-row-static-icon">
+                              <mat-icon
+                                matSuffix
+                                matTooltip="Удалить вариант"
+                                [disabled]="sections.disabled"
+                                (click)="
+                                  deleteOption(
+                                    question.value,
+                                    question.value.controls.options,
+                                    i
+                                  )
+                                "
+                                class="pointer"
+                                >delete</mat-icon
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="3">3</div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #backQuestion>
+                <div
+                  (click)="undoDelete(question.value)"
+                  class="flex-row-static pointer"
+                  style="align-items: center"
+                >
+                  <div class="flex-row-static-icon" style="height: 24px">
+                    <mat-icon>undo</mat-icon>
+                  </div>
+                  <div class="flex-row-static-item">Вернуть вопрос</div>
+                </div>
+              </ng-template>
+            </mat-card>
+            <p class="text-center">
+              <button
+                mat-stroked-button
+                [disabled]="sections.disabled"
+                (click)="addQuestion(section.value.controls.questions)"
+              >
+                Добавить вопрос
+              </button>
+            </p>
+          </div>
+          <ng-template #backSection>
+            <mat-card>
+              <div
+                (click)="undoDelete(section.value)"
+                class="flex-row-static pointer"
+                style="align-items: center"
+              >
+                <div class="flex-row-static-icon" style="height: 24px">
+                  <mat-icon>undo</mat-icon>
+                </div>
+                <div class="flex-row-static-item">Вернуть раздел</div>
+              </div>
+            </mat-card>
+          </ng-template>
         </div>
         <p class="text-center" style="margin-top: 50px">
-          <button mat-stroked-button (click)="addSection()" [disabled]="sections.disabled">
+          <button
+            mat-stroked-button
+            (click)="addSection()"
+            [disabled]="sections.disabled"
+          >
             Добавить раздел
           </button>
         </p>
