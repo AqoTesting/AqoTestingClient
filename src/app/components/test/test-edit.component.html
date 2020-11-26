@@ -285,8 +285,8 @@ fgdfg
               баллов, а "Отлично" от 75.
             </mat-hint>
             <div
-              formArrayName="ratingScale"
-              *ngFor="let scale of ratingScale.controls; index as i"
+              formArrayName="ranks"
+              *ngFor="let rank of ranks.controls; index as i"
             >
               <div class="field-wrapper">
                 <div [formGroupName]="i">
@@ -297,12 +297,15 @@ fgdfg
                           <mat-label>Название оценки</mat-label>
                           <input
                             matInput
-                            formControlName="name"
-                            placeholder="Да ты красава"
+                            formControlName="title"
+                            placeholder="Отлично"
                             required
                           />
-                          <mat-error *ngIf="scale.controls['name'].invalid">{{
-                            getErrorMessage(scale.controls["name"])
+                          <input hidden [ngxMatColorPicker]="colorPicker" formControlName="color">
+                          <ngx-mat-color-toggle matSuffix [for]="colorPicker"></ngx-mat-color-toggle>
+                          <ngx-mat-color-picker #colorPicker color="accent"></ngx-mat-color-picker>
+                          <mat-error *ngIf="rank.controls['title'].invalid">{{
+                            getErrorMessage(rank.controls["title"])
                           }}</mat-error>
                         </mat-form-field>
                       </div>
@@ -311,19 +314,20 @@ fgdfg
                           <mat-label>Баллы</mat-label>
                           <input
                             matInput
-                            formControlName="value"
+                            formControlName="minimumScore"
+                            type="number"
                             placeholder="10"
                             required
                           />
                           <mat-icon
                             matSuffix
                             matTooltip="Удалить шкалу"
-                            (click)="deleteRatingScale(i)"
+                            (click)="deleteRank(i)"
                             class="pointer"
                             >delete</mat-icon
                           >
-                          <mat-error *ngIf="scale.controls['value'].invalid">{{
-                            getErrorMessage(scale.controls["value"])
+                          <mat-error *ngIf="rank.controls['minimumScore'].invalid">{{
+                            getErrorMessage(rank.controls["minimumScore"])
                           }}</mat-error>
                         </mat-form-field>
                       </div>
@@ -333,7 +337,7 @@ fgdfg
               </div>
             </div>
             <p class="text-center">
-              <button mat-button (click)="addRatingScale()">
+              <button mat-button (click)="addRank()">
                 Добавить шкалу
               </button>
             </p>
@@ -467,7 +471,12 @@ fgdfg
                     <div class="flex-row-static-item" style="width: 50%">
                       <mat-form-field appearance="outline" color="accent">
                         <mat-label>Вид вопроса</mat-label>
-                        <mat-select formControlName="type" (selectionChange)="changeQuestionType($event.value, question.value)">
+                        <mat-select
+                          formControlName="type"
+                          (selectionChange)="
+                            changeQuestionType($event.value, question.value)
+                          "
+                        >
                           <mat-option [value]="0">Один из</mat-option>
                           <mat-option [value]="1">Множество из</mat-option>
                           <mat-option [value]="2">Сопоставление</mat-option>
@@ -492,7 +501,7 @@ fgdfg
                     </div>
                     <div
                       class="flex-row-static-icon"
-                      style="flex: unset; width: 24px"
+                      style="flex: unset; width: 24px;padding-bottom: 1.34375em;"
                     >
                       <button
                         mat-icon-button
@@ -866,14 +875,15 @@ fgdfg
                                     placeholder="Текст предмета сравнения"
                                   ></textarea>
                                   <input
-                                    #uploadImageInput
+                                    #uploadLeftImageInput
                                     hidden
                                     type="file"
                                     (change)="
                                       uploadImage(
                                         $event.target.files,
                                         option,
-                                        2
+                                        2,
+                                        false
                                       )
                                     "
                                     accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
@@ -887,11 +897,42 @@ fgdfg
                                     "
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadImageInput.click()"
+                                    (click)="uploadLeftImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>
                                 </mat-form-field>
+                                <div
+                                  *ngIf="option.value.leftImageUrl"
+                                  class="flex-row-static"
+                                  style="gap: 8px; margin-top: 8px"
+                                >
+                                  <div class="flex-row-static-item test-img">
+                                    <img [src]="option.value.leftImageUrl" />
+                                  </div>
+                                  <div class="flex-row-static-icon">
+                                    <div>
+                                      <a
+                                        [href]="option.value.leftImageUrl"
+                                        target="_blank"
+                                      >
+                                        <mat-icon
+                                          matTooltip="Просмотреть изображение"
+                                          nclass="pointer"
+                                          >preview</mat-icon
+                                        >
+                                      </a>
+                                    </div>
+                                    <div>
+                                      <mat-icon
+                                        matTooltip="Удалить изображение"
+                                        (click)="deleteImage(option, 2, false)"
+                                        class="pointer"
+                                        >clear</mat-icon
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <div class="flex-row-item">
                                 <mat-form-field
@@ -906,7 +947,7 @@ fgdfg
                                     placeholder="Текст образа сравнения"
                                   ></textarea>
                                   <input
-                                    #uploadImageInput
+                                    #uploadRightImageInput
                                     hidden
                                     type="file"
                                     (change)="
@@ -928,11 +969,42 @@ fgdfg
                                     "
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadImageInput.click()"
+                                    (click)="uploadRightImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>
                                 </mat-form-field>
+                                <div
+                                  *ngIf="option.value.rightImageUrl"
+                                  class="flex-row-static"
+                                  style="gap: 8px; margin-top: 8px"
+                                >
+                                  <div class="flex-row-static-item test-img">
+                                    <img [src]="option.value.rightImageUrl" />
+                                  </div>
+                                  <div class="flex-row-static-icon">
+                                    <div>
+                                      <a
+                                        [href]="option.value.rightImageUrl"
+                                        target="_blank"
+                                      >
+                                        <mat-icon
+                                          matTooltip="Просмотреть изображение"
+                                          nclass="pointer"
+                                          >preview</mat-icon
+                                        >
+                                      </a>
+                                    </div>
+                                    <div>
+                                      <mat-icon
+                                        matTooltip="Удалить изображение"
+                                        (click)="deleteImage(option, 2, true)"
+                                        class="pointer"
+                                        >clear</mat-icon
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

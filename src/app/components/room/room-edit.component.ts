@@ -69,7 +69,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
       this.roomService.getUserRoomById(this.roomId).subscribe(
         (data: Room) => {
           delete data.id;
-          delete data.ownerId;
+          delete data.userId;
 
           this.room = data;
           this.initForm();

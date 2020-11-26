@@ -271,8 +271,8 @@
             баллов, а "Отлично" от 75.
           </mat-hint>
           <div
-            formArrayName="ratingScale"
-            *ngFor="let scale of ratingScale.controls; index as i"
+            formArrayName="ranks"
+            *ngFor="let rank of ranks.controls; index as i"
           >
             <div class="field-wrapper">
               <div [formGroupName]="i">
@@ -283,12 +283,15 @@
                         <mat-label>Название оценки</mat-label>
                         <input
                           matInput
-                          formControlName="name"
+                          formControlName="title"
                           placeholder="Да ты красава"
                           required
                         />
-                        <mat-error *ngIf="scale.controls['name'].invalid">{{
-                          getErrorMessage(scale.controls["name"])
+                        <input hidden [ngxMatColorPicker]="colorPicker" formControlName="color">
+                        <ngx-mat-color-toggle matSuffix [for]="colorPicker"></ngx-mat-color-toggle>
+                        <ngx-mat-color-picker #colorPicker color="accent"></ngx-mat-color-picker>
+                        <mat-error *ngIf="rank.controls['title'].invalid">{{
+                          getErrorMessage(rank.controls["title"])
                         }}</mat-error>
                       </mat-form-field>
                     </div>
@@ -297,20 +300,23 @@
                         <mat-label>Баллы</mat-label>
                         <input
                           matInput
-                          formControlName="value"
+                          formControlName="minimumScore"
                           placeholder="10"
                           required
                         />
                         <mat-icon
                           matSuffix
                           matTooltip="Удалить шкалу"
-                          (click)="deleteRatingScale(i)"
+                          (click)="deleteRank(i)"
                           class="pointer"
                           >delete</mat-icon
                         >
-                        <mat-error *ngIf="scale.controls['value'].invalid">{{
-                          getErrorMessage(scale.controls["value"])
-                        }}</mat-error>
+                        <mat-error
+                          *ngIf="rank.controls['minimumScore'].invalid"
+                          >{{
+                            getErrorMessage(rank.controls["minimumScore"])
+                          }}</mat-error
+                        >
                       </mat-form-field>
                     </div>
                   </div>
@@ -319,9 +325,7 @@
             </div>
           </div>
           <p class="text-center">
-            <button mat-button (click)="addRatingScale()">
-              Добавить шкалу
-            </button>
+            <button mat-button (click)="addRank()">Добавить шкалу</button>
           </p>
         </mat-card-content>
       </mat-card>

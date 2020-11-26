@@ -34,6 +34,8 @@ import { cloneAbstractControl } from 'src/app/utils/clone-abstract-control.utili
 import { ImageService } from 'src/app/services/image.service';
 import { ImgBBResponse } from 'src/app/services/imgbb.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Color } from '@angular-material-components/color-picker';
+import { hexToRgbA } from 'src/app/utils/hex-to-rgba.utility';
 
 @Component({
   selector: 'app-test-edit',
@@ -60,7 +62,7 @@ export class TestEditComponent implements OnInit {
     activationDate: [null],
     deactivationDate: [null],
     shuffle: [false],
-    ratingScale: this.fb.array([]),
+    ranks: this.fb.array([]),
   });
 
   sections: FormGroup = this.fb.group({});
@@ -69,8 +71,8 @@ export class TestEditComponent implements OnInit {
     return this.testEdit.get('documents') as FormArray;
   }
 
-  get ratingScale(): FormArray {
-    return this.testEdit.get('ratingScale') as FormArray;
+  get ranks(): FormArray {
+    return this.testEdit.get('ranks') as FormArray;
   }
 
   @ViewChild('pickerActivation') pickerActivation: any;
@@ -140,18 +142,23 @@ export class TestEditComponent implements OnInit {
     this.documents.removeAt(i);
   }
 
-  addRatingScale(): void {
-    this.ratingScale.push(
+  addRank(color = new Color(255, 255, 255)): void {
+    this.ranks.push(
       this.fb.group({
-        name: ['', Validators.required],
-        value: [null, Validators.required],
+        title: ['', Validators.required],
+        minimumScore: [1, Validators.required],
+        color: [color, Validators.required],
       })
     );
   }
 
-  deleteRatingScale(i: number): void {
+  deleteRank(i: number): void {
     this.testEdit.markAsDirty();
-    this.ratingScale.removeAt(i);
+    this.ranks.removeAt(i);
+  }
+
+  colorInput(e) {
+    console.log(e);
   }
 
   addSection(
@@ -297,7 +304,7 @@ export class TestEditComponent implements OnInit {
   initForm() {
     delete this.test.id;
     delete this.test.roomId;
-    delete this.test.ownerId;
+    delete this.test.userId;
     delete this.test.creationDate;
 
     // INIT SECTION
@@ -322,21 +329,15 @@ export class TestEditComponent implements OnInit {
     this.sections.patchValue(this.test.sections);
     delete this.test.sections;
 
-    if (this.test.documents?.length) {
-      this.test.documents.forEach((document) => {
-        this.addDocument();
+    if (this.test.documents?.length)
+      this.test.documents.forEach(() => this.addDocument());
+    if (this.test.ranks.length)
+      this.test.ranks.forEach((rank: any, index) => {
+        const rgba: number[] = hexToRgbA(rank.color);
+        const color: Color = new Color(rgba[0], rgba[1], rgba[2]);
+        this.addRank(color);
+        this.test.ranks[index].color = color;
       });
-    } else {
-      this.test.documents = [];
-    }
-
-    if (this.test?.ratingScale?.length) {
-      this.test.ratingScale.forEach((scale) => {
-        this.addRatingScale();
-      });
-    } else {
-      this.test.ratingScale = [];
-    }
 
     if (this.test.attemptSectionsNumber) this.test.showAllSections = false;
     else {
@@ -360,15 +361,10 @@ export class TestEditComponent implements OnInit {
     delete test.showAllSections;
 
     if (!test.description?.length) delete test.description;
-    if (!test.documents?.length) delete test.documents;
-
-    if (test.ratingScale.length) {
-      test.ratingScale.forEach((scale) => {
-        ratingScale[scale.name] = scale.value;
+    if (test.ranks.length)
+      test.ranks.forEach((rank: any) => {
+        rank.color = rank.color.hex;
       });
-      test.ratingScale = ratingScale;
-    }
-    test.ratingScale = {};
 
     if (test.activationDate)
       test.activationDate = new Date(test.activationDate).toISOString();
@@ -517,6 +513,7 @@ export class TestEditComponent implements OnInit {
             if (right) {
               formGroup.patchValue({
                 rightImageUrl: response.data.display_url,
+                right,
               });
             } else {
               formGroup.patchValue({ leftImageUrl: response.data.display_url });

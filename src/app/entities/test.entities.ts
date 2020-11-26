@@ -1,7 +1,9 @@
+import { Color } from '@angular-material-components/color-picker';
+
 export class Test {
   id?: string;
   roomId?: string;
-  ownerId?: string;
+  userId?: string;
   title: string;
   description: string;
   documents: Document[];
@@ -12,7 +14,7 @@ export class Test {
   activationDate: string;
   deactivationDate: string;
   shuffle: boolean = false;
-  ratingScale: any = {};
+  ranks: Rank[];
   sections: Section[];
 }
 
@@ -26,6 +28,12 @@ export class PostSections {
 export class Document {
   title: string;
   link: string;
+}
+
+export class Rank {
+  minimumScore: string;
+  title: string;
+  color: string | Color;
 }
 
 export class Section {

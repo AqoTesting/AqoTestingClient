@@ -3,7 +3,7 @@ export class GetRoomsItem {
   id: string;
   name: string;
   domain: string;
-  ownerId: string;
+  userId: string;
   isActive: boolean;
   isApproveManually: boolean;
   isRegistrationEnabled: boolean;
@@ -18,7 +18,7 @@ export class Room {
   name: string;
   domain: string;
   description: string;
-  ownerId: string;
+  userId: string;
   fields: RoomField[];
   isActive: boolean;
   isApproveManually: boolean;

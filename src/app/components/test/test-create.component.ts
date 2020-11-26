@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
+import { Color } from '@angular-material-components/color-picker';
 
 @Component({
   selector: 'app-test-create',
@@ -39,15 +40,15 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     activationDate: [null],
     deactivationDate: [null],
     shuffle: [false],
-    ratingScale: this.fb.array([]),
+    ranks: this.fb.array([]),
   });
 
   get documents(): FormArray {
     return this.testCreate.get('documents') as FormArray;
   }
 
-  get ratingScale(): FormArray {
-    return this.testCreate.get('ratingScale') as FormArray;
+  get ranks(): FormArray {
+    return this.testCreate.get('ranks') as FormArray;
   }
 
   @ViewChild('pickerActivation') pickerActivation: any;
@@ -95,17 +96,18 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     this.documents.removeAt(i);
   }
 
-  addRatingScale(): void {
-    this.ratingScale.push(
+  addRank(color = new Color(255, 255, 255)): void {
+    this.ranks.push(
       this.fb.group({
-        name: ['', Validators.required],
-        value: [null, Validators.required],
+        title: ['', Validators.required],
+        minimumScore: [1, Validators.required],
+        color: [color, Validators.required],
       })
     );
   }
 
-  deleteRatingScale(i: number): void {
-    this.ratingScale.removeAt(i);
+  deleteRank(i: number): void {
+    this.ranks.removeAt(i);
   }
 
   setShowAllSections(amount: FormControl, showAllSections: FormControl) {
@@ -123,15 +125,10 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     delete test.showAllSections;
 
     if (!test.description.length) delete test.description;
-    if (!test.documents.length) delete test.documents;
-
-    if (test.ratingScale.length) {
-      test.ratingScale.forEach((scale) => {
-        ratingScale[scale.name] = scale.value;
+    if (test.ranks.length)
+      test.ranks.forEach((rank: any) => {
+        rank.color = rank.color.hex;
       });
-      test.ratingScale = ratingScale;
-    }
-    test.ratingScale = {};
 
     if (test.activationDate)
       test.activationDate = new Date(test.activationDate).toISOString();

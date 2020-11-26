@@ -27,6 +27,12 @@ import {
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
 } from '@angular-material-components/datetime-picker';
+import {
+  MatColorFormats,
+  MAT_COLOR_FORMATS,
+  NgxMatColorPickerModule,
+  NGX_MAT_COLOR_FORMATS,
+} from '@angular-material-components/color-picker';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -53,10 +59,20 @@ const MaterialComponents = [
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
   MatCheckboxModule,
+  NgxMatColorPickerModule,
 ];
+
+export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
+  display: {
+    colorInput: 'hex',
+  },
+};
 
 @NgModule({
   imports: [MaterialComponents],
   exports: [MaterialComponents],
+  providers: [
+    { provide: MAT_COLOR_FORMATS, useValue: CUSTOM_MAT_COLOR_FORMATS },
+  ],
 })
 export class MaterialModule {}
