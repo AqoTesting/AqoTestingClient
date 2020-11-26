@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Location } from '@angular/common';
 import {
   AbstractControl,
@@ -79,7 +86,8 @@ export class TestEditComponent implements OnInit {
     private fb: FormBuilder,
     private snack: SnackService,
     private testService: TestService,
-    private image: ImageService
+    private image: ImageService,
+    private cdr: ChangeDetectorRef
   ) {
     this.subscription.add(
       this.route.params.pipe(take(1)).subscribe((params) => {
@@ -256,6 +264,16 @@ export class TestEditComponent implements OnInit {
     options.removeAt(i);
   }
 
+  changeQuestionType(type: QuestionTypes, question: FormControl) {
+    if (type == QuestionTypes.SingleChoice) {
+      let count = 0;
+      this.getOptions(question).controls.forEach((option: AbstractControl) => {
+        if (!count && option.value.isCorrect) count++;
+        else option.patchValue({ isCorrect: false });
+      });
+    }
+  }
+
   radioChange(question: FormControl, i: number) {
     this.getOptions(question).controls.forEach(
       (option: AbstractControl, index) => {
@@ -295,17 +313,7 @@ export class TestEditComponent implements OnInit {
         const question = questions.get(questionId) as FormControl;
         this.test.sections[sectionId].questions[questionId].options.forEach(
           (option, index) => {
-            this.addOption(question, option.isCorrect);
-
-            if ((option.isCorrect, question.value.type)) {
-              if (question.value.type == 0) {
-                this.radioChange(question, index);
-              } else if (question.value.type == 1) {
-                this.checkboxChange(
-                  question.get(index.toString()) as FormControl
-                );
-              }
-            }
+            this.addOption(question, true);
           }
         );
       }
@@ -335,6 +343,7 @@ export class TestEditComponent implements OnInit {
       this.test.attemptSectionsNumber = 1;
       this.test.showAllSections = true;
     }
+
     this.testEdit.setValue(this.test);
     this.testEdit.markAsPending();
   }
