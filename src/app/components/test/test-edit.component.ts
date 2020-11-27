@@ -26,7 +26,13 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  skip,
+  skipLast,
+  take,
+  filter,
+} from 'rxjs/operators';
 import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
 import { MatRadioChange } from '@angular/material/radio';
@@ -154,10 +160,6 @@ export class TestEditComponent implements OnInit {
   deleteRank(i: number): void {
     this.testEdit.markAsDirty();
     this.ranks.removeAt(i);
-  }
-
-  colorInput(e) {
-    console.log(e);
   }
 
   addSection(
@@ -309,6 +311,14 @@ export class TestEditComponent implements OnInit {
     // INIT SECTION
     for (let sectionId in this.test.sections) {
       this.addSection(false, sectionId);
+
+      const section = this.test.sections[sectionId];
+      if (section.attemptQuestionsNumber) section.showAllQuestions = false;
+      else {
+        section.attemptQuestionsNumber = 1;
+        section.showAllQuestions = true;
+      }
+
       const questions = this.sections
         .get(sectionId)
         .get('questions') as FormGroup;
@@ -534,6 +544,32 @@ export class TestEditComponent implements OnInit {
       }
     }
     formGroup.markAsDirty();
+  }
+
+  uploadImage(
+    formGroup: FormGroup,
+    type: QuestionTypes = QuestionTypes.SingleChoice,
+    right: boolean = false
+  ) {
+    this.imgBB.imgUrl$.next(null);
+    this.imgBB.open();
+    this.subscription.add(
+      this.imgBB.imgUrl$
+        .pipe(take(1))
+        .pipe(filter((url) => url != null))
+        .subscribe((url) => {
+          if (
+            type == QuestionTypes.SingleChoice ||
+            type == QuestionTypes.MultipleChoice
+          ) {
+            formGroup.patchValue({ imageUrl: url });
+          } else if (type == QuestionTypes.Matching) {
+            if (right) formGroup.patchValue({ rightImageUrl: url });
+            else formGroup.patchValue({ leftImageUrl: url });
+          }
+          formGroup.markAsDirty();
+        })
+    );
   }
 
   getErrorMessage(control: FormControl) {

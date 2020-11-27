@@ -532,49 +532,32 @@
                       </button>
                     </div>
                   </div>
-                  <div class="flex-row-static" style="align-items: center">
-                    <div class="flex-row-static-item">
-                      <mat-form-field
-                        appearance="outline"
-                        class="ignore-mat-field-padding-bottom"
-                        color="accent"
-                      >
-                        <mat-label>Текст</mat-label>
-                        <textarea
-                          matInput
-                          formControlName="text"
-                          placeholder="Текст вопроса"
-                        ></textarea>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-row-static-icon">
-                      <input
-                        hidden
-                        id="imgBBContentEditable-{{ section.key }}-{{
-                          question.key
-                        }}"
-                        (input)="inputImage($event.target, question.value)"
-                        contenteditable
-                      />
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="ignore-mat-field-padding-bottom"
+                      color="accent"
+                    >
+                      <mat-label>Текст</mat-label>
+                      <textarea
+                        matInput
+                        formControlName="text"
+                        placeholder="Текст вопроса"
+                      ></textarea>
                       <button
+                        matSuffix
                         mat-icon-button
                         [disabled]="
                           question.value.value.imageUrl != null ||
                           sections.disabled
                         "
-                        data-imgbb-trigger
-                        [attr.data-target]="
-                          '#imgBBContentEditable-' +
-                          section.key +
-                          '-' +
-                          question.key
-                        "
+                        (click)="uploadImage(question.value)"
                         matTooltip="Прикрепить изображение"
                         title="Возможно прикрепить только 1 изображение"
                       >
                         <mat-icon>attach_file</mat-icon>
                       </button>
-                    </div>
+                    </mat-form-field>
                   </div>
                   <div
                     *ngIf="question.value.value.imageUrl"
@@ -664,16 +647,6 @@
                                         formControlName="text"
                                         placeholder="Текст варианта"
                                       ></textarea>
-                                      <input
-                                        hidden
-                                        id="imgBBContentEditable-{{
-                                          section.key
-                                        }}-{{ question.key }}-{{ i }}"
-                                        (input)="
-                                          inputImage($event.target, option)
-                                        "
-                                        contenteditable
-                                      />
                                       <button
                                         matSuffix
                                         mat-icon-button
@@ -681,15 +654,7 @@
                                           option.value.imageUrl != null ||
                                           sections.disabled
                                         "
-                                        data-imgbb-trigger
-                                        [attr.data-target]="
-                                          '#imgBBContentEditable-' +
-                                          section.key +
-                                          '-' +
-                                          question.key +
-                                          '-' +
-                                          i
-                                        "
+                                        (click)="uploadImage(option)"
                                         matTooltip="Прикрепить изображение"
                                         title="Возможно прикрепить только 1 изображение"
                                       >
@@ -794,16 +759,6 @@
                                       formControlName="text"
                                       placeholder="Текст варианта"
                                     ></textarea>
-                                    <input
-                                      hidden
-                                      id="imgBBContentEditable-{{
-                                        section.key
-                                      }}-{{ question.key }}-1-{{ i }}"
-                                      (input)="
-                                        inputImage($event.target, option)
-                                      "
-                                      contenteditable
-                                    />
                                     <button
                                       matSuffix
                                       mat-icon-button
@@ -811,15 +766,7 @@
                                         option.value.imageUrl != null ||
                                         sections.disabled
                                       "
-                                      data-imgbb-trigger
-                                      [attr.data-target]="
-                                        '#imgBBContentEditable-' +
-                                        section.key +
-                                        '-' +
-                                        question.key +
-                                        '-1-' +
-                                        i
-                                      "
+                                      (click)="uploadImage(option)"
                                       matTooltip="Прикрепить изображение"
                                       title="Возможно прикрепить только 1 изображение"
                                     >
@@ -908,20 +855,7 @@
                                     formControlName="leftText"
                                     placeholder="Текст предмета сравнения"
                                   ></textarea>
-                                  <input
-                                    #uploadLeftImageInput
-                                    hidden
-                                    type="file"
-                                    (change)="
-                                      uploadImage(
-                                        $event.target.files,
-                                        option,
-                                        2,
-                                        false
-                                      )
-                                    "
-                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                  />
+
                                   <button
                                     matSuffix
                                     mat-icon-button
@@ -929,9 +863,9 @@
                                       option.value.leftImageUrl != null ||
                                       sections.disabled
                                     "
+                                    (click)="uploadImage(option, 2, false)"
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadLeftImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>
@@ -980,20 +914,6 @@
                                     formControlName="rightText"
                                     placeholder="Текст образа сравнения"
                                   ></textarea>
-                                  <input
-                                    #uploadRightImageInput
-                                    hidden
-                                    type="file"
-                                    (change)="
-                                      uploadImage(
-                                        $event.target.files,
-                                        option,
-                                        2,
-                                        true
-                                      )
-                                    "
-                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                  />
                                   <button
                                     matSuffix
                                     mat-icon-button
@@ -1001,9 +921,9 @@
                                       option.value.rightImageUrl != null ||
                                       sections.disabled
                                     "
+                                    (click)="uploadImage(option, 2, true)"
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadRightImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>

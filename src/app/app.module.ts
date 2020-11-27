@@ -26,10 +26,6 @@ import { AuthorizedGuard } from './guards/authorized.guard';
 import { NotAuthorizedGuard } from './guards/not-authorized.guard';
 import { SnackService } from './services/snack.service';
 import { SnackComponent } from './components/snack/snack.component';
-import {
-  ErrorMessagesCode,
-  ErrorMessagesText,
-} from './enums/error-messages.enum';
 import { CatchErrorInterceptor } from './interceptors/catch-error.interceptor';
 import { RoomService } from './services/room.service';
 import { ExitAboutGuard } from './guards/exit-about.guard';
@@ -41,11 +37,6 @@ import { MemberService } from './services/member.service';
 import { FilterMemberComponent } from './components/members/filter-member.component';
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 import { ImgBBService } from './services/imgbb.service';
 
 @NgModule({

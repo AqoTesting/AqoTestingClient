@@ -1,15 +1,20 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { AsyncSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ImgBBService {
   imgUrl$ = new Subject();
+  private button: HTMLButtonElement;
 
   constructor() {
     this.load();
+  }
+
+  open() {
+    this.button.click();
   }
 
   load() {
@@ -21,7 +26,6 @@ export class ImgBBService {
 
     div.addEventListener('input', (e) => {
       const target: HTMLDivElement = e.target as HTMLDivElement;
-      console.log(e);
       this.imgUrl$.next(target.innerText);
       target.innerHTML = '';
     });
@@ -30,6 +34,7 @@ export class ImgBBService {
     button.id = 'imgBBUpload';
     button.setAttribute('data-imgbb-trigger', 'true');
     button.setAttribute('data-target', '#imgBBContentEditable');
+    button.setAttribute('hidden', 'true');
 
     let script = document.createElement('script');
     script.innerHTML = '';
@@ -41,6 +46,7 @@ export class ImgBBService {
     script.setAttribute('data-mode', 'manual');
 
     body.appendChild(div);
+    this.button = button;
     body.appendChild(button);
     body.appendChild(script);
   }
