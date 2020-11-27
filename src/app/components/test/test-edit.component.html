@@ -1,5 +1,4 @@
 <app-navbar></app-navbar>
-fgdfg
 <div class="container">
   <div class="content">
     <ng-container *ngIf="test; else loading">
@@ -301,9 +300,19 @@ fgdfg
                             placeholder="Отлично"
                             required
                           />
-                          <input hidden [ngxMatColorPicker]="colorPicker" formControlName="color">
-                          <ngx-mat-color-toggle matSuffix [for]="colorPicker"></ngx-mat-color-toggle>
-                          <ngx-mat-color-picker #colorPicker color="accent"></ngx-mat-color-picker>
+                          <input
+                            hidden
+                            [ngxMatColorPicker]="colorPicker"
+                            formControlName="color"
+                          />
+                          <ngx-mat-color-toggle
+                            matSuffix
+                            [for]="colorPicker"
+                          ></ngx-mat-color-toggle>
+                          <ngx-mat-color-picker
+                            #colorPicker
+                            color="accent"
+                          ></ngx-mat-color-picker>
                           <mat-error *ngIf="rank.controls['title'].invalid">{{
                             getErrorMessage(rank.controls["title"])
                           }}</mat-error>
@@ -326,9 +335,12 @@ fgdfg
                             class="pointer"
                             >delete</mat-icon
                           >
-                          <mat-error *ngIf="rank.controls['minimumScore'].invalid">{{
-                            getErrorMessage(rank.controls["minimumScore"])
-                          }}</mat-error>
+                          <mat-error
+                            *ngIf="rank.controls['minimumScore'].invalid"
+                            >{{
+                              getErrorMessage(rank.controls["minimumScore"])
+                            }}</mat-error
+                          >
                         </mat-form-field>
                       </div>
                     </div>
@@ -337,9 +349,7 @@ fgdfg
               </div>
             </div>
             <p class="text-center">
-              <button mat-button (click)="addRank()">
-                Добавить шкалу
-              </button>
+              <button mat-button (click)="addRank()">Добавить шкалу</button>
             </p>
           </mat-card-content>
         </mat-card>
@@ -501,7 +511,11 @@ fgdfg
                     </div>
                     <div
                       class="flex-row-static-icon"
-                      style="flex: unset; width: 24px;padding-bottom: 1.34375em;"
+                      style="
+                        flex: unset;
+                        width: 24px;
+                        padding-bottom: 1.34375em;
+                      "
                     >
                       <button
                         mat-icon-button
@@ -535,13 +549,12 @@ fgdfg
                     </div>
                     <div class="flex-row-static-icon">
                       <input
-                        #uploadImageInput
                         hidden
-                        type="file"
-                        (change)="
-                          uploadImage($event.target.files, question.value)
-                        "
-                        accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                        id="imgBBContentEditable-{{ section.key }}-{{
+                          question.key
+                        }}"
+                        (input)="inputImage($event.target, question.value)"
+                        contenteditable
                       />
                       <button
                         mat-icon-button
@@ -549,7 +562,13 @@ fgdfg
                           question.value.value.imageUrl != null ||
                           sections.disabled
                         "
-                        (click)="uploadImageInput.click()"
+                        data-imgbb-trigger
+                        [attr.data-target]="
+                          '#imgBBContentEditable-' +
+                          section.key +
+                          '-' +
+                          question.key
+                        "
                         matTooltip="Прикрепить изображение"
                         title="Возможно прикрепить только 1 изображение"
                       >
@@ -646,16 +665,14 @@ fgdfg
                                         placeholder="Текст варианта"
                                       ></textarea>
                                       <input
-                                        #uploadImageInput
                                         hidden
-                                        type="file"
-                                        (change)="
-                                          uploadImage(
-                                            $event.target.files,
-                                            option
-                                          )
+                                        id="imgBBContentEditable-{{
+                                          section.key
+                                        }}-{{ question.key }}-{{ i }}"
+                                        (input)="
+                                          inputImage($event.target, option)
                                         "
-                                        accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                        contenteditable
                                       />
                                       <button
                                         matSuffix
@@ -664,9 +681,17 @@ fgdfg
                                           option.value.imageUrl != null ||
                                           sections.disabled
                                         "
+                                        data-imgbb-trigger
+                                        [attr.data-target]="
+                                          '#imgBBContentEditable-' +
+                                          section.key +
+                                          '-' +
+                                          question.key +
+                                          '-' +
+                                          i
+                                        "
                                         matTooltip="Прикрепить изображение"
                                         title="Возможно прикрепить только 1 изображение"
-                                        (click)="uploadImageInput.click()"
                                       >
                                         <mat-icon>attach_file</mat-icon>
                                       </button>
@@ -770,13 +795,14 @@ fgdfg
                                       placeholder="Текст варианта"
                                     ></textarea>
                                     <input
-                                      #uploadImageInput
                                       hidden
-                                      type="file"
-                                      (change)="
-                                        uploadImage($event.target.files, option)
+                                      id="imgBBContentEditable-{{
+                                        section.key
+                                      }}-{{ question.key }}-1-{{ i }}"
+                                      (input)="
+                                        inputImage($event.target, option)
                                       "
-                                      accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
+                                      contenteditable
                                     />
                                     <button
                                       matSuffix
@@ -785,9 +811,17 @@ fgdfg
                                         option.value.imageUrl != null ||
                                         sections.disabled
                                       "
+                                      data-imgbb-trigger
+                                      [attr.data-target]="
+                                        '#imgBBContentEditable-' +
+                                        section.key +
+                                        '-' +
+                                        question.key +
+                                        '-1-' +
+                                        i
+                                      "
                                       matTooltip="Прикрепить изображение"
                                       title="Возможно прикрепить только 1 изображение"
-                                      (click)="uploadImageInput.click()"
                                     >
                                       <mat-icon>attach_file</mat-icon>
                                     </button>

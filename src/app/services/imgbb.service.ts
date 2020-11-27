@@ -1,32 +1,47 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-export class ImgBBResponse {
-  data: any;
-  status: number;
-  success: boolean;
-}
-
 @Injectable()
 export class ImgBBService {
-  private http: HttpClient;
+  imgUrl$ = new Subject();
 
-  constructor(private handler: HttpBackend) {
-    this.http = new HttpClient(handler);
+  constructor() {
+    this.load();
   }
 
-  upload(file: File): Observable<ImgBBResponse> {
-    const formData: FormData = new FormData();
-    formData.append('key', environment.imgbbKey);
-    formData.append('image', file, file.name);
-    formData.append('name', file.name);
+  load() {
+    let body = <HTMLDivElement>document.body;
 
-    return this.http.post<ImgBBResponse>(
-      'https://api.imgbb.com/1/upload',
-      formData
-    );
+    let div = document.createElement('div');
+    div.id = 'imgBBContentEditable';
+    div.setAttribute('contenteditable', 'true');
+
+    div.addEventListener('input', (e) => {
+      const target: HTMLDivElement = e.target as HTMLDivElement;
+      console.log(e);
+      this.imgUrl$.next(target.innerText);
+      target.innerHTML = '';
+    });
+
+    let button = document.createElement('button');
+    button.id = 'imgBBUpload';
+    button.setAttribute('data-imgbb-trigger', 'true');
+    button.setAttribute('data-target', '#imgBBContentEditable');
+
+    let script = document.createElement('script');
+    script.innerHTML = '';
+    script.src = 'https://imgbb.com/upload.js';
+    script.async = true;
+    script.defer = true;
+    script.setAttribute('data-url', 'https://imgbb.com/upload');
+    script.setAttribute('data-auto-insert', 'direct-links');
+    script.setAttribute('data-mode', 'manual');
+
+    body.appendChild(div);
+    body.appendChild(button);
+    body.appendChild(script);
   }
 }
