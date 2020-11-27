@@ -26,16 +26,21 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  skip,
+  skipLast,
+  take,
+  filter,
+} from 'rxjs/operators';
 import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
 import { MatRadioChange } from '@angular/material/radio';
 import { cloneAbstractControl } from 'src/app/utils/clone-abstract-control.utility';
-import { ImageService } from 'src/app/services/image.service';
-import { ImgBBResponse } from 'src/app/services/imgbb.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Color } from '@angular-material-components/color-picker';
 import { hexToRgbA } from 'src/app/utils/hex-to-rgba.utility';
+import { ImgBBService } from 'src/app/services/imgbb.service';
 
 @Component({
   selector: 'app-test-edit',
@@ -88,7 +93,7 @@ export class TestEditComponent implements OnInit {
     private fb: FormBuilder,
     private snack: SnackService,
     private testService: TestService,
-    private image: ImageService,
+    private imgBB: ImgBBService,
     private cdr: ChangeDetectorRef
   ) {
     this.subscription.add(
@@ -155,10 +160,6 @@ export class TestEditComponent implements OnInit {
   deleteRank(i: number): void {
     this.testEdit.markAsDirty();
     this.ranks.removeAt(i);
-  }
-
-  colorInput(e) {
-    console.log(e);
   }
 
   addSection(
@@ -310,6 +311,14 @@ export class TestEditComponent implements OnInit {
     // INIT SECTION
     for (let sectionId in this.test.sections) {
       this.addSection(false, sectionId);
+
+      const section = this.test.sections[sectionId];
+      if (section.attemptQuestionsNumber) section.showAllQuestions = false;
+      else {
+        section.attemptQuestionsNumber = 1;
+        section.showAllQuestions = true;
+      }
+
       const questions = this.sections
         .get(sectionId)
         .get('questions') as FormGroup;
@@ -494,54 +503,25 @@ export class TestEditComponent implements OnInit {
     }
   }
 
-  uploadImage(
-    files: any[],
+  inputImage(
+    target: HTMLElement,
     formGroup: FormGroup,
     type: QuestionTypes = QuestionTypes.SingleChoice,
     right: boolean = false
   ) {
-    this.sections.disable();
-    if (files.length) {
-      this.image.upload(files[0]).subscribe(
-        (response: ImgBBResponse) => {
-          if (
-            type == QuestionTypes.SingleChoice ||
-            type == QuestionTypes.MultipleChoice
-          ) {
-            formGroup.patchValue({ imageUrl: response.data.display_url });
-          } else if (type == QuestionTypes.Matching) {
-            if (right) {
-              formGroup.patchValue({
-                rightImageUrl: response.data.display_url,
-                right,
-              });
-            } else {
-              formGroup.patchValue({ leftImageUrl: response.data.display_url });
-            }
-          }
-          formGroup.markAsDirty();
-          this.sections.enable();
-        },
-        (response) => {
-          this.sections.enable();
-          if (response instanceof HttpErrorResponse) {
-            this.snack.fatal(response.message);
-          } else {
-            const { error } = response;
-            switch (error.code) {
-              case 310:
-                this.snack.fatal('Данный файл не является изображением');
-                break;
-              default:
-                this.snack.fatal(error.code + ' - ' + error.message);
-                break;
-            }
-          }
-        }
-      );
-    } else {
-      this.snack.fatal('Вы не выбрали файл');
+    const url = target.innerText;
+
+    if (
+      type == QuestionTypes.SingleChoice ||
+      type == QuestionTypes.MultipleChoice
+    )
+      formGroup.patchValue({ imageUrl: url });
+    else if (type == QuestionTypes.Matching) {
+      if (right) formGroup.patchValue({ rightImageUrl: url });
+      else formGroup.patchValue({ leftImageUrl: url });
     }
+    formGroup.markAsDirty();
+    target.innerHTML = '';
   }
 
   deleteImage(
@@ -564,6 +544,32 @@ export class TestEditComponent implements OnInit {
       }
     }
     formGroup.markAsDirty();
+  }
+
+  uploadImage(
+    formGroup: FormGroup,
+    type: QuestionTypes = QuestionTypes.SingleChoice,
+    right: boolean = false
+  ) {
+    this.imgBB.imgUrl$.next(null);
+    this.imgBB.open();
+    this.subscription.add(
+      this.imgBB.imgUrl$
+        .pipe(take(1))
+        .pipe(filter((url) => url != null))
+        .subscribe((url) => {
+          if (
+            type == QuestionTypes.SingleChoice ||
+            type == QuestionTypes.MultipleChoice
+          ) {
+            formGroup.patchValue({ imageUrl: url });
+          } else if (type == QuestionTypes.Matching) {
+            if (right) formGroup.patchValue({ rightImageUrl: url });
+            else formGroup.patchValue({ leftImageUrl: url });
+          }
+          formGroup.markAsDirty();
+        })
+    );
   }
 
   getErrorMessage(control: FormControl) {

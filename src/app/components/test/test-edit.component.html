@@ -1,5 +1,4 @@
 <app-navbar></app-navbar>
-fgdfg
 <div class="container">
   <div class="content">
     <ng-container *ngIf="test; else loading">
@@ -301,9 +300,19 @@ fgdfg
                             placeholder="Отлично"
                             required
                           />
-                          <input hidden [ngxMatColorPicker]="colorPicker" formControlName="color">
-                          <ngx-mat-color-toggle matSuffix [for]="colorPicker"></ngx-mat-color-toggle>
-                          <ngx-mat-color-picker #colorPicker color="accent"></ngx-mat-color-picker>
+                          <input
+                            hidden
+                            [ngxMatColorPicker]="colorPicker"
+                            formControlName="color"
+                          />
+                          <ngx-mat-color-toggle
+                            matSuffix
+                            [for]="colorPicker"
+                          ></ngx-mat-color-toggle>
+                          <ngx-mat-color-picker
+                            #colorPicker
+                            color="accent"
+                          ></ngx-mat-color-picker>
                           <mat-error *ngIf="rank.controls['title'].invalid">{{
                             getErrorMessage(rank.controls["title"])
                           }}</mat-error>
@@ -326,9 +335,12 @@ fgdfg
                             class="pointer"
                             >delete</mat-icon
                           >
-                          <mat-error *ngIf="rank.controls['minimumScore'].invalid">{{
-                            getErrorMessage(rank.controls["minimumScore"])
-                          }}</mat-error>
+                          <mat-error
+                            *ngIf="rank.controls['minimumScore'].invalid"
+                            >{{
+                              getErrorMessage(rank.controls["minimumScore"])
+                            }}</mat-error
+                          >
                         </mat-form-field>
                       </div>
                     </div>
@@ -337,9 +349,7 @@ fgdfg
               </div>
             </div>
             <p class="text-center">
-              <button mat-button (click)="addRank()">
-                Добавить шкалу
-              </button>
+              <button mat-button (click)="addRank()">Добавить шкалу</button>
             </p>
           </mat-card-content>
         </mat-card>
@@ -501,7 +511,11 @@ fgdfg
                     </div>
                     <div
                       class="flex-row-static-icon"
-                      style="flex: unset; width: 24px;padding-bottom: 1.34375em;"
+                      style="
+                        flex: unset;
+                        width: 24px;
+                        padding-bottom: 1.34375em;
+                      "
                     >
                       <button
                         mat-icon-button
@@ -518,44 +532,32 @@ fgdfg
                       </button>
                     </div>
                   </div>
-                  <div class="flex-row-static" style="align-items: center">
-                    <div class="flex-row-static-item">
-                      <mat-form-field
-                        appearance="outline"
-                        class="ignore-mat-field-padding-bottom"
-                        color="accent"
-                      >
-                        <mat-label>Текст</mat-label>
-                        <textarea
-                          matInput
-                          formControlName="text"
-                          placeholder="Текст вопроса"
-                        ></textarea>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-row-static-icon">
-                      <input
-                        #uploadImageInput
-                        hidden
-                        type="file"
-                        (change)="
-                          uploadImage($event.target.files, question.value)
-                        "
-                        accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                      />
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="ignore-mat-field-padding-bottom"
+                      color="accent"
+                    >
+                      <mat-label>Текст</mat-label>
+                      <textarea
+                        matInput
+                        formControlName="text"
+                        placeholder="Текст вопроса"
+                      ></textarea>
                       <button
+                        matSuffix
                         mat-icon-button
                         [disabled]="
                           question.value.value.imageUrl != null ||
                           sections.disabled
                         "
-                        (click)="uploadImageInput.click()"
+                        (click)="uploadImage(question.value)"
                         matTooltip="Прикрепить изображение"
                         title="Возможно прикрепить только 1 изображение"
                       >
                         <mat-icon>attach_file</mat-icon>
                       </button>
-                    </div>
+                    </mat-form-field>
                   </div>
                   <div
                     *ngIf="question.value.value.imageUrl"
@@ -645,18 +647,6 @@ fgdfg
                                         formControlName="text"
                                         placeholder="Текст варианта"
                                       ></textarea>
-                                      <input
-                                        #uploadImageInput
-                                        hidden
-                                        type="file"
-                                        (change)="
-                                          uploadImage(
-                                            $event.target.files,
-                                            option
-                                          )
-                                        "
-                                        accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                      />
                                       <button
                                         matSuffix
                                         mat-icon-button
@@ -664,9 +654,9 @@ fgdfg
                                           option.value.imageUrl != null ||
                                           sections.disabled
                                         "
+                                        (click)="uploadImage(option)"
                                         matTooltip="Прикрепить изображение"
                                         title="Возможно прикрепить только 1 изображение"
-                                        (click)="uploadImageInput.click()"
                                       >
                                         <mat-icon>attach_file</mat-icon>
                                       </button>
@@ -769,15 +759,6 @@ fgdfg
                                       formControlName="text"
                                       placeholder="Текст варианта"
                                     ></textarea>
-                                    <input
-                                      #uploadImageInput
-                                      hidden
-                                      type="file"
-                                      (change)="
-                                        uploadImage($event.target.files, option)
-                                      "
-                                      accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                    />
                                     <button
                                       matSuffix
                                       mat-icon-button
@@ -785,9 +766,9 @@ fgdfg
                                         option.value.imageUrl != null ||
                                         sections.disabled
                                       "
+                                      (click)="uploadImage(option)"
                                       matTooltip="Прикрепить изображение"
                                       title="Возможно прикрепить только 1 изображение"
-                                      (click)="uploadImageInput.click()"
                                     >
                                       <mat-icon>attach_file</mat-icon>
                                     </button>
@@ -874,20 +855,7 @@ fgdfg
                                     formControlName="leftText"
                                     placeholder="Текст предмета сравнения"
                                   ></textarea>
-                                  <input
-                                    #uploadLeftImageInput
-                                    hidden
-                                    type="file"
-                                    (change)="
-                                      uploadImage(
-                                        $event.target.files,
-                                        option,
-                                        2,
-                                        false
-                                      )
-                                    "
-                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                  />
+
                                   <button
                                     matSuffix
                                     mat-icon-button
@@ -895,9 +863,9 @@ fgdfg
                                       option.value.leftImageUrl != null ||
                                       sections.disabled
                                     "
+                                    (click)="uploadImage(option, 2, false)"
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadLeftImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>
@@ -946,20 +914,6 @@ fgdfg
                                     formControlName="rightText"
                                     placeholder="Текст образа сравнения"
                                   ></textarea>
-                                  <input
-                                    #uploadRightImageInput
-                                    hidden
-                                    type="file"
-                                    (change)="
-                                      uploadImage(
-                                        $event.target.files,
-                                        option,
-                                        2,
-                                        true
-                                      )
-                                    "
-                                    accept="image/*, .jpg,.png,.bmp,.gif,.tif,.webp,.heic,.pdf,.jpeg,.tiff,.heif"
-                                  />
                                   <button
                                     matSuffix
                                     mat-icon-button
@@ -967,9 +921,9 @@ fgdfg
                                       option.value.rightImageUrl != null ||
                                       sections.disabled
                                     "
+                                    (click)="uploadImage(option, 2, true)"
                                     matTooltip="Прикрепить изображение"
                                     title="Возможно прикрепить только 1 изображение"
-                                    (click)="uploadRightImageInput.click()"
                                   >
                                     <mat-icon>attach_file</mat-icon>
                                   </button>
