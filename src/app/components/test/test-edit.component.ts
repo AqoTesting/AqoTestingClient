@@ -284,13 +284,16 @@ export class TestEditComponent implements OnInit {
   }
 
   radioChange(question: FormControl, i: number) {
-    this.getOptions(question).controls.forEach(
-      (option: AbstractControl, index) => {
-        if (index == i) option.patchValue({ isCorrect: true });
-        else option.patchValue({ isCorrect: false });
-      }
-    );
-    question.markAsDirty();
+    if (i != undefined) {
+      this.getOptions(question).controls.forEach(
+        (option: AbstractControl, index) => {
+          if (index == i) option.patchValue({ isCorrect: true });
+          else option.patchValue({ isCorrect: false });
+        }
+      );
+      question.markAsDirty();
+    }
+    console.log(i)
   }
 
   checkboxChange(option: FormControl) {
@@ -425,6 +428,7 @@ export class TestEditComponent implements OnInit {
         break;
       }
 
+      if (!section.title) delete section.title;
       if (!section.showAllQuestions) section.attemptQuestionsNumber = 0;
       delete section.showAllQuestions;
       delete section.local;
