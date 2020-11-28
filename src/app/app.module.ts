@@ -38,6 +38,7 @@ import { FilterMemberComponent } from './components/members/filter-member.compon
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
 import { ImgBBService } from './services/imgbb.service';
+import { ToFixedPipe } from './pipes/to-fixed.pipe';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,8 @@ import { ImgBBService } from './services/imgbb.service';
     FilterMemberComponent,
     TestCreateComponent,
     TestEditComponent,
+
+    ToFixedPipe
   ],
   imports: [
     BrowserModule,

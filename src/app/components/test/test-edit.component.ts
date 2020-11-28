@@ -552,7 +552,7 @@ export class TestEditComponent implements OnInit {
     if (timeLimit.value) {
       timeLimit.setValue(0);
     } else {
-      timeLimit.setValue(60);
+      timeLimit.setValue(600);
     }
     timeLimit.markAsDirty();
   }
