@@ -41,6 +41,7 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     deactivationDate: [null],
     shuffle: [false],
     ranks: this.fb.array([]),
+    timeLimit: [0, [Validators.required, Validators.min(0)]],
   });
 
   get documents(): FormArray {
@@ -90,6 +91,16 @@ export class TestCreateComponent implements OnInit, OnDestroy {
         ],
       })
     );
+  }
+
+  timeLimitChange() {
+    const timeLimit = this.testCreate.get('timeLimit');
+    if (timeLimit.value) {
+      timeLimit.setValue(0);
+    } else {
+      timeLimit.setValue(60);
+    }
+    timeLimit.markAsDirty();
   }
 
   deleteDucument(i: number): void {

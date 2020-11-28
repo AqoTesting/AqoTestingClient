@@ -148,6 +148,35 @@
           <div class="flex-row">
             <div class="flex-row-item">
               <p>
+                <mat-slide-toggle
+                  [checked]="testCreate.value.timeLimit != 0"
+                  (change)="timeLimitChange()"
+                  >Ограничивать время</mat-slide-toggle
+                >
+              </p>
+            </div>
+            <div class="flex-row-item" *ngIf="testCreate.value.timeLimit != 0">
+              <p>
+                <mat-form-field appearance="outline" color="accent">
+                  <mat-label>Ограничение времени</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    placeholder="60"
+                    formControlName="timeLimit"
+                    min="1"
+                  />
+                  <span matSuffix>мин.</span>
+                  <mat-error *ngIf="testCreate.controls['timeLimit'].invalid">{{
+                    getErrorMessage(testCreate.controls["timeLimit"])
+                  }}</mat-error>
+                </mat-form-field>
+              </p>
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-row-item">
+              <p>
                 <mat-slide-toggle formControlName="isActive"
                   >Тест активирован</mat-slide-toggle
                 >
@@ -287,9 +316,19 @@
                           placeholder="Да ты красава"
                           required
                         />
-                        <input hidden [ngxMatColorPicker]="colorPicker" formControlName="color">
-                        <ngx-mat-color-toggle matSuffix [for]="colorPicker"></ngx-mat-color-toggle>
-                        <ngx-mat-color-picker #colorPicker color="accent"></ngx-mat-color-picker>
+                        <input
+                          hidden
+                          [ngxMatColorPicker]="colorPicker"
+                          formControlName="color"
+                        />
+                        <ngx-mat-color-toggle
+                          matSuffix
+                          [for]="colorPicker"
+                        ></ngx-mat-color-toggle>
+                        <ngx-mat-color-picker
+                          #colorPicker
+                          color="accent"
+                        ></ngx-mat-color-picker>
                         <mat-error *ngIf="rank.controls['title'].invalid">{{
                           getErrorMessage(rank.controls["title"])
                         }}</mat-error>

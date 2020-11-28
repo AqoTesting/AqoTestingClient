@@ -68,6 +68,7 @@ export class TestEditComponent implements OnInit {
     deactivationDate: [null],
     shuffle: [false],
     ranks: this.fb.array([]),
+    timeLimit: [0, [Validators.required, Validators.min(0)]],
   });
 
   sections: FormGroup = this.fb.group({});
@@ -544,6 +545,16 @@ export class TestEditComponent implements OnInit {
       }
     }
     formGroup.markAsDirty();
+  }
+
+  timeLimitChange() {
+    const timeLimit = this.testEdit.get('timeLimit');
+    if (timeLimit.value) {
+      timeLimit.setValue(0);
+    } else {
+      timeLimit.setValue(60);
+    }
+    timeLimit.markAsDirty();
   }
 
   uploadImage(

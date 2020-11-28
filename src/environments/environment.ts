@@ -6,7 +6,6 @@ export const environment = {
   production: false,
   apiUrl: 'http://192.168.1.64:5000',
   domain: 'aqotesting.tk',
-  imgbbKey: '472261f2fe05fd0d9082f3bca7349199',
 };
 
 /*

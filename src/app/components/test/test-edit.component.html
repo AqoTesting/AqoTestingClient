@@ -155,6 +155,35 @@
             <div class="flex-row">
               <div class="flex-row-item">
                 <p>
+                  <mat-slide-toggle
+                    [checked]="testEdit.value.timeLimit != 0"
+                    (change)="timeLimitChange()"
+                    >Ограничивать время</mat-slide-toggle
+                  >
+                </p>
+              </div>
+              <div class="flex-row-item" *ngIf="testEdit.value.timeLimit != 0">
+                <p>
+                  <mat-form-field appearance="outline" color="accent">
+                    <mat-label>Ограничение времени</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="60"
+                      formControlName="timeLimit"
+                      min="1"
+                    />
+                    <span matSuffix>мин.</span>
+                    <mat-error *ngIf="testEdit.controls['timeLimit'].invalid">{{
+                      getErrorMessage(testEdit.controls["timeLimit"])
+                    }}</mat-error>
+                  </mat-form-field>
+                </p>
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="flex-row-item">
+                <p>
                   <mat-slide-toggle formControlName="isActive"
                     >Тест активирован</mat-slide-toggle
                   >
