@@ -166,7 +166,7 @@
                     formControlName="timeLimit"
                     min="1"
                   />
-                  <span matSuffix>мин.</span>
+                  <span matSuffix>сек.</span>
                   <mat-error *ngIf="testCreate.controls['timeLimit'].invalid">{{
                     getErrorMessage(testCreate.controls["timeLimit"])
                   }}</mat-error>
