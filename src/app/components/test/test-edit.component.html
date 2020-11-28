@@ -174,13 +174,7 @@
                       min="1"
                     />
                     <span matSuffix>сек.</span>
-                    <mat-hint
-                      >{{ testCreate.value.timeLimit / 60 | toFixed: 2 }} мин. /
-                      {{
-                        testCreate.value.timeLimit / 3600 | toFixed: 2
-                      }}
-                      час.</mat-hint
-                    >
+                    <mat-hint>{{ testEdit.value.timeLimit / 60 | toFixed: 2 }} мин. / {{ testEdit.value.timeLimit / 3600 | toFixed: 2 }} час.</mat-hint>
                     <mat-error *ngIf="testEdit.controls['timeLimit'].invalid">{{
                       getErrorMessage(testEdit.controls["timeLimit"])
                     }}</mat-error>
