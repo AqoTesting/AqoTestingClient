@@ -293,7 +293,6 @@ export class TestEditComponent implements OnInit {
       );
       question.markAsDirty();
     }
-    console.log(i)
   }
 
   checkboxChange(option: FormControl) {

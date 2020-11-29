@@ -167,7 +167,13 @@
                     min="1"
                   />
                   <span matSuffix>сек.</span>
-                  <mat-hint>{{(testCreate.value.timeLimit/60) | toFixed:2}} мин. / {{(testCreate.value.timeLimit/3600) | toFixed:2}} час.</mat-hint>
+                  <mat-hint
+                    >{{ testCreate.value.timeLimit / 60 | toFixed: 2 }} мин. /
+                    {{
+                      testCreate.value.timeLimit / 3600 | toFixed: 2
+                    }}
+                    час.</mat-hint
+                  >
                   <mat-error *ngIf="testCreate.controls['timeLimit'].invalid">{{
                     getErrorMessage(testCreate.controls["timeLimit"])
                   }}</mat-error>
@@ -339,6 +345,7 @@
                       <mat-form-field appearance="outline" color="accent">
                         <mat-label>Баллы</mat-label>
                         <input
+                          type="number"
                           matInput
                           formControlName="minimumScore"
                           placeholder="10"
