@@ -36,6 +36,7 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
     description: ['', [Validators.maxLength(4096)]],
 
     fields: this.fb.array([]),
+    tags: this.fb.array([]),
   });
 
   subscription: Subscription = new Subscription();

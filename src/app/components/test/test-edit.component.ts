@@ -148,12 +148,14 @@ export class TestEditComponent implements OnInit {
     this.documents.removeAt(i);
   }
 
-  addRank(color = new Color(255, 255, 255)): void {
+  addRank(backgroundColor = new Color(255, 255, 255)): void {
     this.ranks.push(
       this.fb.group({
         title: ['', Validators.required],
-        minimumScore: [1, Validators.required],
-        color: [color, Validators.required],
+        minimumScore: [0, Validators.required],
+        backgroundColor: [backgroundColor, Validators.required],
+        textColor: ["000000"],
+        fontStyle: [0]
       })
     );
   }
@@ -345,10 +347,10 @@ export class TestEditComponent implements OnInit {
       this.test.documents.forEach(() => this.addDocument());
     if (this.test.ranks.length)
       this.test.ranks.forEach((rank: any, index) => {
-        const rgba: number[] = hexToRgbA(rank.color);
-        const color: Color = new Color(rgba[0], rgba[1], rgba[2]);
-        this.addRank(color);
-        this.test.ranks[index].color = color;
+        const rgba: number[] = hexToRgbA(rank.backgroundColor);
+        const backgroundColor: Color = new Color(rgba[0], rgba[1], rgba[2]);
+        this.addRank(backgroundColor);
+        this.test.ranks[index].backgroundColor = backgroundColor;
       });
 
     if (this.test.attemptSectionsNumber) this.test.showAllSections = false;
@@ -375,7 +377,7 @@ export class TestEditComponent implements OnInit {
     if (!test.description?.length) delete test.description;
     if (test.ranks.length)
       test.ranks.forEach((rank: any) => {
-        rank.color = rank.color.hex;
+        rank.backgroundColor = rank.backgroundColor.hex;
       });
 
     if (test.activationDate)

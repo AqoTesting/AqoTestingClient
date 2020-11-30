@@ -324,59 +324,66 @@
               <div class="field-wrapper">
                 <div [formGroupName]="i">
                   <div class="field-wrapper-body">
-                    <div class="flex-row">
-                      <div class="flex-row-item">
-                        <mat-form-field appearance="outline" color="accent">
-                          <mat-label>Название оценки</mat-label>
-                          <input
-                            matInput
-                            formControlName="title"
-                            placeholder="Отлично"
-                            required
-                          />
-                          <input
-                            hidden
-                            [ngxMatColorPicker]="colorPicker"
-                            formControlName="color"
-                          />
-                          <ngx-mat-color-toggle
-                            matSuffix
-                            [for]="colorPicker"
-                          ></ngx-mat-color-toggle>
-                          <ngx-mat-color-picker
-                            #colorPicker
-                            color="accent"
-                          ></ngx-mat-color-picker>
-                          <mat-error *ngIf="rank.controls['title'].invalid">{{
-                            getErrorMessage(rank.controls["title"])
-                          }}</mat-error>
-                        </mat-form-field>
+                    <div class="flex-row-static">
+                      <div class="flex-row-static-item">
+                        <div class="flex-row">
+                          <div class="flex-row-item">
+                            <mat-form-field appearance="outline" color="accent">
+                              <mat-label>Название оценки</mat-label>
+                              <input
+                                matInput
+                                formControlName="title"
+                                placeholder="Да ты красава"
+                                required
+                              />
+                              <input
+                                hidden
+                                [ngxMatColorPicker]="colorPicker"
+                                formControlName="backgroundColor"
+                              />
+                              <ngx-mat-color-toggle
+                                matSuffix
+                                [for]="colorPicker"
+                              ></ngx-mat-color-toggle>
+                              <ngx-mat-color-picker
+                                #colorPicker
+                                color="accent"
+                              ></ngx-mat-color-picker>
+                              <mat-error *ngIf="rank.controls['title'].invalid">{{
+                                getErrorMessage(rank.controls["title"])
+                              }}</mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="flex-row-item">
+                            <mat-form-field appearance="outline" color="accent">
+                              <mat-label>Процент верных ответов</mat-label>
+                              <input
+                                type="number"
+                                matInput
+                                formControlName="minimumScore"
+                                placeholder="10"
+                                required
+                              />
+                              <span matSuffix>%</span>
+                              <mat-hint>От скольки % верных ответов будет эта оценка</mat-hint>
+                              <mat-error
+                                *ngIf="rank.controls['minimumScore'].invalid"
+                                >{{
+                                  getErrorMessage(rank.controls["minimumScore"])
+                                }}</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                        </div>
                       </div>
-                      <div class="flex-row-item">
-                        <mat-form-field appearance="outline" color="accent">
-                          <mat-label>Баллы</mat-label>
-                          <input
-                            type="number"
-                            matInput
-                            formControlName="minimumScore"
-                            type="number"
-                            placeholder="10"
-                            required
-                          />
-                          <mat-icon
-                            matSuffix
-                            matTooltip="Удалить шкалу"
-                            (click)="deleteRank(i)"
-                            class="pointer"
-                            >delete</mat-icon
-                          >
-                          <mat-error
-                            *ngIf="rank.controls['minimumScore'].invalid"
-                            >{{
-                              getErrorMessage(rank.controls["minimumScore"])
-                            }}</mat-error
-                          >
-                        </mat-form-field>
+                      <div class="flex-row-static-icon">
+                        <mat-icon
+                          matSuffix
+                          matTooltip="Удалить шкалу"
+                          (click)="deleteRank(i)"
+                          class="pointer"
+                          >delete</mat-icon
+                        >
                       </div>
                     </div>
                   </div>

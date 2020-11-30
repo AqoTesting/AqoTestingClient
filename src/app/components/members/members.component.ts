@@ -45,8 +45,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     private memberService: MemberService,
     private snack: SnackService,
     public dialog: MatDialog
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getMembers();
@@ -92,6 +91,26 @@ export class MembersComponent implements OnInit, OnDestroy {
     );
   }
 
+  memberDelete(member: Member) {
+    if (confirm('Вы уверены что хотите удалить участника?')) {
+      this.subscription.add(
+        this.memberService.memberDelete(member.id).subscribe(
+          () => {
+            this.snack.success('Участник успешно удалён');
+            this.members = this.members.filter(
+              (_member) => _member.id != member.id
+            );
+          },
+          (error) => {
+            if (error instanceof Response) {
+              this.snack.error(error.errorMessageCode);
+            }
+          }
+        )
+      );
+    }
+  }
+
   openFilterDialog() {
     const dialogRef = this.dialog.open(FilterMemberComponent, {
       data: this.room.fields,
@@ -126,5 +145,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     return Object.keys(fields);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+  }
 }

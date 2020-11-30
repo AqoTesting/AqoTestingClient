@@ -33,7 +33,7 @@ export class Document {
 export class Rank {
   minimumScore: string;
   title: string;
-  color: string | Color;
+  backgroundColor: string | Color;
 }
 
 export class Section {

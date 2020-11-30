@@ -54,6 +54,7 @@
             mat-icon-button
             aria-label="Удалить"
             matTooltip="Удалить"
+            (click)="memberDelete(member)"
             *ngIf="!member.isRegistered"
           >
             <mat-icon>delete</mat-icon>
@@ -77,7 +78,7 @@
               <mat-icon>backspace</mat-icon>
               <span>Сбросить регистрацию</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="memberDelete(member)">
               <mat-icon>delete</mat-icon>
               <span>Удалить</span>
             </button>

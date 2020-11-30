@@ -107,12 +107,12 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     this.documents.removeAt(i);
   }
 
-  addRank(color = new Color(255, 255, 255)): void {
+  addRank(backgroundColor = new Color(255, 255, 255)): void {
     this.ranks.push(
       this.fb.group({
         title: ['', Validators.required],
-        minimumScore: [1, Validators.required],
-        color: [color, Validators.required],
+        minimumScore: [0, Validators.required],
+        backgroundColor: [backgroundColor, Validators.required],
       })
     );
   }
@@ -138,7 +138,7 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     if (!test.description.length) delete test.description;
     if (test.ranks.length)
       test.ranks.forEach((rank: any) => {
-        rank.color = rank.color.hex;
+        rank.backgroundColor = rank.backgroundColor.hex;
       });
 
     if (test.activationDate)

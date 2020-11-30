@@ -22,10 +22,20 @@ export class MemberService {
   }
 
   memberApprove(memberId: string): Observable<any> {
-    return this.http.patch<any>(environment.apiUrl + '/user/member/' + memberId + '/approve', "");
+    return this.http.patch<any>(
+      environment.apiUrl + '/user/member/' + memberId + '/approve',
+      ''
+    );
   }
 
   memberUnregister(memberId: string): Observable<any> {
-    return this.http.patch<any>(environment.apiUrl + '/user/member/' + memberId + '/unregister', "");
+    return this.http.patch<any>(
+      environment.apiUrl + '/user/member/' + memberId + '/unregister',
+      ''
+    );
+  }
+
+  memberDelete(memberId: string): Observable<any> {
+    return this.http.delete(environment.apiUrl + '/user/member/' + memberId);
   }
 }
