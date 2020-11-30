@@ -152,10 +152,13 @@ export class TestEditComponent implements OnInit {
     this.ranks.push(
       this.fb.group({
         title: ['', Validators.required],
-        minimumScore: [0, Validators.required],
+        minimumSuccessRatio: [
+          0,
+          [Validators.required, Validators.min(0), Validators.max(100)],
+        ],
         backgroundColor: [backgroundColor, Validators.required],
-        textColor: ["000000"],
-        fontStyle: [0]
+        textColor: ['000000'],
+        fontStyle: [0],
       })
     );
   }
@@ -351,6 +354,7 @@ export class TestEditComponent implements OnInit {
         const backgroundColor: Color = new Color(rgba[0], rgba[1], rgba[2]);
         this.addRank(backgroundColor);
         this.test.ranks[index].backgroundColor = backgroundColor;
+        this.test.ranks[index].minimumSuccessRatio = this.test.ranks[index].minimumSuccessRatio * 100;
       });
 
     if (this.test.attemptSectionsNumber) this.test.showAllSections = false;
@@ -378,6 +382,7 @@ export class TestEditComponent implements OnInit {
     if (test.ranks.length)
       test.ranks.forEach((rank: any) => {
         rank.backgroundColor = rank.backgroundColor.hex;
+        rank.minimumSuccessRatio = rank.minimumSuccessRatio / 100;
       });
 
     if (test.activationDate)

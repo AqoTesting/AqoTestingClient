@@ -31,7 +31,7 @@ export class Document {
 }
 
 export class Rank {
-  minimumScore: string;
+  minimumSuccessRatio: number;
   title: string;
   backgroundColor: string | Color;
 }

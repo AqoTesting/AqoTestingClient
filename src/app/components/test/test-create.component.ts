@@ -111,7 +111,7 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     this.ranks.push(
       this.fb.group({
         title: ['', Validators.required],
-        minimumScore: [0, Validators.required],
+        minimumSuccessRatio: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
         backgroundColor: [backgroundColor, Validators.required],
       })
     );
@@ -136,10 +136,12 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     delete test.showAllSections;
 
     if (!test.description.length) delete test.description;
-    if (test.ranks.length)
+    if (test.ranks.length) {
       test.ranks.forEach((rank: any) => {
         rank.backgroundColor = rank.backgroundColor.hex;
+        rank.minimumSuccessRatio = rank.minimumSuccessRatio / 100;
       });
+    }
 
     if (test.activationDate)
       test.activationDate = new Date(test.activationDate).toISOString();

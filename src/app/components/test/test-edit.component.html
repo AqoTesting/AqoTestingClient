@@ -360,16 +360,16 @@
                               <input
                                 type="number"
                                 matInput
-                                formControlName="minimumScore"
+                                formControlName="minimumSuccessRatio"
                                 placeholder="10"
                                 required
                               />
                               <span matSuffix>%</span>
                               <mat-hint>От скольки % верных ответов будет эта оценка</mat-hint>
                               <mat-error
-                                *ngIf="rank.controls['minimumScore'].invalid"
+                                *ngIf="rank.controls['minimumSuccessRatio'].invalid"
                                 >{{
-                                  getErrorMessage(rank.controls["minimumScore"])
+                                  getErrorMessage(rank.controls["minimumSuccessRatio"])
                                 }}</mat-error
                               >
                             </mat-form-field>
