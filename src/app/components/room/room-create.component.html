@@ -30,13 +30,11 @@
                   <mat-label>Название</mat-label>
                   <input
                     matInput
-                    placeholder="Операционные системы"
                     required
                     formControlName="name"
                     minlength="1"
                     maxlength="64"
                   />
-                  <mat-hint>Придумайте название комнате</mat-hint>
                 </mat-form-field>
               </p>
             </div>
@@ -52,6 +50,7 @@
                     formControlName="domain"
                     minlength="1"
                     maxlength="63"
+                    (focus)="onDomainFocus($event)"
                   />
                   <span matSuffix>.aqotesting.tk</span>
                   <mat-hint
@@ -92,6 +91,7 @@
             <mat-form-field class="field" appearance="outline" color="accent">
               <mat-label>Описание</mat-label>
               <textarea
+                cdkTextareaAutosize
                 matInput
                 #description
                 formControlName="description"

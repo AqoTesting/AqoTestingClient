@@ -90,6 +90,11 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
     return this.getFieldOptions(field).removeAt(i);
   }
 
+  onDomainFocus(event) {
+    const pos = event.target.value.length;
+    event.target.setSelectionRange(pos, pos);
+  }
+
   onSubmit() {
     this.roomCreate.disable();
 
