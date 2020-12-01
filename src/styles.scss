@@ -49,6 +49,11 @@ a {
   color: $purple-soft-color;
 }
 
+.mat-field-suffix-no-centering {
+  display: block;
+  margin-top: 0.4em;
+}
+
 .pointer {
   cursor: pointer;
 }
