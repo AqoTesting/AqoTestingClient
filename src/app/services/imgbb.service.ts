@@ -23,6 +23,7 @@ export class ImgBBService {
     let div = document.createElement('div');
     div.id = 'imgBBContentEditable';
     div.setAttribute('contenteditable', 'true');
+    div.style.display = "none";
 
     div.addEventListener('input', (e) => {
       const target: HTMLDivElement = e.target as HTMLDivElement;
