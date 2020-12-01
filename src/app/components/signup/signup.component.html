@@ -2,89 +2,122 @@
   <mat-card-title>Регистрация</mat-card-title>
   <mat-card-content>
     <div class="auth-container">
-      <p>
-        <mat-form-field class="auth-field" appearance="outline" color="accent">
-          <mat-label>Введите имя</mat-label>
-          <input
-            matInput
-            placeholder="Иванов Иван Иванович"
-            [formControl]="name"
-            required
-          />
-          <mat-error *ngIf="name.invalid">{{
-            getErrorMessageName()
-          }}</mat-error>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field class="auth-field" appearance="outline" color="accent">
-          <mat-label>Введите e-mail</mat-label>
-          <input
-            matInput
-            placeholder="aqo@example.ru"
-            [formControl]="email"
-            required
-          />
-          <mat-error *ngIf="email.invalid">{{
-            getErrorMessageEmail()
-          }}</mat-error>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field class="auth-field" appearance="outline" color="accent">
-          <mat-label>Введите пароль</mat-label>
-          <input
-            matInput
-            [type]="hide ? 'password' : 'text'"
-            [formControl]="passwd"
-            required
-          />
-          <mat-error *ngIf="passwd.invalid">{{
-            getErrorMessagePasswd()
-          }}</mat-error>
-          <button
-            mat-icon-button
-            matSuffix
-            (click)="hide = !hide"
-            [attr.aria-label]="'Скрыть пароль'"
-            [attr.aria-pressed]="hide"
+      <form [formGroup]="signUpForm">
+        <p>
+          <mat-form-field
+            class="auth-field"
+            appearance="outline"
+            color="accent"
           >
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field class="auth-field" appearance="outline" color="accent">
-          <mat-label>Повторите пароль</mat-label>
-          <input
-            matInput
-            [type]="hide ? 'password' : 'text'"
-            [formControl]="repeatPasswd"
-            required
-          />
-          <mat-error *ngIf="repeatPasswd.invalid">{{
-            getErrorMessageRepeatPasswd()
-          }}</mat-error>
-        </mat-form-field>
-      </p>
-      <div class="login-action">
-        <div>
-          <button
-            mat-flat-button
-            [disabled]="
-              email.invalid ||
-              passwd.invalid ||
-              repeatPasswd.invalid
-            "
+            <mat-label>Введите логин</mat-label>
+            <input
+              matInput
+              placeholder="jebati"
+              formControlName="login"
+              required
+            />
+            <mat-error *ngIf="signUpForm.controls.login.invalid">{{
+              getErrorMessage(signUpForm.controls.login)
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field
+            class="auth-field"
+            appearance="outline"
+            color="accent"
           >
-            Создать
-          </button>
+            <mat-label>Введите e-mail</mat-label>
+            <input
+              matInput
+              placeholder="aqo@example.ru"
+              formControlName="email"
+              required
+            />
+            <mat-error *ngIf="signUpForm.controls.email.invalid">{{
+              getErrorMessage(signUpForm.controls.email)
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field
+            class="auth-field"
+            appearance="outline"
+            color="accent"
+          >
+            <mat-label>Введите имя</mat-label>
+            <input
+              matInput
+              placeholder="Иванов Иван Иванович"
+              formControlName="name"
+              required
+            />
+            <mat-error *ngIf="signUpForm.controls.name.invalid">{{
+              getErrorMessage(signUpForm.controls.name)
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field
+            class="auth-field"
+            appearance="outline"
+            color="accent"
+          >
+            <mat-label>Введите пароль</mat-label>
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              formControlName="password"
+              required
+            />
+            <mat-error *ngIf="signUpForm.controls.password.invalid">{{
+              getErrorMessage(signUpForm.controls.password)
+            }}</mat-error>
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Скрыть пароль'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field
+            class="auth-field"
+            appearance="outline"
+            color="accent"
+          >
+            <mat-label>Повторите пароль</mat-label>
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              formControlName="repeatPassword"
+              required
+            />
+            <mat-error *ngIf="signUpForm.controls.repeatPassword.invalid">{{
+              getErrorMessage(signUpForm.controls.repeatPassword)
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <div class="login-action">
+          <div>
+            <button
+              mat-flat-button
+              [disabled]="signUpForm.invalid || signUpForm.disabled"
+              (click)="onSubmit()"
+            >
+              Создать
+            </button>
+          </div>
+          <div>
+            <a routerLink="/auth/signin">Войти</a><br />
+            <a routerLink="/auth/recover">Забыли пароль?</a>
+          </div>
         </div>
-        <div>
-          <a routerLink="/auth/signin">Войти</a><br />
-          <a routerLink="/auth/recover">Забыли пароль?</a>
-        </div>
-      </div>
+      </form>
     </div>
   </mat-card-content>
 </mat-card>

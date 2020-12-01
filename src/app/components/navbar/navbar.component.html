@@ -2,7 +2,7 @@
   <button mat-button routerLink="/">AqoTesting</button>
   <span class="spacer"></span>
   <div *ngIf="user" class="navbar-name">
-    {{ user.name || user.login }}
+    {{ user.login }}
   </div>
   <button mat-icon-button (click)="signOut()" matTooltip="Выйти">
     <mat-icon>login</mat-icon>

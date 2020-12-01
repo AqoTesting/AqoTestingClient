@@ -1,10 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormBuilder,
   FormControl,
+  FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Response } from 'src/app/entities/response.entities';
+import { AuthService } from 'src/app/services/auth.service';
+import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
 import RepeatValidator from '../../validators/repeat.validator';
 
@@ -13,73 +20,83 @@ import RepeatValidator from '../../validators/repeat.validator';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignUpComponent implements OnInit {
-  constructor() {
-    Background.setColor("#9c27b0");
+export class SignUpComponent implements OnInit, OnDestroy {
+  subscription: Subscription = new Subscription();
+
+  signUpForm: FormGroup = this.fb.group({
+    login: [
+      '',
+      [Validators.required, Validators.minLength(1), Validators.maxLength(32)],
+    ],
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email,
+        Validators.minLength(6),
+        Validators.maxLength(320),
+      ],
+    ],
+    name: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(30)],
+    ],
+    password: [
+      '',
+      [Validators.required, Validators.minLength(5), Validators.maxLength(30)],
+    ],
+    repeatPassword: [
+      '',
+      [Validators.required, Validators.minLength(5), Validators.maxLength(30)],
+    ],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private snack: SnackService
+  ) {
+    Background.setColor('#9c27b0');
+    this.signUpForm.controls.repeatPassword.setValidators(
+      RepeatValidator(this.signUpForm.controls.password)
+    );
   }
 
   ngOnInit(): void {}
 
-  name = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(30),
-  ]);
-  email = new FormControl('', [Validators.required, Validators.email]);
-  passwd = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5),
-    Validators.maxLength(30),
-  ]);
-
-  repeatPasswd = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5),
-    Validators.maxLength(30),
-    RepeatValidator(this.passwd),
-  ]);
-
   hide = true;
 
-  getErrorMessageName() {
-    if (this.name.hasError('required')) return 'Введите имя';
-
-    if (this.name.hasError('minlength')) return 'Имя слишком короткое';
-
-    if (this.name.hasError('maxlength')) return 'Имя слишком длинное';
-
-    return this.email.hasError('email') ? 'Неверный e-mail' : '';
-  }
-
-  getErrorMessageEmail() {
-    if (this.email.hasError('required')) return 'Введите email';
-
-    return this.email.hasError('email') ? 'Неверный e-mail' : '';
-  }
-
-  getErrorMessagePasswd() {
-    if (this.passwd.hasError('required')) return 'Введите пароль';
-
-    if (this.passwd.hasError('minlength')) return 'Пароль слишком короткий';
-
-    if (this.passwd.hasError('maxlength')) return 'Пароль слишком длинный';
+  getErrorMessage(control: FormControl) {
+    if (control.hasError('required')) return 'Введите значение';
+    else if (control.hasError('minlength')) return 'Значение слишком короткое';
+    else if (control.hasError('maxlength')) return 'Значение слишком длинное';
+    else if (control.hasError('repeat')) return 'Значения не совпадают';
+    else if (control.hasError('url')) return 'Неверный формат URL';
 
     return '';
   }
 
-  getErrorMessageRepeatPasswd() {
-    if (this.repeatPasswd.hasError('required')) return 'Введите пароль';
+  onSubmit() {
+    this.signUpForm.disable();
+    const signUp = this.signUpForm.value;
+    delete signUp.repeatPassword;
+    this.subscription.add(
+      this.authService.getUserTokenSignUp(signUp).subscribe(
+        () => {
+          this.router.navigate(['/rooms']);
+        },
+        (error) => {
+          if (error instanceof Response) {
+            this.snack.error(error.errorMessageCode);
+          }
+          this.signUpForm.enable();
+        }
+      )
+    );
+  }
 
-    if (this.repeatPasswd.hasError('minlength'))
-      return 'Пароль слишком короткий';
-
-    if (this.repeatPasswd.hasError('maxlength'))
-      return 'Пароль слишком длинный';
-
-    if (this.repeatPasswd.hasError('repeat')) {
-      return 'Пароли не совпадают';
-    }
-
-    return '';
+  ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

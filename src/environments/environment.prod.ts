@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.aqotesting.tk',
+  apiUrl: '/api',
   domain: 'aqotesting.tk',
 };
