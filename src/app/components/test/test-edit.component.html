@@ -1,39 +1,39 @@
 <app-navbar></app-navbar>
 <div class="container">
   <div class="content">
-    <ng-container *ngIf="test; else loading">
-      <div class="header">
-        <div class="header-left">
-          <h1>Изменение теста</h1>
-        </div>
-        <div class="header-right" style="width: 80px">
-          <div class="flex-row" style="display: flex; gap: 0px">
-            <div class="flex-row-item">
-              <button
-                mat-icon-button
-                aria-label="Сохранить тест"
-                matTooltip="Сохранить тест"
-                (click)="onTestSubmit()"
-                [disabled]="
-                  testEdit.invalid || testEdit.disabled || !testEdit.dirty
-                "
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-            </div>
-            <div class="flex-row-item">
-              <button
-                routerLink="../../../tests"
-                mat-icon-button
-                aria-label="Назад"
-                matTooltip="Назад"
-              >
-                <mat-icon>arrow_back</mat-icon>
-              </button>
-            </div>
+    <div class="header">
+      <div class="header-left">
+        <h1>Изменение теста</h1>
+      </div>
+      <div class="header-right" style="width: 80px">
+        <div class="flex-row" style="display: flex; gap: 0px">
+          <div class="flex-row-item">
+            <button
+              mat-icon-button
+              aria-label="Сохранить тест"
+              matTooltip="Сохранить тест"
+              (click)="onTestSubmit()"
+              [disabled]="
+                testEdit.invalid || testEdit.disabled || !testEdit.dirty
+              "
+            >
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+          <div class="flex-row-item">
+            <button
+              routerLink="../../../tests"
+              mat-icon-button
+              aria-label="Назад"
+              matTooltip="Назад"
+            >
+              <mat-icon>arrow_back</mat-icon>
+            </button>
           </div>
         </div>
       </div>
+    </div>
+    <ng-container *ngIf="test; else loading">
       <form [formGroup]="testEdit">
         <mat-card>
           <mat-card-content>
@@ -350,9 +350,12 @@
                                 #colorPicker
                                 color="accent"
                               ></ngx-mat-color-picker>
-                              <mat-error *ngIf="rank.controls['title'].invalid">{{
-                                getErrorMessage(rank.controls["title"])
-                              }}</mat-error>
+                              <mat-error
+                                *ngIf="rank.controls['title'].invalid"
+                                >{{
+                                  getErrorMessage(rank.controls["title"])
+                                }}</mat-error
+                              >
                             </mat-form-field>
                           </div>
                           <div class="flex-row-item">
@@ -366,11 +369,18 @@
                                 required
                               />
                               <span matSuffix>%</span>
-                              <mat-hint>От скольки % верных ответов будет эта оценка</mat-hint>
+                              <mat-hint
+                                >От скольки % верных ответов будет эта
+                                оценка</mat-hint
+                              >
                               <mat-error
-                                *ngIf="rank.controls['minimumSuccessRatio'].invalid"
+                                *ngIf="
+                                  rank.controls['minimumSuccessRatio'].invalid
+                                "
                                 >{{
-                                  getErrorMessage(rank.controls["minimumSuccessRatio"])
+                                  getErrorMessage(
+                                    rank.controls["minimumSuccessRatio"]
+                                  )
                                 }}</mat-error
                               >
                             </mat-form-field>
@@ -432,7 +442,14 @@
           </div>
         </div>
       </div>
-      <div class="white text-center">Данный компонент находится в переработке, в связи с багом <a target="_blank" href="https://github.com/AqoTesting/AqoTestingDomainClient/issues/4">#4</a></div>
+      <div class="white text-center">
+        Данный компонент находится в переработке, в связи с багом
+        <a
+          target="_blank"
+          href="https://github.com/AqoTesting/AqoTestingDomainClient/issues/4"
+          >#4</a
+        >
+      </div>
       <form *ngIf="false" [formGroup]="sections">
         <div
           *ngFor="let section of sections.controls | keyvalue; let i = index"
@@ -577,7 +594,9 @@
                     </div>
                   </div>
                   <div>
-                    <mat-slide-toggle formControlName="shuffle">Перемешивать варианты</mat-slide-toggle><br><br>
+                    <mat-slide-toggle formControlName="shuffle"
+                      >Перемешивать варианты</mat-slide-toggle
+                    ><br /><br />
                   </div>
                   <div>
                     <mat-form-field
