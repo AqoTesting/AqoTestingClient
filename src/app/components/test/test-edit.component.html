@@ -432,7 +432,8 @@
           </div>
         </div>
       </div>
-      <form [formGroup]="sections">
+      <div class="white text-center">Данный компонент находится в переработке, в связи с багом <a target="_blank" href="https://github.com/AqoTesting/AqoTestingDomainClient/issues/4">#4</a></div>
+      <form *ngIf="false" [formGroup]="sections">
         <div
           *ngFor="let section of sections.controls | keyvalue; let i = index"
           style="margin: 50px 0 100px 0"
