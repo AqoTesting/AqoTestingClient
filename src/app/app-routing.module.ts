@@ -16,6 +16,7 @@ import { TestsComponent } from './components/tests/tests.component';
 import { MembersComponent } from './components/members/members.component';
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
+import { TestResultsComponent } from './components/test/test-results.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: ':roomId/test/edit/:testId',
         component: TestEditComponent,
+      },
+      {
+        path: ':roomId/test/results/:testId',
+        component: TestResultsComponent,
       },
     ],
   },

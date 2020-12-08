@@ -22,24 +22,32 @@
         <div class="tests-line-left">{{ test.title }}</div>
 
         <div class="tests-line-right">
-          <mat-icon
-            matTooltip="Удалить тест"
-            class="pointer room-action-icon"
+          <button
             (click)="deleteTest(test)"
-            >delete</mat-icon
+            mat-icon-button
+            aria-label="Удалить тест"
+            matTooltip="Удалить тест"
           >
-          <mat-icon
+            <mat-icon>delete</mat-icon>
+          </button>
+
+          <button
+            [routerLink]="['../test', 'edit', test.id]"
+            mat-icon-button
+            aria-label="Изменить тест"
             matTooltip="Изменить тест"
-            class="pointer room-action-icon"
-            [routerLink]="['../test', 'edit', test.id]"
-            >settings</mat-icon
           >
-          <mat-icon
+            <mat-icon>settings</mat-icon>
+          </button>
+          <div class="divider"></div>
+          <button
+            [routerLink]="['../test', 'results', test.id]"
+            mat-icon-button
+            aria-label="Посмотреть результаты"
             matTooltip="Посмотреть результаты"
-            class="pointer room-action-icon"
-            [routerLink]="['../test', 'edit', test.id]"
-            >preview</mat-icon
           >
+            <mat-icon>preview</mat-icon>
+          </button>
         </div>
       </mat-card>
     </div>

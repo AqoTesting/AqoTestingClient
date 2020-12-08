@@ -20,7 +20,7 @@
   </div>
   <ng-container *ngIf="rooms; else loading" class="rooms-conteiner">
     <div *ngFor="let room of rooms" class="room-content">
-      <mat-card [routerLink]="['/room/', room.id]" class="pointer">
+      <mat-card [routerLink]="['/room/', room.id]" class="pointer" style="display: flex;align-items: center;">
         <div class="room-info">
           <div class="room-info-name pointer">
             <span>{{ room.name }}</span>
@@ -32,32 +32,38 @@
                 target="_blank"
                 [href]="'https://' + room.domain + '.' + env.domain"
                 matTooltip="Открыть в новой владке"
-                style="width: fit-content;"
+                style="width: fit-content"
                 >{{ room.domain }}.aqotesting.tk</a
               >
             </span>
           </div>
         </div>
         <div class="room-action">
-          <mat-icon
+          <button
             (click)="deleteRoom(room)"
+            mat-icon-button
+            aria-label="Удалить комнату"
             matTooltip="Удалить комнату"
-            class="pointer room-action-icon"
-            >delete</mat-icon
           >
-          <mat-icon
-            matTooltip="Изменить комнату"
-            class="pointer room-action-icon"
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button
             [routerLink]="['/room/edit/', room.id]"
-            >settings</mat-icon
+            mat-icon-button
+            aria-label="Изменить комнату"
+            matTooltip="Изменить комнату"
           >
+            <mat-icon>settings</mat-icon>
+          </button>
           <div class="divider"></div>
-          <mat-icon
-            matTooltip="Перейти в комнату"
-            class="pointer room-action-icon"
+          <button
             [routerLink]="['/room/', room.id]"
-            >keyboard_tab</mat-icon
+            mat-icon-button
+            aria-label="Перейти в комнату"
+            matTooltip="Перейти в комнату"
           >
+            <mat-icon>keyboard_tab</mat-icon>
+          </button>
         </div>
       </mat-card>
     </div>

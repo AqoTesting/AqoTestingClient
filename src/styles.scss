@@ -67,7 +67,7 @@ a {
 }
 
 .divider {
-  margin-left: 14px;
+  margin: 0 8px;
   border-left: 1px solid $gray-night-color;
   display: inline-block;
   height: 24px;
@@ -182,6 +182,7 @@ snack-bar-container {
   .room-info {
     width: 50%;
     display: inline-block;
+    height: 34px;
 
     &-name {
     }
@@ -195,9 +196,9 @@ snack-bar-container {
     display: inline-block;
     text-align: right;
 
-    &-icon {
-      margin-left: 14px;
-    }
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -257,7 +258,11 @@ mat-form-field {
     flex: 1;
     width: 50%;
     text-align: right;
-    height: 24px;
+
+    justify-content: flex-end;
+    display: flex;
+    height: 40px;
+    align-items: center;
   }
 }
 

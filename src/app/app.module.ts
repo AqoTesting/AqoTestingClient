@@ -39,6 +39,7 @@ import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
 import { ImgBBService } from './services/imgbb.service';
 import { ToFixedPipe } from './pipes/to-fixed.pipe';
+import { TestResultsComponent } from './components/test/test-results.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,9 @@ import { ToFixedPipe } from './pipes/to-fixed.pipe';
     TestCreateComponent,
     TestEditComponent,
 
-    ToFixedPipe
+    ToFixedPipe,
+
+    TestResultsComponent
   ],
   imports: [
     BrowserModule,
