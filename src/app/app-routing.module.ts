@@ -17,6 +17,7 @@ import { MembersComponent } from './components/members/members.component';
 import { TestCreateComponent } from './components/test/test-create.component';
 import { TestEditComponent } from './components/test/test-edit.component';
 import { TestResultsComponent } from './components/test/test-results.component';
+import { RoomViewComponent } from './components/room/room-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -59,28 +60,34 @@ const routes: Routes = [
         path: ':roomId',
         component: RoomComponent,
         children: [
-          { path: '', redirectTo: 'tests', pathMatch: 'prefix' },
           {
-            path: 'tests',
-            component: TestsComponent,
+            path: '',
+            component: RoomViewComponent,
+            children: [
+              { path: '', redirectTo: 'tests', pathMatch: 'prefix' },
+              {
+                path: 'tests',
+                component: TestsComponent,
+              },
+              {
+                path: 'members',
+                component: MembersComponent,
+              },
+            ],
           },
           {
-            path: 'members',
-            component: MembersComponent,
+            path: 'test/create',
+            component: TestCreateComponent,
+          },
+          {
+            path: 'test/edit/:testId',
+            component: TestEditComponent,
+          },
+          {
+            path: 'test/results/:testId',
+            component: TestResultsComponent,
           },
         ],
-      },
-      {
-        path: ':roomId/test/create',
-        component: TestCreateComponent,
-      },
-      {
-        path: ':roomId/test/edit/:testId',
-        component: TestEditComponent,
-      },
-      {
-        path: ':roomId/test/results/:testId',
-        component: TestResultsComponent,
       },
     ],
   },

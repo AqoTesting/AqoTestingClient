@@ -40,6 +40,7 @@ import { TestEditComponent } from './components/test/test-edit.component';
 import { ImgBBService } from './services/imgbb.service';
 import { ToFixedPipe } from './pipes/to-fixed.pipe';
 import { TestResultsComponent } from './components/test/test-results.component';
+import { RoomViewComponent } from './components/room/room-view.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,9 @@ import { TestResultsComponent } from './components/test/test-results.component';
 
     ToFixedPipe,
 
-    TestResultsComponent
+    TestResultsComponent,
+
+    RoomViewComponent
   ],
   imports: [
     BrowserModule,

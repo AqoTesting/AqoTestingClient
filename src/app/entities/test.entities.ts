@@ -63,6 +63,7 @@ export enum QuestionTypes {
   MultipleChoice = 1,
   Matching = 2,
   Sequence = 3,
+  FillIn = 4,
 }
 
 export class CommonOption {

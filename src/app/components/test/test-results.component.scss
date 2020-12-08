@@ -1,0 +1,48 @@
+.results-table {
+  text-align: left;
+  background: #424242;
+  margin: 24px 0;
+  border-radius: 4px;
+
+  min-width: 600px;
+  width: fit-content;
+  margin: auto;
+  //overflow-x: scroll;
+
+  &-head {
+    font-size: 10px;
+    height: 25px;
+    font-weight: 500;
+    color: hsla(0, 0%, 100%, 0.7);
+
+    th {
+      padding-left: 15px;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: hsla(0, 0%, 100%, 0.12);
+    }
+  }
+  &-body {
+    height: 25px;
+    color: white;
+    font-size: 15px;
+
+    td {
+      padding-left: 15px;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: hsla(0, 0%, 100%, 0.12);
+    }
+  }
+}
+
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+}
+
+.results-scroll {
+  border-radius: 4px;
+  overflow-x: auto;
+}
