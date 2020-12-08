@@ -5,6 +5,7 @@ import { Room } from 'src/app/entities/room.entities';
 import { RoomService } from 'src/app/services/room.service';
 import { Background } from 'src/app/utils/background.utility';
 import { Location } from '@angular/common';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room',
@@ -24,7 +25,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   ) {
     Background.setColor('#303030');
     this.subscription.add(
-      this.route.params.subscribe((params) => {
+      this.route.params.pipe(take(1)).subscribe((params) => {
         this.roomId = params['roomId'];
       })
     );
@@ -36,7 +37,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   getRoom(): void {
     this.subscription.add(
-      this.roomService.getUserRoomById(this.roomId).subscribe((data: Room) => {
+      this.roomService.getUserRoomById(this.roomId).pipe(take(1)).subscribe((data: Room) => {
         this.room = data;
       })
     );

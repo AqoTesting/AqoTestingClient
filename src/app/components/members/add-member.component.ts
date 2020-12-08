@@ -12,6 +12,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Response } from 'src/app/entities/response.entities';
 import { Room, RoomField } from 'src/app/entities/room.entities';
 import { MemberService } from 'src/app/services/member.service';
@@ -74,7 +75,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.memberAdd.disable();
-    this.subscription.add(this.memberService.postRoomMember(this.room.id, { fields: this.memberAdd.value }).subscribe(() => {
+    this.subscription.add(this.memberService.postRoomMember(this.room.id, { fields: this.memberAdd.value }).pipe(take(1)).subscribe(() => {
       this.snack.success('Участник успешно добавлен');
       this.onNoClick(true);
     }, (error) => {

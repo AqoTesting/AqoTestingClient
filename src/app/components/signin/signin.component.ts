@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-signin',
@@ -70,7 +71,7 @@ export class SignInComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.signInForm.disable();
     this.subscription.add(
-      this.authService.getUserTokenSignIn(this.signInForm.value).subscribe(
+      this.authService.getUserTokenSignIn(this.signInForm.value).pipe(take(1)).subscribe(
         () => {
           this.snackService.success('Вы успешно авторизовались');
           this.router.navigate(['rooms']);

@@ -14,6 +14,7 @@ import { RoomService } from 'src/app/services/room.service';
 import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
 import { Location } from '@angular/common';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room-create',
@@ -116,20 +117,23 @@ export class RoomCreateComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.roomService.createRoom(this.roomCreate.value).subscribe(
-        () => {
-          this.snackService.success(
-            `Комната <b>${this.roomCreate.value.name}</b> была успешно создана`
-          );
-          this.roomCreate.reset();
-          this.router.navigate(['/rooms']);
-        },
-        (error) => {
-          if (error instanceof Response)
-            this.snackService.error(error.errorMessageCode);
-          this.roomCreate.enable();
-        }
-      )
+      this.roomService
+        .createRoom(this.roomCreate.value)
+        .pipe(take(1))
+        .subscribe(
+          () => {
+            this.snackService.success(
+              `Комната <b>${this.roomCreate.value.name}</b> была успешно создана`
+            );
+            this.roomCreate.reset();
+            this.router.navigate(['/rooms']);
+          },
+          (error) => {
+            if (error instanceof Response)
+              this.snackService.error(error.errorMessageCode);
+            this.roomCreate.enable();
+          }
+        )
     );
   }
 

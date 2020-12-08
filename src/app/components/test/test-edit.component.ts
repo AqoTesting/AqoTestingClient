@@ -111,7 +111,7 @@ export class TestEditComponent implements OnInit {
 
   getTest() {
     this.subscription.add(
-      this.testService.getTest(this.testId).subscribe(
+      this.testService.getTest(this.testId).pipe(take(1)).subscribe(
         (test: Test) => {
           this.test = test;
           this.initForm();
@@ -391,7 +391,7 @@ export class TestEditComponent implements OnInit {
       test.deactivationDate = new Date(test.deactivationDate).toISOString();
 
     this.subscription.add(
-      this.testService.putTest(this.testId, test).subscribe(
+      this.testService.putTest(this.testId, test).pipe(take(1)).subscribe(
         () => {
           this.snack.success('Тест успешно изменён');
           this.testEdit.enable();
@@ -486,7 +486,7 @@ export class TestEditComponent implements OnInit {
     }
 
     this.subscription.add(
-      this.testService.patchSections(this.testId, postSectionsValue).subscribe(
+      this.testService.patchSections(this.testId, postSectionsValue).pipe(take(1)).subscribe(
         () => {
           this.deleteOnSectionsForm();
           this.sections.enable();

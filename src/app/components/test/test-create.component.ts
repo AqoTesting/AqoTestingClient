@@ -149,7 +149,7 @@ export class TestCreateComponent implements OnInit, OnDestroy {
       test.deactivationDate = new Date(test.deactivationDate).toISOString();
 
     this.subscription.add(
-      this.testService.postTest(this.roomId, test).subscribe(
+      this.testService.postTest(this.roomId, test).pipe(take(1)).subscribe(
         ({ testId }) => {
           this.router.navigate(['room', this.roomId, 'test', 'edit', testId]);
         },

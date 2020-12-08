@@ -41,6 +41,7 @@ import { ImgBBService } from './services/imgbb.service';
 import { ToFixedPipe } from './pipes/to-fixed.pipe';
 import { TestResultsComponent } from './components/test/test-results.component';
 import { RoomViewComponent } from './components/room/room-view.component';
+import { AttemptService } from './services/attempt.service';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { RoomViewComponent } from './components/room/room-view.component';
     SnackService,
     TestService,
     MemberService,
+    AttemptService,
     ImgBBService,
     {
       provide: HTTP_INTERCEPTORS,

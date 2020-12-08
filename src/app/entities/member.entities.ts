@@ -1,3 +1,5 @@
+import { Attempt } from './attempt.entities';
+
 interface Dictionary<T> {
     [key: string]: T;
 }
@@ -10,4 +12,5 @@ export class Member {
     isRegistered: boolean;
     isApproved: boolean;
     fields: Dictionary<string>;
+    attempts: Attempt[];
 }

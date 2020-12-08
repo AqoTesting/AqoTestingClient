@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Response } from 'src/app/entities/response.entities';
 import { AuthService } from 'src/app/services/auth.service';
 import { SnackService } from 'src/app/services/snack.service';
@@ -82,7 +83,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     const signUp = this.signUpForm.value;
     delete signUp.repeatPassword;
     this.subscription.add(
-      this.authService.getUserTokenSignUp(signUp).subscribe(
+      this.authService.getUserTokenSignUp(signUp).pipe(take(1)).subscribe(
         () => {
           this.router.navigate(['/rooms']);
         },

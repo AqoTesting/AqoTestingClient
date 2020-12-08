@@ -44,17 +44,22 @@ export class TestsComponent implements OnInit, OnDestroy {
 
   updateRoomTests(): void {
     this.subscription.add(
-      this.testService.getTests(this.roomId).subscribe((data) => {
-        this.tests = data;
-      })
+      this.testService
+        .getTests(this.roomId)
+        .pipe(take(1))
+        .subscribe((data) => {
+          this.tests = data;
+        })
     );
   }
 
   deleteTest(test: Test): void {
     if (confirm(`Вы уверены, что хотите удалить тест ${test.title}?`)) {
       this.subscription.add(
-        this.subscription.add(
-          this.testService.deleteTest(test.id).subscribe(
+        this.testService
+          .deleteTest(test.id)
+          .pipe(take(1))
+          .subscribe(
             () => {
               this.snack.success(
                 `Тест <b>${test.title}</b> был успешно удален`
@@ -67,7 +72,6 @@ export class TestsComponent implements OnInit, OnDestroy {
                 this.snack.error(error.errorMessageCode);
             }
           )
-        )
       );
     }
   }

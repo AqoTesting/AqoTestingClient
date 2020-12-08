@@ -6,6 +6,7 @@ import { SnackService } from 'src/app/services/snack.service';
 import { RoomService } from '../../services/room.service';
 import { Background } from 'src/app/utils/background.utility';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rooms',
@@ -30,28 +31,34 @@ export class RoomsComponent implements OnInit, OnDestroy {
 
   private updateRoomsItem(): void {
     this.subscription.add(
-      this._roomService.getUserRooms().subscribe((data) => {
-        this.rooms = data;
-      })
+      this._roomService
+        .getUserRooms()
+        .pipe(take(1))
+        .subscribe((data) => {
+          this.rooms = data;
+        })
     );
   }
 
   deleteRoom(room: GetRoomsItem): void {
     if (confirm(`Вы уверены, что хотите удалить комнату ${room.name}?`)) {
       this.subscription.add(
-        this._roomService.deleteRoomById(room.id).subscribe(
-          () => {
-            this._snackService.success(
-              `Комната <b>${room.name}</b> была успешно удалена`
-            );
-            this.rooms = this.rooms.filter((_room) => _room.id != room.id);
-            this.updateRoomsItem();
-          },
-          (error) => {
-            if (error instanceof Response)
-              this._snackService.error(error.errorMessageCode);
-          }
-        )
+        this._roomService
+          .deleteRoomById(room.id)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this._snackService.success(
+                `Комната <b>${room.name}</b> была успешно удалена`
+              );
+              this.rooms = this.rooms.filter((_room) => _room.id != room.id);
+              this.updateRoomsItem();
+            },
+            (error) => {
+              if (error instanceof Response)
+                this._snackService.error(error.errorMessageCode);
+            }
+          )
       );
     }
   }

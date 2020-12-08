@@ -15,6 +15,7 @@ import { SnackService } from 'src/app/services/snack.service';
 import { Background } from 'src/app/utils/background.utility';
 import { Response } from 'src/app/entities/response.entities';
 import { Location } from '@angular/common';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room-edit',
@@ -54,7 +55,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   ) {
     Background.setColor('#303030');
     this.subscription.add(
-      this.route.params.subscribe((params) => {
+      this.route.params.pipe(take(1)).subscribe((params) => {
         this.roomId = params['roomId'];
       })
     );
@@ -67,7 +68,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   getRoom() {
     this.roomEdit.disable();
     this.subscription.add(
-      this.roomService.getUserRoomById(this.roomId).subscribe(
+      this.roomService.getUserRoomById(this.roomId).pipe(take(1)).subscribe(
         (data: Room) => {
           delete data.id;
           delete data.userId;
@@ -162,7 +163,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.roomService.editRoom(this.roomId, this.roomEdit.value).subscribe(
+      this.roomService.editRoom(this.roomId, this.roomEdit.value).pipe(take(1)).subscribe(
         () => {
           this.snackService.success(
             `Комната <b>${this.roomEdit.value.name}</b> была успешно изменена`

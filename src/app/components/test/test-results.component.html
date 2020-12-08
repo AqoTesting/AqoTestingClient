@@ -6,6 +6,13 @@
       </div>
       <div class="header-right" style="width: 80px">
         <button
+          mat-icon-button
+          aria-label="Скачать Excel"
+          matTooltip="Скачать Excel"
+        >
+          <mat-icon>save_alt</mat-icon>
+        </button>
+        <button
           routerLink="../../../tests"
           mat-icon-button
           aria-label="Назад"
@@ -16,16 +23,31 @@
       </div>
     </div>
   </div>
-  <div class="results-scroll">
+  <div
+    *ngIf="members && room && test && attempts; else loading"
+    class="results-scroll"
+  >
     <table class="results-table">
       <tr class="results-table-head">
-        <th>1</th>
-        <th>2</th>
+        <th *ngFor="let field of room.fields">{{ field.name }}</th>
+        <th>Осталось попыток</th>
+        <th *ngIf="test.ranks.length">Оценка</th>
+        <th *ngIf="!test.ranks.length">Баллы</th>
       </tr>
-      <tr class="results-table-body">
-        <td>3</td>
-        <td>4</td>
-      </tr>
+      <ng-container *ngFor="let member of members">
+        <tr class="results-table-body" *ngIf="member.attempts.length">
+          <td *ngFor="let field of room.fields">
+            {{ member.fields[field.name] }}
+          </td>
+          <td>{{ test.attemptsNumber - member.attempts.length }}</td>
+          <td>
+            {{ getPoints(member) }}/
+          </td>
+        </tr>
+      </ng-container>
     </table>
   </div>
+  <ng-template #loading>
+    <mat-spinner class="loading"></mat-spinner>
+  </ng-template>
 </div>

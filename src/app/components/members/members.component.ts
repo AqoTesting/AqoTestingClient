@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { error } from 'protractor';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Member } from 'src/app/entities/member.entities';
 import { Response } from 'src/app/entities/response.entities';
 import { Room } from 'src/app/entities/room.entities';
@@ -57,6 +58,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.memberService
         .getRoomMembers(this.room.id)
+        .pipe(take(1))
         .subscribe((members: Member[]) => {
           this.members = members;
         })
@@ -66,47 +68,56 @@ export class MembersComponent implements OnInit, OnDestroy {
   memberApprove(member: Member) {
     member.isApproved = true;
     this.subscription.add(
-      this.memberService.memberApprove(member.id).subscribe(
-        () => {},
-        (error) => {
-          member.isApproved = false;
-          if (error instanceof Response)
-            this.snack.error(error.errorMessageCode);
-        }
-      )
+      this.memberService
+        .memberApprove(member.id)
+        .pipe(take(1))
+        .subscribe(
+          () => {},
+          (error) => {
+            member.isApproved = false;
+            if (error instanceof Response)
+              this.snack.error(error.errorMessageCode);
+          }
+        )
     );
   }
 
   memberUnregister(member: Member) {
     member.isRegistered = false;
     this.subscription.add(
-      this.memberService.memberUnregister(member.id).subscribe(
-        () => {},
-        (error) => {
-          member.isRegistered = true;
-          if (error instanceof Response)
-            this.snack.error(error.errorMessageCode);
-        }
-      )
+      this.memberService
+        .memberUnregister(member.id)
+        .pipe(take(1))
+        .subscribe(
+          () => {},
+          (error) => {
+            member.isRegistered = true;
+            if (error instanceof Response)
+              this.snack.error(error.errorMessageCode);
+          }
+        )
     );
   }
 
   memberDelete(member: Member) {
     if (confirm('Вы уверены что хотите удалить участника?')) {
       this.subscription.add(
-        this.memberService.memberDelete(member.id).subscribe(
-          () => {
-            this.snack.success('Участник успешно удалён');
-            this.members = this.members.filter(
-              (_member) => _member.id != member.id
-            );
-          },
-          (error) => {
-            if (error instanceof Response) {
-              this.snack.error(error.errorMessageCode);
+        this.memberService
+          .memberDelete(member.id)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.snack.success('Участник успешно удалён');
+              this.members = this.members.filter(
+                (_member) => _member.id != member.id
+              );
+            },
+            (error) => {
+              if (error instanceof Response) {
+                this.snack.error(error.errorMessageCode);
+              }
             }
-          }
-        )
+          )
       );
     }
   }
@@ -117,12 +128,15 @@ export class MembersComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      dialogRef.afterClosed().subscribe((reslt) => {
-        if (reslt) {
-          this.members = null;
-          this.getMembers();
-        }
-      })
+      dialogRef
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((reslt) => {
+          if (reslt) {
+            this.members = null;
+            this.getMembers();
+          }
+        })
     );
   }
 
@@ -132,12 +146,15 @@ export class MembersComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      dialogRef.afterClosed().subscribe((reslt) => {
-        if (reslt) {
-          this.members = null;
-          this.getMembers();
-        }
-      })
+      dialogRef
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((reslt) => {
+          if (reslt) {
+            this.members = null;
+            this.getMembers();
+          }
+        })
     );
   }
 

@@ -9,6 +9,7 @@ export class Test {
   documents: Document[];
   isActive: boolean = false;
   showAllSections: boolean = true;
+  finalResultCalculationMethod: FinalResultCalculationMethod;
   attemptSectionsNumber: number = 0;
   creationDate: string;
   activationDate: string;
@@ -56,6 +57,11 @@ export class Question {
   cost?: number = 1;
   weight?: number = 0;
   options?: CommonOption[];
+}
+
+export enum FinalResultCalculationMethod {
+  Average = 0,
+  Best = 1,
 }
 
 export enum QuestionTypes {
