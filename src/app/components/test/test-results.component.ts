@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Attempt } from 'src/app/entities/attempt.entities';
-import { Member } from 'src/app/entities/member.entities';
+import { attempt } from 'lodash';
+import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { Attempt, CalculatedAttempt } from 'src/app/entities/attempt.entities';
+import { CalculatedMember, Member } from 'src/app/entities/member.entities';
 import { Room } from 'src/app/entities/room.entities';
 import {
   FinalResultCalculationMethod,
+  Rank,
   Test,
 } from 'src/app/entities/test.entities';
 import { AttemptService } from 'src/app/services/attempt.service';
@@ -24,11 +26,20 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
 
   room: Room;
-  test: Test;
-  attempts: Attempt[];
-  private _members: Member[];
+  private test$: BehaviorSubject<Test> = new BehaviorSubject<Test>(undefined);
+  private attempts$: BehaviorSubject<Attempt[]> = new BehaviorSubject<
+    Attempt[]
+  >(undefined);
 
-  get members(): Member[] {
+  members: Member[];
+  get test(): Test {
+    return this.test$.value;
+  }
+  get attempts(): Attempt[] {
+    return this.attempts$.value;
+  }
+
+  /*get members(): Member[] {
     if (
       this._members?.length &&
       this.attempts?.length &&
@@ -41,7 +52,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
       });
     }
     return this._members;
-  }
+  }*/
 
   constructor(
     private route: ActivatedRoute,
@@ -78,8 +89,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         .getTest(this.testId)
         .pipe(take(1))
         .subscribe((test: Test) => {
-          this.test = test;
-          console.log(this.test);
+          this.test$.next(test);
         })
     );
   }
@@ -90,7 +100,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         .getRoomMembers(this.room.id)
         .pipe(take(1))
         .subscribe((members: Member[]) => {
-          this._members = members;
+          this.calculateMembers(members);
         })
     );
   }
@@ -101,7 +111,101 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         .getAttemptByTestId(this.testId)
         .pipe(take(1))
         .subscribe((attempts: Attempt[]) => {
-          this.attempts = attempts;
+          this.attempts$.next(attempts);
+        })
+    );
+  }
+
+  calculateMembers(members: Member[]): void {
+    this.subscription.add(
+      this.test$
+        .pipe(filter((test) => test != undefined))
+        .pipe(take(1))
+        .subscribe((test: Test) => {
+          this.subscription.add(
+            this.attempts$
+              .pipe(filter((attempts) => attempts != undefined))
+              .pipe(take(1))
+              .subscribe((attempts: Attempt[]) => {
+                members.forEach((member) => {
+                  member.attempts = attempts.filter(
+                    (attempt) => attempt.memberId == member.id
+                  );
+
+                  member.calculated = new CalculatedMember();
+                  member.attempts
+                    .filter((attempt) => !attempt.ignore)
+                    .forEach((attempt: Attempt) => {
+                      switch (this.test.finalResultCalculationMethod) {
+                        case FinalResultCalculationMethod.Best:
+                          if (
+                            member.calculated.correctPoints <
+                            attempt.correctPoints
+                          )
+                            member.calculated.correctPoints =
+                              attempt.correctPoints;
+                          if (
+                            member.calculated.penalPoints < attempt.penalPoints
+                          )
+                            member.calculated.penalPoints = attempt.penalPoints;
+                          if (
+                            member.calculated.correctRatio <
+                            attempt.correctRatio
+                          )
+                            member.calculated.correctRatio =
+                              attempt.correctRatio;
+                          if (member.calculated.penalRatio < attempt.penalRatio)
+                            member.calculated.penalRatio = attempt.penalRatio;
+                          break;
+                        case FinalResultCalculationMethod.Average:
+                          member.calculated.correctPoints += attempt.correctPoints;
+                          member.calculated.penalPoints += attempt.penalPoints;
+                          member.calculated.correctRatio += attempt.correctRatio;
+                          member.calculated.penalRatio += attempt.penalRatio;
+                          break;
+                      }
+
+                      if (test.ranks.length) {
+                        attempt.calculated = new CalculatedAttempt();
+                        attempt.calculated.correctRank = this.getRankByRatio(
+                          attempt.correctRatio
+                        );
+                        attempt.calculated.penalRank = this.getRankByRatio(
+                          attempt.correctRatio - attempt.penalRatio
+                        );
+                      }
+                    });
+
+                  if (member.attempts.length) {
+                    switch (this.test.finalResultCalculationMethod) {
+                      case FinalResultCalculationMethod.Best:
+                        break;
+                      case FinalResultCalculationMethod.Average:
+                        member.calculated.correctPoints /= member.attempts.length;
+                        member.calculated.penalPoints /= member.attempts.length;
+                        member.calculated.correctRatio /= member.attempts.length;
+                        member.calculated.penalRatio /= member.attempts.length;
+                        break;
+                    }
+
+                    if (test.ranks.length) {
+                      member.calculated.correctRank = this.getRankByRatio(
+                        member.calculated.correctRatio
+                      );
+                      member.calculated.penalRank = this.getRankByRatio(
+                        member.calculated.correctRatio -
+                          member.calculated.penalRatio
+                      );
+                    }
+                  }
+                });
+
+                this.members = members;
+                console.log(
+                  this.members.filter((member) => member.attempts.length)
+                );
+              })
+          );
         })
     );
   }
@@ -123,6 +227,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         break;
     }
     return points;
+  }
+
+  getRankByRatio(ratio: number): Rank {
+    let retval: Rank;
+    this.test.ranks.forEach((rank) => {
+      if (ratio >= rank.minimumSuccessRatio) retval = rank;
+    });
+    return retval;
   }
 
   ngOnDestroy(): void {

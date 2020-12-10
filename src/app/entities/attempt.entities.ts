@@ -1,3 +1,5 @@
+import { Rank } from './test.entities';
+
 export class Attempt {
   id: string;
   memberId: string;
@@ -17,4 +19,11 @@ export class Attempt {
 
   penalRatio: number;
   correctRatio: number;
+
+  calculated: CalculatedAttempt;
+}
+
+export class CalculatedAttempt {
+  correctRank: Rank;
+  penalRank: Rank;
 }
