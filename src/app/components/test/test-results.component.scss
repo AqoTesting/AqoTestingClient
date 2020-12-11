@@ -34,6 +34,12 @@
     }
 
     td {
+      .rank-background-color {
+        align-items: center;
+        display: flex;
+        gap: 4px;
+      }
+
       padding-left: 15px;
       padding-right: 15px;
       border-bottom-width: 1px;
@@ -41,15 +47,29 @@
       border-bottom-color: hsla(0, 0%, 100%, 0.12);
     }
   }
+  .hover {
+    background: hsla(0, 0%, 100%, 0.12);
+
+    td {
+      border-bottom-color: transparent;
+    }
+  }
 }
 
 .circle {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   border-radius: 100%;
 }
 
 .results-scroll {
   border-radius: 4px;
   overflow-x: auto;
+}
+
+span.mini {
+  font-size: 10px;
+  height: 30px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
 }

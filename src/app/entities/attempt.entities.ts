@@ -1,4 +1,6 @@
+import { from } from 'rxjs';
 import { Rank } from './test.entities';
+import * as moment from 'moment';
 
 export class Attempt {
   id: string;
@@ -26,4 +28,5 @@ export class Attempt {
 export class CalculatedAttempt {
   correctRank: Rank;
   penalRank: Rank;
+  timeMinute: number = 0;
 }

@@ -18,6 +18,12 @@ export class TestService {
     return this.http.get<Test>(environment.apiUrl + '/user/test/' + testId);
   }
 
+  getTestInfo(testId: string): Observable<Test> {
+    return this.http.get<Test>(
+      environment.apiUrl + '/user/test/' + testId + '/info'
+    );
+  }
+
   postTest(roomId: string, test: Test): Observable<{ testId: number }> {
     return this.http.post<{ testId: number }>(
       environment.apiUrl + '/user/room/' + roomId + '/test',

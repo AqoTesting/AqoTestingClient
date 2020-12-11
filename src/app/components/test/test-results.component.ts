@@ -15,6 +15,7 @@ import { AttemptService } from 'src/app/services/attempt.service';
 import { MemberService } from 'src/app/services/member.service';
 import { RoomService } from 'src/app/services/room.service';
 import { TestService } from 'src/app/services/test.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-test-results',
@@ -24,6 +25,8 @@ import { TestService } from 'src/app/services/test.service';
 export class TestResultsComponent implements OnInit, OnDestroy {
   testId: string;
   subscription: Subscription = new Subscription();
+
+  openedMemberIndex: number = -1;
 
   room: Room;
   private test$: BehaviorSubject<Test> = new BehaviorSubject<Test>(undefined);
@@ -38,21 +41,6 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   get attempts(): Attempt[] {
     return this.attempts$.value;
   }
-
-  /*get members(): Member[] {
-    if (
-      this._members?.length &&
-      this.attempts?.length &&
-      !this._members[0].attempts
-    ) {
-      this._members.forEach((member) => {
-        member.attempts = this.attempts.filter(
-          (attempt) => attempt.memberId == member.id
-        );
-      });
-    }
-    return this._members;
-  }*/
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +74,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   getTest(): void {
     this.subscription.add(
       this.testService
-        .getTest(this.testId)
+        .getTestInfo(this.testId)
         .pipe(take(1))
         .subscribe((test: Test) => {
           this.test$.next(test);
@@ -136,6 +124,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                   member.attempts
                     .filter((attempt) => !attempt.ignore)
                     .forEach((attempt: Attempt) => {
+                      attempt.calculated = new CalculatedAttempt();
+                      let startTime = moment(attempt.startDate),
+                        endTime = moment(attempt.endDate);
+                      let diff = endTime.diff(startTime, 'minute');
+
+                      attempt.calculated.timeMinute = diff;
+                      member.calculated.timeMinute += diff;
+
                       switch (this.test.finalResultCalculationMethod) {
                         case FinalResultCalculationMethod.Best:
                           if (
@@ -158,15 +154,16 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                             member.calculated.penalRatio = attempt.penalRatio;
                           break;
                         case FinalResultCalculationMethod.Average:
-                          member.calculated.correctPoints += attempt.correctPoints;
+                          member.calculated.correctPoints +=
+                            attempt.correctPoints;
                           member.calculated.penalPoints += attempt.penalPoints;
-                          member.calculated.correctRatio += attempt.correctRatio;
+                          member.calculated.correctRatio +=
+                            attempt.correctRatio;
                           member.calculated.penalRatio += attempt.penalRatio;
                           break;
                       }
 
                       if (test.ranks.length) {
-                        attempt.calculated = new CalculatedAttempt();
                         attempt.calculated.correctRank = this.getRankByRatio(
                           attempt.correctRatio
                         );
@@ -177,13 +174,17 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                     });
 
                   if (member.attempts.length) {
+                    member.calculated.timeMinute /= member.attempts.length;
+
                     switch (this.test.finalResultCalculationMethod) {
                       case FinalResultCalculationMethod.Best:
                         break;
                       case FinalResultCalculationMethod.Average:
-                        member.calculated.correctPoints /= member.attempts.length;
+                        member.calculated.correctPoints /=
+                          member.attempts.length;
                         member.calculated.penalPoints /= member.attempts.length;
-                        member.calculated.correctRatio /= member.attempts.length;
+                        member.calculated.correctRatio /=
+                          member.attempts.length;
                         member.calculated.penalRatio /= member.attempts.length;
                         break;
                     }
@@ -235,6 +236,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
       if (ratio >= rank.minimumSuccessRatio) retval = rank;
     });
     return retval;
+  }
+
+  openOrCloseMemberAttempts(index: number): void {
+    if (index == this.openedMemberIndex) {
+      this.openedMemberIndex = -1;
+    } else {
+      this.openedMemberIndex = index;
+    }
   }
 
   ngOnDestroy(): void {

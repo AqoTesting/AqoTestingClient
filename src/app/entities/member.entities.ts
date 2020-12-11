@@ -27,4 +27,6 @@ export class CalculatedMember {
 
   correctRank: Rank;
   penalRank: Rank;
+
+  timeMinute: number = 0;
 }

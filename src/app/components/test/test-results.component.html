@@ -29,21 +29,124 @@
   >
     <table class="results-table">
       <tr class="results-table-head">
+        <th></th>
         <th *ngFor="let field of room.fields">{{ field.name }}</th>
-        <th>Осталось попыток</th>
-        <th *ngIf="test.ranks.length">Оценка</th>
+        <th>Попыток</th>
+        <th>Ср. время</th>
+        <th
+          *ngIf="test.ranks.length"
+          title="Оценка без учета коэффициента коррекции"
+        >
+          Оценка
+        </th>
+        <th
+          *ngIf="test.ranks.length"
+          title="Оценка с учетом коэффициента коррекции"
+        >
+          Коррекция
+        </th>
         <th *ngIf="!test.ranks.length">Баллы</th>
       </tr>
-      <ng-container *ngFor="let member of members">
-        <tr class="results-table-body" *ngIf="member.attempts.length">
-          <td *ngFor="let field of room.fields">
-            {{ member.fields[field.name] }}
-          </td>
-          <td>{{ test.attemptsNumber - member.attempts.length }}</td>
-          <td>
-            {{ getPoints(member) }}
-          </td>
-        </tr>
+      <ng-container *ngFor="let member of members; let i = index">
+        <ng-container *ngIf="member.attempts.length">
+          <tr class="results-table-body" [class.hover]="i == openedMemberIndex">
+            <td style="padding-right: 0">
+              <div
+                *ngIf="member.attempts.length > 1"
+                style="display: flex; align-self: center"
+                class="pointer"
+                (click)="openOrCloseMemberAttempts(i)"
+                title="Показать все попытки"
+              >
+                <mat-icon>{{
+                  i == openedMemberIndex ? "expand_less" : "expand_more"
+                }}</mat-icon>
+              </div>
+            </td>
+            <td *ngFor="let field of room.fields">
+              {{ member.fields[field.name] }}
+            </td>
+            <td>{{ member.attempts.length }}</td>
+            <td>{{ member.calculated.timeMinute | toFixed: 0 }}<span class="mini">мин</span></td>
+            <td *ngIf="test.ranks.length">
+              <div class="rank-background-color">
+                <div
+                  class="circle"
+                  [style.background-color]="
+                    '#' + member.calculated.correctRank.backgroundColor
+                  "
+                ></div>
+                {{ member.calculated.correctRank.title }}
+              </div>
+            </td>
+            <td *ngIf="test.ranks.length">
+              <div class="rank-background-color">
+                <div
+                  class="circle"
+                  [style.background-color]="
+                    '#' + member.calculated.penalRank.backgroundColor
+                  "
+                ></div>
+                {{ member.calculated.penalRank.title }}
+              </div>
+            </td>
+          </tr>
+          <tr
+            class="results-table-body"
+            [class.hover]="i == openedMemberIndex"
+            *ngIf="i == openedMemberIndex"
+          >
+            <td [attr.colspan]="room.fields.length + 5">
+              <div
+                style="
+                  border: rgba(255, 255, 255, 0.12) 1px solid;
+                  width: fit-content;
+                  border-radius: 4px;
+                  margin: auto;
+                  margin-bottom: 5px;
+                "
+              >
+                <table class="results-table" style="background: #595959">
+                  <tr class="results-table-head">
+                    <th>#</th>
+                    <th>Время</th>
+                    <th>Оценка</th>
+                    <th>Коррекция</th>
+                  </tr>
+                  <tr
+                    class="results-table-body"
+                    *ngFor="let attempt of member.attempts; let i = index"
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ attempt.calculated.timeMinute }}<span class="mini">мин</span></td>
+                    <td>
+                      <div class="rank-background-color">
+                        <div
+                          class="circle"
+                          [style.background-color]="
+                            '#' + attempt.calculated.correctRank.backgroundColor
+                          "
+                        ></div>
+                        {{ attempt.calculated.correctRank.title }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="rank-background-color">
+                        <div
+                          class="circle"
+                          [style.background-color]="
+                            '#' + attempt.calculated.penalRank.backgroundColor
+                          "
+                        ></div>
+                        {{ attempt.calculated.penalRank.title }}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
       </ng-container>
     </table>
   </div>
