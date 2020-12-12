@@ -43,6 +43,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   fieldsKeys: string[] = [];
   filtred: Dictionary<FormControl> = {};
 
+  averageCalculated: {
+    timeMinute: number;
+    correctRank: Rank;
+    penalRank: Rank;
+    correctRatio: number;
+    penalRatio: number;
+  };
+
   room: Room;
   private test$: BehaviorSubject<Test> = new BehaviorSubject<Test>(undefined);
   private attempts$: BehaviorSubject<Attempt[]> = new BehaviorSubject<
@@ -148,6 +156,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
               .pipe(filter((attempts) => attempts != undefined))
               .pipe(take(1))
               .subscribe((attempts: Attempt[]) => {
+                let membersWithAttempts = 0;
+                this.averageCalculated = {
+                  timeMinute: 0,
+                  correctRank: undefined,
+                  penalRank: undefined,
+                  correctRatio: 0,
+                  penalRatio: 0,
+                };
                 members.forEach((member) => {
                   member.attempts = attempts.filter(
                     (attempt) => attempt.memberId == member.id
@@ -208,6 +224,13 @@ export class TestResultsComponent implements OnInit, OnDestroy {
 
                   if (member.attempts.length) {
                     member.calculated.timeMinute /= member.attempts.length;
+                    membersWithAttempts++;
+                    this.averageCalculated.timeMinute +=
+                      member.calculated.timeMinute;
+                    this.averageCalculated.correctRatio +=
+                      member.calculated.correctRatio;
+                    this.averageCalculated.penalRatio +=
+                      member.calculated.penalRatio;
 
                     switch (this.test.finalResultCalculationMethod) {
                       case FinalResultCalculationMethod.Best:
@@ -234,9 +257,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                   }
                 });
 
+                this.averageCalculated.timeMinute /= membersWithAttempts;
+                this.averageCalculated.correctRank = this.getRankByRatio(this.averageCalculated.correctRatio / membersWithAttempts);
+                this.averageCalculated.penalRank = this.getRankByRatio(this.averageCalculated.penalRatio / membersWithAttempts);
+                
                 this.members = members;
+
                 console.log(
-                  this.members.filter((member) => member.attempts.length)
+                  this.members.filter((member) => member.attempts.length), this.averageCalculated
                 );
               })
           );

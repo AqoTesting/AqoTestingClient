@@ -29,7 +29,7 @@
     color: white;
     font-size: 15px;
 
-    &:hover {
+    &:hover:not([ignore-hover]) {
       background: hsla(0, 0%, 100%, 0.12);
     }
 
@@ -38,7 +38,7 @@
       padding-right: 15px;
       border-bottom-width: 1px;
       border-bottom-style: solid;
-      border-bottom-color: hsla(0, 0%, 100%, 0.12);
+      border-bottom-color: rgb(89 89 89);
     }
   }
   .hover {
