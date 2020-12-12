@@ -4,7 +4,11 @@ import { attempt } from 'lodash';
 import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Attempt, CalculatedAttempt } from 'src/app/entities/attempt.entities';
-import { CalculatedMember, Member } from 'src/app/entities/member.entities';
+import {
+  Dictionary,
+  CalculatedMember,
+  Member,
+} from 'src/app/entities/member.entities';
 import { Room } from 'src/app/entities/room.entities';
 import {
   FinalResultCalculationMethod,
@@ -16,6 +20,14 @@ import { MemberService } from 'src/app/services/member.service';
 import { RoomService } from 'src/app/services/room.service';
 import { TestService } from 'src/app/services/test.service';
 import * as moment from 'moment';
+import { Workbook } from 'exceljs';
+import * as fs from 'file-saver';
+import { FormControl } from '@angular/forms';
+import { ThrowStmt } from '@angular/compiler';
+
+class FilterField {
+  values: string[] = [];
+}
 
 @Component({
   selector: 'app-test-results',
@@ -27,6 +39,9 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
 
   openedMemberIndex: number = -1;
+
+  fieldsKeys: string[] = [];
+  filtred: Dictionary<FormControl> = {};
 
   room: Room;
   private test$: BehaviorSubject<Test> = new BehaviorSubject<Test>(undefined);
@@ -54,12 +69,30 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         this.testId = params.testId;
       })
     );
+
+    /*const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet("хуй");
+    let headerRow = worksheet.addRow([
+      "Фамилия",
+      "Имя",
+      "Отчество",
+      "Оценка",
+      "Корректировка"
+    ]);
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type:
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      fs.saveAs(blob, `АКС-ПКС.xlsx`);
+    });*/
   }
 
   ngOnInit(): void {
     this.subscription.add(
       this.roomService.room$.pipe(take(1)).subscribe((room: Room) => {
         this.room = room;
+        this.initFiltre();
         this.getData();
       })
     );
@@ -244,6 +277,51 @@ export class TestResultsComponent implements OnInit, OnDestroy {
     } else {
       this.openedMemberIndex = index;
     }
+  }
+
+  initFiltre(): void {
+    this.room.fields
+      .filter((filed) => filed.type == 2)
+      .forEach((field) => {
+        this.filtred[field.name] = new FormControl();
+        this.fieldsKeys.push(field.name);
+      });
+
+    this.filtred.correct = new FormControl();
+    this.filtred.penal = new FormControl();
+    console.log(this.filtred, this.isFilterIncludes('correct', '3'));
+  }
+
+  isFilterIncludes(key: string, value: string): boolean {
+    return this.filtred[key]?.value?.includes(value) || false;
+  }
+
+  isMemberNotFiltred(member: Member): boolean {
+    for (const field of this.room.fields) {
+      if (
+        field.type == 2 &&
+        this.filtred[field.name]?.value?.length &&
+        !this.isFilterIncludes(field.name, member.fields[field.name])
+      ) {
+        return false;
+      }
+    }
+
+    if (this.test.ranks.length) {
+      if (
+        this.filtred['correct']?.value?.length &&
+        !this.isFilterIncludes('correct', member.calculated.correctRank.title)
+      ) {
+        return false;
+      } else if (
+        this.filtred['penal']?.value?.length &&
+        !this.isFilterIncludes('penal', member.calculated.penalRank.title)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   ngOnDestroy(): void {

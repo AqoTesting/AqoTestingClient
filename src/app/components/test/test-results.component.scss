@@ -11,7 +11,7 @@
   margin: auto;
 
   &-head {
-    font-size: 10px;
+    font-size: 12px;
     height: 30px;
     font-weight: 500;
     color: hsla(0, 0%, 100%, 0.7);
@@ -34,12 +34,6 @@
     }
 
     td {
-      .rank-background-color {
-        align-items: center;
-        display: flex;
-        gap: 4px;
-      }
-
       padding-left: 15px;
       padding-right: 15px;
       border-bottom-width: 1px;
@@ -56,6 +50,13 @@
   }
 }
 
+.rank-background-color {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  color: white;
+}
+
 .circle {
   width: 10px;
   height: 10px;
@@ -63,6 +64,7 @@
 }
 
 .results-scroll {
+  min-height: 60px;
   border-radius: 4px;
   overflow-x: auto;
 }
@@ -72,4 +74,44 @@ span.mini {
   height: 30px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.filter {
+  display: flex;
+  align-self: center;
+
+  &-name {
+    height: 13px;
+    margin: auto;
+  }
+  mat-icon {
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
+  }
+
+  ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+      padding: 0;
+      .mat-form-field-flex {
+        height: 17px;
+        width: 17px;
+
+        .mat-form-field-infix {
+          height: 17px;
+        }
+      }
+
+      .mat-form-field-underline, .mat-form-field-subscript-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .mat-select {
+    ::ng-deep .mat-select-arrow {
+      //border: unset;
+      display: none;
+    }
+  }
 }

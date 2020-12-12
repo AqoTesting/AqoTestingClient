@@ -30,25 +30,76 @@
     <table class="results-table">
       <tr class="results-table-head">
         <th></th>
-        <th *ngFor="let field of room.fields">{{ field.name }}</th>
+        <th *ngFor="let field of room.fields">
+          <div *ngIf="field.type == 1">{{ field.name }}</div>
+          <div class="filter" *ngIf="field.type == 2">
+            <div class="filter-name">{{ field.name }}&nbsp;</div>
+            <mat-form-field color="accent">
+              <mat-icon>filter_alt</mat-icon>
+              <mat-select multiple hidden [formControl]="filtred[field.name]">
+                <mat-option *ngFor="let option of field.options" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </th>
         <th>Попыток</th>
         <th>Ср. время</th>
         <th
           *ngIf="test.ranks.length"
           title="Оценка без учета коэффициента коррекции"
         >
-          Оценка
+          <div class="filter">
+            <div class="filter-name">Оценка&nbsp;</div>
+            <mat-form-field color="accent">
+              <mat-icon>filter_alt</mat-icon>
+              <mat-select multiple hidden [formControl]="filtred.correct">
+                <mat-option
+                  *ngFor="let rank of test.ranks"
+                  [value]="rank.title"
+                >
+                  <div class="rank-background-color">
+                    <div
+                      class="circle"
+                      [style.background-color]="'#' + rank.backgroundColor"
+                    ></div>
+                    {{ rank.title }}
+                  </div></mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
         </th>
         <th
           *ngIf="test.ranks.length"
           title="Оценка с учетом коэффициента коррекции"
         >
-          Коррекция
+          <div class="filter">
+            <div class="filter-name">Коррекция&nbsp;</div>
+            <mat-form-field color="accent">
+              <mat-icon>filter_alt</mat-icon>
+              <mat-select multiple hidden [formControl]="filtred.penal">
+                <mat-option
+                  *ngFor="let rank of test.ranks"
+                  [value]="rank.title"
+                >
+                  <div class="rank-background-color">
+                    <div
+                      class="circle"
+                      [style.background-color]="'#' + rank.backgroundColor"
+                    ></div>
+                    {{ rank.title }}
+                  </div></mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
         </th>
         <th *ngIf="!test.ranks.length">Баллы</th>
       </tr>
       <ng-container *ngFor="let member of members; let i = index">
-        <ng-container *ngIf="member.attempts.length">
+        <ng-container *ngIf="member.attempts.length && isMemberNotFiltred(member)">
           <tr class="results-table-body" [class.hover]="i == openedMemberIndex">
             <td style="padding-right: 0">
               <div
@@ -67,7 +118,10 @@
               {{ member.fields[field.name] }}
             </td>
             <td>{{ member.attempts.length }}</td>
-            <td>{{ member.calculated.timeMinute | toFixed: 0 }}<span class="mini">мин</span></td>
+            <td>
+              {{ member.calculated.timeMinute | toFixed: 0
+              }}<span class="mini">мин</span>
+            </td>
             <td *ngIf="test.ranks.length">
               <div class="rank-background-color">
                 <div
@@ -118,7 +172,10 @@
                     *ngFor="let attempt of member.attempts; let i = index"
                   >
                     <td>{{ i + 1 }}</td>
-                    <td>{{ attempt.calculated.timeMinute }}<span class="mini">мин</span></td>
+                    <td>
+                      {{ attempt.calculated.timeMinute
+                      }}<span class="mini">мин</span>
+                    </td>
                     <td>
                       <div class="rank-background-color">
                         <div

@@ -24,6 +24,8 @@
     "@angular/platform-browser-dynamic": "~10.1.4",
     "@angular/router": "~10.1.4",
     "@types/lodash": "^4.14.165",
+    "exceljs": "^4.2.0",
+    "file-saver": "^2.0.5",
     "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

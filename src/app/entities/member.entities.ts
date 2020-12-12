@@ -1,7 +1,7 @@
 import { Attempt } from './attempt.entities';
 import { Rank } from './test.entities';
 
-interface Dictionary<T> {
+export interface Dictionary<T> {
   [key: string]: T;
 }
 
