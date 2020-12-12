@@ -41,6 +41,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Color } from '@angular-material-components/color-picker';
 import { hexToRgbA } from 'src/app/utils/hex-to-rgba.utility';
 import { ImgBBService } from 'src/app/services/imgbb.service';
+import { ToFixedPipe } from 'src/app/pipes/to-fixed.pipe';
 
 @Component({
   selector: 'app-test-edit',
@@ -95,7 +96,8 @@ export class TestEditComponent implements OnInit {
     private snack: SnackService,
     private testService: TestService,
     private imgBB: ImgBBService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toFixedPipe: ToFixedPipe
   ) {
     this.subscription.add(
       this.route.params.pipe(take(1)).subscribe((params) => {
@@ -354,7 +356,7 @@ export class TestEditComponent implements OnInit {
         const backgroundColor: Color = new Color(rgba[0], rgba[1], rgba[2]);
         this.addRank(backgroundColor);
         this.test.ranks[index].backgroundColor = backgroundColor;
-        this.test.ranks[index].minimumSuccessRatio = this.test.ranks[index].minimumSuccessRatio * 100;
+        this.test.ranks[index].minimumSuccessRatio = this.toFixedPipe.transform(this.test.ranks[index].minimumSuccessRatio * 100, 2);
       });
 
     if (this.test.attemptSectionsNumber) this.test.showAllSections = false;

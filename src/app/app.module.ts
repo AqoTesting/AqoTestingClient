@@ -102,6 +102,7 @@ import { AttemptService } from './services/attempt.service';
     AuthorizedGuard,
     NotAuthorizedGuard,
     ExitAboutGuard,
+    ToFixedPipe
   ],
   bootstrap: [AppComponent],
 
