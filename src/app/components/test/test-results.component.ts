@@ -25,8 +25,12 @@ import * as fs from 'file-saver';
 import { FormControl } from '@angular/forms';
 import { ThrowStmt } from '@angular/compiler';
 
-class FilterField {
-  values: string[] = [];
+class AverageCalculated {
+  timeMinute: number = 0;
+  correctRank: Rank = undefined;
+  penalRank: Rank = undefined;
+  correctRatio: number = 0;
+  penalRatio: number = 0;
 }
 
 @Component({
@@ -43,13 +47,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   fieldsKeys: string[] = [];
   filtred: Dictionary<FormControl> = {};
 
-  averageCalculated: {
-    timeMinute: number;
-    correctRank: Rank;
-    penalRank: Rank;
-    correctRatio: number;
-    penalRatio: number;
-  };
+  averageCalculated: AverageCalculated = new AverageCalculated();
 
   room: Room;
   private test$: BehaviorSubject<Test> = new BehaviorSubject<Test>(undefined);
@@ -77,23 +75,6 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         this.testId = params.testId;
       })
     );
-
-    /*const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet("хуй");
-    let headerRow = worksheet.addRow([
-      "Фамилия",
-      "Имя",
-      "Отчество",
-      "Оценка",
-      "Корректировка"
-    ]);
-    workbook.xlsx.writeBuffer().then((data) => {
-      const blob = new Blob([data], {
-        type:
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      fs.saveAs(blob, `АКС-ПКС.xlsx`);
-    });*/
   }
 
   ngOnInit(): void {
@@ -157,13 +138,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
               .pipe(take(1))
               .subscribe((attempts: Attempt[]) => {
                 let membersWithAttempts = 0;
-                this.averageCalculated = {
-                  timeMinute: 0,
-                  correctRank: undefined,
-                  penalRank: undefined,
-                  correctRatio: 0,
-                  penalRatio: 0,
-                };
+
                 members.forEach((member) => {
                   member.attempts = attempts.filter(
                     (attempt) => attempt.memberId == member.id
@@ -258,14 +233,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                 });
 
                 this.averageCalculated.timeMinute /= membersWithAttempts;
-                this.averageCalculated.correctRank = this.getRankByRatio(this.averageCalculated.correctRatio / membersWithAttempts);
-                this.averageCalculated.penalRank = this.getRankByRatio(this.averageCalculated.penalRatio / membersWithAttempts);
-                
-                this.members = members;
-
-                console.log(
-                  this.members.filter((member) => member.attempts.length), this.averageCalculated
+                this.averageCalculated.correctRank = this.getRankByRatio(
+                  this.averageCalculated.correctRatio / membersWithAttempts
                 );
+                this.averageCalculated.penalRank = this.getRankByRatio(
+                  this.averageCalculated.penalRatio / membersWithAttempts
+                );
+
+                this.members = members;
               })
           );
         })
@@ -317,7 +292,6 @@ export class TestResultsComponent implements OnInit, OnDestroy {
 
     this.filtred.correct = new FormControl();
     this.filtred.penal = new FormControl();
-    console.log(this.filtred, this.isFilterIncludes('correct', '3'));
   }
 
   isFilterIncludes(key: string, value: string): boolean {
@@ -350,6 +324,107 @@ export class TestResultsComponent implements OnInit, OnDestroy {
     }
 
     return true;
+  }
+
+  saveAsExcel() {
+    const header = [],
+      date = new Date().toISOString();
+    let countFieldTypeSelect = 0;
+
+    this.room.fields.forEach((field) => {
+      header.push(field.name);
+      if (field.type == 2) countFieldTypeSelect++;
+    });
+
+    header.push('Оценка');
+    header.push('Коррекция');
+
+    const workbook = new Workbook();
+
+    if (countFieldTypeSelect == 1) {
+      this.room.fields
+        .filter((field) => field.type == 2)
+        .forEach((fieldSelect) => {
+          fieldSelect.options.forEach((option) => {
+            const worksheet = workbook.addWorksheet(option);
+            let headerRow = worksheet.addRow(header);
+            this.headerRowEachCell(headerRow);
+
+            this.members
+              .filter(
+                (member) =>
+                  member.fields[fieldSelect.name] == option &&
+                  member.attempts.length
+              )
+              .forEach((member) => {
+                const row = [];
+                this.room.fields.forEach((field) => {
+                  row.push(member.fields[field.name]);
+                });
+                row.push(member.calculated.correctRank.title);
+                row.push(member.calculated.penalRank.title);
+                worksheet.addRow(row);
+              });
+
+            this.worksheetAutoWidth(worksheet);
+          });
+        });
+    } else {
+      const worksheet = workbook.addWorksheet(date);
+      let headerRow = worksheet.addRow(header);
+      this.headerRowEachCell(headerRow);
+
+      this.members.forEach((member) => {
+        const row = [];
+        this.room.fields.forEach((field) => {
+          row.push(member.fields[field.name]);
+        });
+        worksheet.addRow(row);
+      });
+
+      this.worksheetAutoWidth(worksheet);
+    }
+
+    this.removeNullWorksheet(workbook);
+
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type:
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      fs.saveAs(blob, `${this.room.name}-${this.test.title}-${date}.xlsx`);
+    });
+  }
+
+  headerRowEachCell(headerRow) {
+    headerRow.eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'f2f2f2' },
+        bgColor: { argb: 'f2f2f2' },
+      };
+      cell.border = {
+        bottom: { style: 'thin' },
+      };
+    });
+  }
+
+  removeNullWorksheet(workbook) {
+    workbook.eachSheet((worksheet) => {
+      if (worksheet.rowCount < 2) workbook.removeWorksheet(worksheet.name);
+    });
+  }
+
+  worksheetAutoWidth(worksheet) {
+    const minWidth = 11;
+    worksheet.columns.forEach((column) => {
+      let dataWidth = 0;
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        dataWidth = cell.value ? cell.value.toString().length : 0;
+      });
+      column.width = dataWidth < minWidth ? minWidth : dataWidth + 1;
+    });
   }
 
   ngOnDestroy(): void {
