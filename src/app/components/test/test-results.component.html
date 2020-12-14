@@ -7,6 +7,7 @@
       <div class="header-right" style="width: 80px">
         <button
           (click)="saveAsExcel()"
+          [disabled]="!members || !members.length"
           mat-icon-button
           aria-label="Скачать Excel"
           matTooltip="Скачать Excel"
@@ -28,7 +29,7 @@
     *ngIf="members && room && test && attempts; else loading"
     class="results-scroll"
   >
-    <table class="results-table">
+    <table class="results-table" *ngIf="members.length; else noResults">
       <tr class="results-table-head">
         <th></th>
         <th *ngFor="let field of room.fields">
@@ -114,9 +115,7 @@
         <th *ngIf="!test.ranks.length">Баллы</th>
       </tr>
       <ng-container *ngFor="let member of members; let i = index">
-        <ng-container
-          *ngIf="member.attempts.length && isMemberNotFiltred(member)"
-        >
+        <ng-container *ngIf="isMemberNotFiltred(member)">
           <tr class="results-table-body" [class.hover]="i == openedMemberIndex">
             <td style="padding-right: 0">
               <div
@@ -252,6 +251,9 @@
         </td>
       </tr>
     </table>
+    <ng-template #noResults
+      ><div class="white text-center">Результатов ещё нет</div></ng-template
+    >
   </div>
   <ng-template #loading>
     <mat-spinner class="loading"></mat-spinner>

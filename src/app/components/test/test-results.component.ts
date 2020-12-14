@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { attempt } from 'lodash';
-import { BehaviorSubject, ReplaySubject, Subscription } from 'rxjs';
+import { BehaviorSubject, interval, ReplaySubject, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Attempt, CalculatedAttempt } from 'src/app/entities/attempt.entities';
 import {
@@ -83,6 +83,12 @@ export class TestResultsComponent implements OnInit, OnDestroy {
         this.room = room;
         this.initFiltre();
         this.getData();
+        this.subscription.add(
+          interval(5000).subscribe(() => {
+            this.getMembers();
+            this.getAttempts();
+          })
+        );
       })
     );
   }
@@ -138,6 +144,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
               .pipe(take(1))
               .subscribe((attempts: Attempt[]) => {
                 let membersWithAttempts = 0;
+                this.averageCalculated.timeMinute = 0;
 
                 members.forEach((member) => {
                   member.attempts = attempts.filter(
@@ -241,7 +248,9 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                   this.averageCalculated.penalRatio / membersWithAttempts
                 );
 
-                this.members = members;
+                this.members = members.filter(
+                  (member) => member.attempts.length
+                );
               })
           );
         })
