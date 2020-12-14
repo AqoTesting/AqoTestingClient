@@ -141,7 +141,8 @@ export class TestResultsComponent implements OnInit, OnDestroy {
 
                 members.forEach((member) => {
                   member.attempts = attempts.filter(
-                    (attempt) => attempt.memberId == member.id
+                    (attempt) =>
+                      attempt.memberId == member.id && !attempt.isActive
                   );
 
                   member.calculated = new CalculatedMember();
@@ -267,6 +268,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
   }
 
   getRankByRatio(ratio: number): Rank {
+    if (ratio < 0) ratio = 0;
     let retval: Rank;
     this.test.ranks.forEach((rank) => {
       if (ratio >= rank.minimumSuccessRatio) retval = rank;
