@@ -44,11 +44,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
     ],
     password: [
       '',
-      [Validators.required, Validators.minLength(5), Validators.maxLength(30)],
+      [Validators.required, Validators.minLength(6), Validators.maxLength(128)],
     ],
     repeatPassword: [
       '',
-      [Validators.required, Validators.minLength(5), Validators.maxLength(30)],
+      [Validators.required, Validators.minLength(6), Validators.maxLength(128)],
     ],
   });
 
