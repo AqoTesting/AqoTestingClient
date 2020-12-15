@@ -144,7 +144,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
               .pipe(take(1))
               .subscribe((attempts: Attempt[]) => {
                 let membersWithAttempts = 0;
-                this.averageCalculated.timeMinute = 0;
+                this.averageCalculated = new AverageCalculated();
 
                 members.forEach((member) => {
                   member.attempts = attempts.filter(
