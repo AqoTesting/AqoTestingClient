@@ -16,6 +16,8 @@ import { take } from 'rxjs/operators';
 import { SnackService } from 'src/app/services/snack.service';
 import RegExpValidator from 'src/app/validators/regexp.validator';
 import { Color } from '@angular-material-components/color-picker';
+import { RoomService } from 'src/app/services/room.service';
+import { Room } from 'src/app/entities/room.entities';
 
 @Component({
   selector: 'app-test-create',
@@ -58,19 +60,19 @@ export class TestCreateComponent implements OnInit, OnDestroy {
     return new Date();
   }
 
+  get room(): Room {
+    return this.roomService.room;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public location: Location,
     private fb: FormBuilder,
     private snack: SnackService,
-    private testService: TestService
+    private testService: TestService,
+    private roomService: RoomService
   ) {
-    this.subscription.add(
-      this.route.params.pipe(take(1)).subscribe((params) => {
-        this.roomId = params['roomId'];
-      })
-    );
   }
 
   ngOnInit(): void {}
@@ -149,9 +151,9 @@ export class TestCreateComponent implements OnInit, OnDestroy {
       test.deactivationDate = new Date(test.deactivationDate).toISOString();
 
     this.subscription.add(
-      this.testService.postTest(this.roomId, test).pipe(take(1)).subscribe(
+      this.testService.postTest(this.room.id, test).pipe(take(1)).subscribe(
         ({ testId }) => {
-          this.router.navigate(['room', this.roomId, 'test', 'edit', testId]);
+          this.router.navigate(['room', this.room.id, 'test', 'edit', testId]);
         },
         (error) => {
           this.testCreate.enable();

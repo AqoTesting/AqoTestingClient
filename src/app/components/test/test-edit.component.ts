@@ -42,6 +42,8 @@ import { Color } from '@angular-material-components/color-picker';
 import { hexToRgbA } from 'src/app/utils/hex-to-rgba.utility';
 import { ImgBBService } from 'src/app/services/imgbb.service';
 import { ToFixedPipe } from 'src/app/pipes/to-fixed.pipe';
+import { Room } from 'src/app/entities/room.entities';
+import { RoomService } from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-test-edit',
@@ -51,7 +53,6 @@ import { ToFixedPipe } from 'src/app/pipes/to-fixed.pipe';
 export class TestEditComponent implements OnInit {
   test: Test;
   subscription: Subscription = new Subscription();
-  roomId: string;
   testId: string;
   testEdit: FormGroup = this.fb.group({
     title: [
@@ -88,6 +89,10 @@ export class TestEditComponent implements OnInit {
     return new Date();
   }
 
+  get room(): Room {
+    return this.roomService.room;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -97,11 +102,11 @@ export class TestEditComponent implements OnInit {
     private testService: TestService,
     private imgBB: ImgBBService,
     private cdr: ChangeDetectorRef,
-    private toFixedPipe: ToFixedPipe
+    private toFixedPipe: ToFixedPipe,
+    private roomService: RoomService
   ) {
     this.subscription.add(
       this.route.params.pipe(take(1)).subscribe((params) => {
-        this.roomId = params['roomId'];
         this.testId = params['testId'];
       })
     );
@@ -119,7 +124,7 @@ export class TestEditComponent implements OnInit {
           this.initForm();
         },
         (error) => {
-          this.router.navigate(['room', this.roomId, 'tests']);
+          this.router.navigate(['room', this.room.id, 'tests']);
           if (error instanceof Response)
             this.snack.error(error.errorMessageCode);
         }
