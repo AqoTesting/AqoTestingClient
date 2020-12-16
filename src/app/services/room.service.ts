@@ -8,7 +8,7 @@ import { Room, GetRoomsItem } from '../entities/room.entities';
 
 @Injectable()
 export class RoomService {
-  room$: ReplaySubject<Room> = new ReplaySubject<Room>();
+  room$: ReplaySubject<Room> = new ReplaySubject<Room>(1);
   room: Room;
 
   constructor(private http: HttpClient) {}

@@ -29,4 +29,5 @@ export class CalculatedMember {
   penalRank: Rank;
 
   timeMinute: number = 0;
+  totalBlurTime: number = 0;
 }

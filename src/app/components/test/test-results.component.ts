@@ -27,6 +27,7 @@ import { ThrowStmt } from '@angular/compiler';
 
 class AverageCalculated {
   timeMinute: number = 0;
+  totalBlurTime: number = 0;
   correctRank: Rank = undefined;
   penalRank: Rank = undefined;
   correctRatio: number = 0;
@@ -164,6 +165,8 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                       attempt.calculated.timeMinute = diff;
                       member.calculated.timeMinute += diff;
 
+                      member.calculated.totalBlurTime += attempt.totalBlurTime;
+
                       switch (this.test.finalResultCalculationMethod) {
                         case FinalResultCalculationMethod.Best:
                           if (
@@ -207,7 +210,10 @@ export class TestResultsComponent implements OnInit, OnDestroy {
 
                   if (member.attempts.length) {
                     member.calculated.timeMinute /= member.attempts.length;
+                    member.calculated.totalBlurTime /= member.attempts.length;
                     membersWithAttempts++;
+                    this.averageCalculated.totalBlurTime +=
+                      member.calculated.totalBlurTime;
                     this.averageCalculated.timeMinute +=
                       member.calculated.timeMinute;
                     this.averageCalculated.correctRatio +=
@@ -240,6 +246,7 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                   }
                 });
 
+                this.averageCalculated.totalBlurTime /= membersWithAttempts;
                 this.averageCalculated.timeMinute /= membersWithAttempts;
                 this.averageCalculated.correctRank = this.getRankByRatio(
                   this.averageCalculated.correctRatio / membersWithAttempts

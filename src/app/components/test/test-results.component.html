@@ -56,6 +56,7 @@
         </th>
         <th>Попыток</th>
         <th>Ср. время</th>
+        <th>Ср. блюр</th>
         <th
           *ngIf="test.ranks.length"
           title="Оценка без учета коэффициента коррекции"
@@ -138,6 +139,10 @@
               {{ member.calculated.timeMinute | toFixed: 0
               }}<span class="mini">мин</span>
             </td>
+            <td>
+              {{ member.calculated.totalBlurTime / 60 | toFixed: 0
+              }}<span class="mini">мин</span>
+            </td>
             <td *ngIf="test.ranks.length">
               <div class="rank-background-color">
                 <div
@@ -166,7 +171,7 @@
             [class.hover]="i == openedMemberIndex"
             *ngIf="i == openedMemberIndex"
           >
-            <td [attr.colspan]="room.fields.length + 5">
+            <td [attr.colspan]="room.fields.length + 6">
               <div
                 style="
                   border: rgba(255, 255, 255, 0.12) 1px solid;
@@ -180,6 +185,7 @@
                   <tr class="results-table-head">
                     <th>#</th>
                     <th>Время</th>
+                    <th>Блюр</th>
                     <th>Оценка</th>
                     <th>Коррекция</th>
                   </tr>
@@ -190,6 +196,10 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       {{ attempt.calculated.timeMinute
+                      }}<span class="mini">мин</span>
+                    </td>
+                    <td>
+                      {{ attempt.totalBlurTime / 60 | toFixed: 0
                       }}<span class="mini">мин</span>
                     </td>
                     <td>
@@ -225,6 +235,10 @@
         <td [attr.colspan]="room.fields.length + 2"></td>
         <td>
           {{ averageCalculated.timeMinute | toFixed: 0
+          }}<span class="mini">мин</span>
+        </td>
+        <td>
+          {{ averageCalculated.totalBlurTime / 60 | toFixed: 0
           }}<span class="mini">мин</span>
         </td>
         <td>

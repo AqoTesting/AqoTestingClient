@@ -13,6 +13,7 @@ export class Attempt {
   endDate: Date;
   isActive: boolean;
   ignore: boolean;
+  totalBlurTime: number;
 
   maxPoints: number;
 

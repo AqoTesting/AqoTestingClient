@@ -11,6 +11,7 @@ export class Test {
   showAllSections: boolean = true;
   finalResultCalculationMethod: FinalResultCalculationMethod;
   attemptSectionsNumber: number = 0;
+  lastConsiderableAttemptsNumber: number = 0;
   creationDate: string;
   activationDate: string;
   deactivationDate: string;
