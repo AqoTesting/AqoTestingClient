@@ -65,7 +65,7 @@ export class TestEditComponent implements OnInit {
     finalResultCalculationMethod: [0],
     showAllSections: [{ value: true, disabled: false }],
     attemptSectionsNumber: [1, [Validators.required, Validators.min(1)]],
-    lastConsiderableAttemptsNumber: [0, [Validators.required, Validators.min(1)]],
+    lastConsiderableAttemptsNumber: [0, [Validators.required, Validators.min(0)]],
     isActive: [false],
     activationDate: [null],
     deactivationDate: [null],
