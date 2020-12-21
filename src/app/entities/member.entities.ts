@@ -25,6 +25,9 @@ export class CalculatedMember {
   correctRatio: number = 0;
   penalRatio: number = 0;
 
+  correctRate: number = 0;
+  penalRate: number = 0;
+
   correctRank: Rank;
   penalRank: Rank;
 

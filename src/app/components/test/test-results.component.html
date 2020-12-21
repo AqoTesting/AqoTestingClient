@@ -139,11 +139,14 @@
               {{ member.calculated.timeMinute | toFixed: 0
               }}<span class="mini">мин</span>
             </td>
-            <td>
+            <td [title]="member.calculated.totalBlurTime + 'с'">
               {{ member.calculated.totalBlurTime / 60 | toFixed: 0
               }}<span class="mini">мин</span>
             </td>
-            <td *ngIf="test.ranks.length">
+            <td
+              *ngIf="test.ranks.length"
+              [title]="member.calculated.correctRate + '%'"
+            >
               <div class="rank-background-color">
                 <div
                   class="circle"
@@ -154,7 +157,10 @@
                 {{ member.calculated.correctRank.title }}
               </div>
             </td>
-            <td *ngIf="test.ranks.length">
+            <td
+              *ngIf="test.ranks.length"
+              [title]="member.calculated.penalRate + '%'"
+            >
               <div class="rank-background-color">
                 <div
                   class="circle"

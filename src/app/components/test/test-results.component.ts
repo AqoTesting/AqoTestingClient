@@ -24,6 +24,7 @@ import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import { FormControl } from '@angular/forms';
 import { ThrowStmt } from '@angular/compiler';
+import { ToFixedPipe } from 'src/app/pipes/to-fixed.pipe';
 
 class AverageCalculated {
   timeMinute: number = 0;
@@ -69,7 +70,8 @@ export class TestResultsComponent implements OnInit, OnDestroy {
     private testService: TestService,
     private roomService: RoomService,
     private memberService: MemberService,
-    private attemptService: AttemptService
+    private attemptService: AttemptService,
+    private toFixed: ToFixedPipe
   ) {
     this.subscription.add(
       this.route.params.pipe(take(1)).subscribe((params) => {
@@ -233,6 +235,17 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                         member.calculated.penalRatio /= member.attempts.length;
                         break;
                     }
+
+                    member.calculated.correctRate = this.toFixed.transform(
+                      member.calculated.correctRatio * 100,
+                      2
+                    );
+                    member.calculated.penalRate = this.toFixed.transform(
+                      (member.calculated.correctRatio -
+                        member.calculated.penalRatio) *
+                        100,
+                      2
+                    );
 
                     if (test.ranks.length) {
                       member.calculated.correctRank = this.getRankByRatio(
