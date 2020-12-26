@@ -174,21 +174,14 @@ export class TestResultsComponent implements OnInit, OnDestroy {
                           if (
                             member.calculated.correctPoints <
                             attempt.correctPoints
-                          )
+                          ) {
                             member.calculated.correctPoints =
                               attempt.correctPoints;
-                          if (
-                            member.calculated.penalPoints < attempt.penalPoints
-                          )
                             member.calculated.penalPoints = attempt.penalPoints;
-                          if (
-                            member.calculated.correctRatio <
-                            attempt.correctRatio
-                          )
                             member.calculated.correctRatio =
                               attempt.correctRatio;
-                          if (member.calculated.penalRatio < attempt.penalRatio)
                             member.calculated.penalRatio = attempt.penalRatio;
+                          }
                           break;
                         case FinalResultCalculationMethod.Average:
                           member.calculated.correctPoints +=
