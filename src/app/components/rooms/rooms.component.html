@@ -20,9 +20,9 @@
   </div>
   <ng-container *ngIf="rooms; else loading" class="rooms-conteiner">
     <div *ngFor="let room of rooms" class="room-content">
-      <mat-card [routerLink]="['/room/', room.id]" class="pointer" style="display: flex;align-items: center;">
+      <mat-card style="display: flex;align-items: center;justify-content: space-between;">
         <div class="room-info">
-          <div class="room-info-name pointer">
+          <div class="room-info-name pointer" [routerLink]="['/room/', room.id]">
             <span>{{ room.name }}</span>
           </div>
           <div class="room-info-domain">

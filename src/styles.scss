@@ -180,19 +180,17 @@ snack-bar-container {
   }
 
   .room-info {
-    width: 50%;
     display: inline-block;
-    height: 34px;
 
     &-name {
     }
     &-domain {
       font-size: 11px;
+      height: 13px;
     }
   }
 
   .room-action {
-    width: 50%;
     display: inline-block;
     text-align: right;
 
